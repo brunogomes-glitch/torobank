@@ -209,20 +209,19 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // SUAS CHAVES REAIS CONFIGURADAS COM SUCESSO
+        // CHAVES CORRIGIDAS DO SEU BANCO ATUAL (TOROBANK-82B54)
         const firebaseConfig = {
             apiKey: "AIzaSyAjZyD-0Tu2-o3ornqChE6E7B6EIjDGebk",
-            authDomain: "torobank-simulador.firebaseapp.com",
-            projectId: "torobank-simulador",
-            storageBucket: "torobank-simulador.firebasestorage.app",
-            messagingSenderId: "543549857480",
-            appId: "1:543549857480:web:5c0835b579ef123eb08ffd"
+            authDomain: "torobank-82b54.firebaseapp.com",
+            projectId: "torobank-82b54",
+            storageBucket: "torobank-82b54.firebasestorage.app",
+            messagingSenderId: "939125058614",
+            appId: "1:939125058614:web:b3602b4035016f3db43c97"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Expõe globalmente para o jogo usar
         window.db = db;
         window.collection = collection;
         window.addDoc = addDoc;
@@ -404,7 +403,7 @@
             },
             "2": {
               "viés": "representatividade",
-              "prompt": "Eu gosto de investir in empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.",
+              "prompt": "Eu gosto de investir em empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.",
               "options": {
                 "A": { "content": "Faz sentido, uma boa história recente costuma indicar retorno superior e risco menor.", "score": 0, "next": "3", "explanation": "Incorreta. Uma narrativa convincente não garante retornos futuros, caindo no viés de representatividade." },
                 "B": { "content": "Podemos comprar mais, pois empresas famosas normalmente superam empresas discretas.", "score": 0, "next": "3", "explanation": "Incorreta. Fama e saliência não equivalem a preço justo ou vantagem competitiva real." },
@@ -477,7 +476,7 @@
               "prompt": "Uma posição caiu 15%. Eu não quero vender porque, enquanto não vendo, sinto que não perdi de verdade. Prefiro esperar voltar ao preço de compra.",
               "options": {
                 "A": { "content": "Espere voltar ao preço de compra, pois vender agora transformaria a perda em real.", "score": 0, "next": "10", "explanation": "Incorreta. A deterioração patrimonial já ocorreu. Recusar a liquidação revela aversão à perda." },
-                "B": { "content": "Vamos reavaliar a tese; se ela quebano, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! A permanência deve se amparar nas premissas de hoje, não no preço histórico." },
+                "B": { "content": "Vamos reavaliar a tese; se ela quebrou, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! A permanência deve se amparar nas premissas de hoje, não no preço histórico." },
                 "C": { "content": "Compre mais para reduzir o preço médio, assim fica mais fácil recuperar logo.", "score": 0, "next": "10", "explanation": "Incorreta. Reduzir preço médio em teses ruins apenas amplifica a exposição." },
                 "D": { "content": "Mantenha sem analisar, porque paciência sempre vence quedas temporárias do mercado.", "score": 0, "next": "10", "explanation": "Incorreta. A resiliência só funciona se os fundamentos seguirem intactos." }
               }
@@ -499,7 +498,7 @@
                 "A": { "content": "Defina um preço-alvo único, confie na sua leitura e segure perdas até empatar.", "score": 0, "next": "END", "explanation": "Incorreta. Essa resposta aglutina simultaneamente ancoragem e aversão à perda." },
                 "B": { "content": "Acompanhe previsões de mercado diariamente e ajuste a carteira a cada nova opinião.", "score": 0, "next": "END", "explanation": "Incorreta. Ajustes por ruídos macroeconômicos quebram a consistência." },
                 "C": { "content": "Invista somente quando tiver certeza alta, pois dúvida é sinal de decisão ruim.", "score": 0, "next": "END", "explanation": "Incorreta. Exigir certezas absolutas mascara o excesso de confiança." },
-                "D": { "content": "Use cenários, limites de posição, criteria de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! A governança por processos minimiza reações passionais, controlando os vieses." }
+                "D": { "content": "Use cenários, limites de posição, critérios de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! A governança por processos minimiza reações passionais, controlando os vieses." }
               }
             }
           }
@@ -518,7 +517,6 @@
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
 
-        // MÁGICA DO NOVO FLUXO: CADASTRA NO BANCO PRIMEIRO E SÓ ENTÃO DESTRAVA O RPG
         async function processarCadastroEIniciar(event) {
             event.preventDefault();
             
@@ -537,7 +535,6 @@
 
             try {
                 if (window.addDoc && window.collection && window.db) {
-                    // Envia o lead obrigatório de entrada para o Firestore
                     await window.addDoc(window.collection(window.db, "leads_cadastro"), {
                         nome: nameInput,
                         email: emailInput,
@@ -545,12 +542,10 @@
                         data_cadastro: new Date()
                     });
                     
-                    // Configura o nome do atendente no jogo dinamicamente
                     nomeDoAtendente = nameInput;
                     document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
                     document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
 
-                    // Inicializa a Agência e o RPG
                     iniciarJogo();
                 } else {
                     alert("O sistema de banco de dados está terminando de inicializar. Aguarde 3 segundos e clique novamente.");
@@ -718,7 +713,6 @@
             document.getElementById('rep-perda').innerText = formatarLinha('perda');
         }
 
-        // SALVA DADOS NO FIREBASE FIRESTORE EM TEMPO REAL
         let gravacaoConcluida = false;
         async function salvarResultadoNoFirebase(motivoTermino) {
             try {
