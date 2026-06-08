@@ -67,19 +67,31 @@
             justify-content: flex-start;
         }
 
-        /* IDENTIDADE VISUAL ATUALIZADA - LOGO OFICIAL */
+        /* IDENTIDADE VISUAL ATUALIZADA - LOGO E FUNDO DE CONTRASTE */
         .brand-container {
             margin-bottom: 20px;
             text-align: center;
             animation: fadeInDown 0.8s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-background-card {
+            background-color: #ffffff; /* Fundo branco para contraste com a logo branca */
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            border: 2px solid #ffffff;
         }
         
         .brand-logo-img {
             width: 100%;
-            max-width: 420px; /* Tamanho calibrado para o formato horizontal */
+            max-width: 400px; /* Tamanho calibrado para o formato horizontal */
             height: auto;
-            filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.15));
-            margin-bottom: 5px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+            display: block;
         }
 
         .menu-subtitle { 
@@ -94,6 +106,23 @@
             display: inline-block;
             text-transform: uppercase;
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* ESTILIZAÇÃO DO SITE DA EMPRESA */
+        .company-website {
+            margin-top: auto;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 0.5px;
+            padding-bottom: 10px;
+        }
+        .company-website a {
+            color: var(--accent-color); /* Amarelo em destaque */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .company-website a:hover {
+            text-decoration: underline;
         }
 
         @keyframes fadeInDown {
@@ -328,8 +357,9 @@
         
         <div class="menu-screen" id="main-menu">
             <div class="brand-container">
-                <img src="logo.png" alt="Rafael Toro - Academia de Finanças" class="brand-logo-img">
-                <br>
+                <div class="logo-background-card">
+                    <img src="logo.png" alt="Rafael Toro - Academia de Finanças" class="brand-logo-img">
+                </div>
                 <div class="menu-subtitle" id="menu-sub-title-label">Módulo de Treinamento e Diagnóstico</div>
             </div>
             
@@ -360,6 +390,10 @@
             </form>
             
             <button class="btn-admin-trigger" type="button" onclick="abrirModalSenhaAdmin()">Painel Geral</button>
+
+            <div class="company-website">
+                Visite nosso site: <a href="https://rafaeltoro.com.br/" target="_blank">rafaeltoro.com.br</a>
+            </div>
         </div>
 
         <div class="stats-bar">
@@ -714,16 +748,12 @@
             setInterval(() => {
                 const rotas = [{top: '22%', left: '63%'}, {top: '16%', left: '74%'}, {top: '36%', left: '62%'}];
                 let d = rotas[Math.floor(Math.random() * rotas.length)];
-                if(clienteFila) {
-                    clienteFila.style.top = d.top; clienteFila.style.left = d.left;
-                }
+                clienteFila.style.top = d.top; clienteFila.style.left = d.left;
             }, 6000);
             setInterval(() => {
                 const rotas = [{top: '38%', left: '74%'}, {top: '18%', left: '80%'}, {top: '20%', left: '45%'}];
                 let d = rotas[Math.floor(Math.random() * rotas.length)];
-                if(guarda) {
-                    guarda.style.top = d.top; guarda.style.left = d.left;
-                }
+                guarda.style.top = d.top; guarda.style.left = d.left;
             }, 7500);
         }
 
