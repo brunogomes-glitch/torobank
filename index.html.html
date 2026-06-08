@@ -42,7 +42,7 @@
             min-height: 600px;
         }
 
-        /* --- TELA DE MENU --- */
+        /* --- TELA DE MENU / CADASTRO --- */
         .menu-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -61,7 +61,7 @@
 
         .menu-logo { font-size: 52px; font-weight: 800; letter-spacing: 2px; margin-bottom: 5px; }
         .menu-logo span { color: var(--accent-color); }
-        .menu-subtitle { font-size: 16px; opacity: 0.8; margin-bottom: 25px; font-style: italic; }
+        .menu-subtitle { font-size: 16px; opacity: 0.8; margin-bottom: 20px; font-style: italic; }
 
         .menu-form {
             background: rgba(255, 255, 255, 0.08);
@@ -72,20 +72,19 @@
             max-width: 500px;
             width: 100%;
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: left;
             box-sizing: border-box;
         }
 
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #2c3e50; box-sizing: border-box; outline: none; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group select { width: 100%; padding: 11px; background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #2c3e50; box-sizing: border-box; outline: none; }
+        .form-group input:focus { border-color: var(--secondary-color); background: #ffffff; }
 
-        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 14px 45px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-start:hover { transform: translateY(-2px); background: #ffffff; }
-        
-        .btn-support { margin-top: 20px; background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 8px 18px; font-size: 13px; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-weight: bold;}
-        .btn-support:hover { background: var(--accent-color); color: var(--primary-color); }
+        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 14px 45px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 350px;}
+        .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 5px 15px rgba(255,215,0,0.3); }
+        .btn-start:disabled { background: #cccccc; color: #666666; cursor: not-allowed; transform: none; box-shadow: none; }
 
         /* --- BARRAS DE STATUS RPG --- */
         .stats-bar { display: flex; justify-content: space-around; align-items: center; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 13px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
@@ -232,25 +231,32 @@
 <body>
 
     <div class="game-container">
+        
         <div class="menu-screen" id="main-menu">
             <div class="menu-logo">Toro<span>Bank</span></div>
             <div class="menu-subtitle">Módulo RPG Avançado & Diagnóstico</div>
             
-            <div class="menu-form">
+            <form class="menu-form" id="cadastro-inicial-form" onsubmit="processarCadastroEIniciar(event)">
                 <div class="form-group">
-                    <label for="player-name-input">Nome do Atendente</label>
-                    <input type="text" id="player-name-input" value="Alex" placeholder="Digite seu nome...">
+                    <label for="player-name-input">Seu Nome Completo (Atendente)</label>
+                    <input type="text" id="player-name-input" required placeholder="Ex: Alex Silva">
                 </div>
                 <div class="form-group">
-                    <label for="tree-select">Selecione o Cenário de Treinamento</label>
+                    <label for="player-email-input">E-mail de Trabalho/Estudante</label>
+                    <input type="email" id="player-email-input" required placeholder="Ex: alex@empresa.com">
+                </div>
+                <div class="form-group">
+                    <label for="player-phone-input">WhatsApp / Celular</label>
+                    <input type="tel" id="player-phone-input" required placeholder="Ex: (11) 99999-9999">
+                </div>
+                <div class="form-group">
+                    <label for="tree-select">Cenário Disponível</label>
                     <select id="tree-select">
                         <option value="modulo_financas">Módulo 1003: Finanças Comportamentais</option>
                     </select>
                 </div>
-            </div>
-            
-            <button class="btn-start" onclick="iniciarJogo()">Iniciar Expediente</button>
-            <button class="btn-support" onclick="abrirCaptacaoLeads()">Fale com um de nossos especialistas</button>
+                <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
+            </form>
         </div>
 
         <div class="stats-bar">
@@ -384,7 +390,6 @@
         function sfxErro() { playTone(220.00, 'sawtooth', 0.15, 0.15); setTimeout(() => playTone(196.00, 'sawtooth', 0.3, 0.15), 100); }
         function iniciarMusicaFundo() { const notasJazz = [261.63, 329.63, 392.00, 493.88]; let i = 0; bgmInterval = setInterval(() => { if(Math.random() > 0.3) { playTone(notasJazz[i % notasJazz.length], 'sine', 0.8, 0.03); } i++; }, 600); }
 
-        // Mapeamento Completo da Árvore
         const gameData = {
           "steps": {
             "1": {
@@ -394,12 +399,12 @@
                 "A": { "content": "Vamos escolher logo os ativos mais comentados e ajustar depois, porque rapidez conta muito.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Essa resposta reforça a disponibilidade e o comportamento impulsivo, sem diagnosticar objetivos estruturados antes." },
                 "B": { "content": "Vamos mapear objetivos, horizonte, risco e vieses antes de discutir qualquer ativo específico.", "score": 5, "next": "2", "explanation": "Abordagem correta! A orientação consultiva começa pelo diagnóstico do investidor e dos vieses que distorcem as suas escolhas." },
                 "C": { "content": "Vamos repetir a estratégia do seu amigo, já que ela parece ter funcionado recentemente.", "score": 0, "next": "2", "explanation": "Abordagem incorreta. Copiar terceiros sem contexto favorece representatividade e negligencia a tolerância a riscos." },
-                "D": { "content": "Vamos focar apenas na rentabilidade passada para encontrar o investment vencedor.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Rentabilidade passada isolada ativa extrapolação e excesso de confiança." }
+                "D": { "content": "Vamos focar apenas na rentabilidade passada para encontrar o investimento vencedor.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Rentabilidade passada isolada ativa extrapolação e excesso de confiança." }
               }
             },
             "2": {
               "viés": "representatividade",
-              "prompt": "Eu gosto de investir em empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.",
+              "prompt": "Eu gosto de investir in empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.",
               "options": {
                 "A": { "content": "Faz sentido, uma boa história recente costuma indicar retorno superior e risco menor.", "score": 0, "next": "3", "explanation": "Incorreta. Uma narrativa convincente não garante retornos futuros, caindo no viés de representatividade." },
                 "B": { "content": "Podemos comprar mais, pois empresas famosas normalmente superam empresas discretas.", "score": 0, "next": "3", "explanation": "Incorreta. Fama e saliência não equivalem a preço justo ou vantagem competitiva real." },
@@ -411,7 +416,7 @@
               "viés": "disponibilidade",
               "prompt": "Quando vejo muitas reportagens sobre crise, fico com vontade de vender tudo. Parece que a chance de perda ficou enorme só porque o assunto está em todo lugar.",
               "options": {
-                "A": { "content": "Isso pode be disponibilidade; vamos medir probabilidade, impacto e plano antes de agir.", "score": 5, "next": "4", "explanation": "Correta! A heurística da disponibilidade superestima eventos recentes ou vívidos. Medir dados reais acalma a reação reativa." },
+                "A": { "content": "Isso pode ser disponibilidade; vamos medir probabilidade, impacto e plano antes de agir.", "score": 5, "next": "4", "explanation": "Correta! A heurística da disponibilidade superestima eventos recentes ou vívidos. Medir dados reais acalma a reação reativa." },
                 "B": { "content": "Se a notícia está em todo lugar, o melhor é vender agora e recomprar depois.", "score": 0, "next": "4", "explanation": "Incorreta. Vender puramente por saliência midiática pode transformar ruídos diários em prejuízo consolidado." },
                 "C": { "content": "Ignore totalmente as notícias, porque elas nunca ajudam a avaliar riscos reais.", "score": 0, "next": "4", "explanation": "Incorreta. As notícias contêm dados úteis, elas só precisam ser filtradas metodologicamente por probabilidade." },
                 "D": { "content": "Use a manchete principal do dia como guia para aumentar ou reduzir a carteira.", "score": 0, "next": "4", "explanation": "Incorreta. Decidir por manchetes amplia drasticamente o viés de disponibilidade e a rotatividade desnecessária." }
@@ -472,7 +477,7 @@
               "prompt": "Uma posição caiu 15%. Eu não quero vender porque, enquanto não vendo, sinto que não perdi de verdade. Prefiro esperar voltar ao preço de compra.",
               "options": {
                 "A": { "content": "Espere voltar ao preço de compra, pois vender agora transformaria a perda em real.", "score": 0, "next": "10", "explanation": "Incorreta. A deterioração patrimonial já ocorreu. Recusar a liquidação revela aversão à perda." },
-                "B": { "content": "Vamos reavaliar a tese; se ela quebrou, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! A permanência deve se amparar nas premissas de hoje, não no preço histórico." },
+                "B": { "content": "Vamos reavaliar a tese; se ela quebano, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! A permanência deve se amparar nas premissas de hoje, não no preço histórico." },
                 "C": { "content": "Compre mais para reduzir o preço médio, assim fica mais fácil recuperar logo.", "score": 0, "next": "10", "explanation": "Incorreta. Reduzir preço médio em teses ruins apenas amplifica a exposição." },
                 "D": { "content": "Mantenha sem analisar, porque paciência sempre vence quedas temporárias do mercado.", "score": 0, "next": "10", "explanation": "Incorreta. A resiliência só funciona se os fundamentos seguirem intactos." }
               }
@@ -494,7 +499,7 @@
                 "A": { "content": "Defina um preço-alvo único, confie na sua leitura e segure perdas até empatar.", "score": 0, "next": "END", "explanation": "Incorreta. Essa resposta aglutina simultaneamente ancoragem e aversão à perda." },
                 "B": { "content": "Acompanhe previsões de mercado diariamente e ajuste a carteira a cada nova opinião.", "score": 0, "next": "END", "explanation": "Incorreta. Ajustes por ruídos macroeconômicos quebram a consistência." },
                 "C": { "content": "Invista somente quando tiver certeza alta, pois dúvida é sinal de decisão ruim.", "score": 0, "next": "END", "explanation": "Incorreta. Exigir certezas absolutas mascara o excesso de confiança." },
-                "D": { "content": "Use cenários, limites de posição, critérios de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! A governança por processos minimiza reações passionais, controlando os vieses." }
+                "D": { "content": "Use cenários, limites de posição, criteria de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! A governança por processos minimiza reações passionais, controlando os vieses." }
               }
             }
           }
@@ -513,13 +518,55 @@
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
 
+        // MÁGICA DO NOVO FLUXO: CADASTRA NO BANCO PRIMEIRO E SÓ ENTÃO DESTRAVA O RPG
+        async function processarCadastroEIniciar(event) {
+            event.preventDefault();
+            
+            const btnSubmit = document.getElementById('btn-submit-cadastro');
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            const emailInput = document.getElementById('player-email-input').value.trim();
+            const phoneInput = document.getElementById('player-phone-input').value.trim();
+
+            if (!nameInput || !emailInput || !phoneInput) {
+                alert("Por favor, preencha todos os campos do cadastro para iniciar.");
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Registrando Entrada...";
+
+            try {
+                if (window.addDoc && window.collection && window.db) {
+                    // Envia o lead obrigatório de entrada para o Firestore
+                    await window.addDoc(window.collection(window.db, "leads_cadastro"), {
+                        nome: nameInput,
+                        email: emailInput,
+                        telefone: phoneInput,
+                        data_cadastro: new Date()
+                    });
+                    
+                    // Configura o nome do atendente no jogo dinamicamente
+                    nomeDoAtendente = nameInput;
+                    document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
+                    document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
+
+                    // Inicializa a Agência e o RPG
+                    iniciarJogo();
+                } else {
+                    alert("O sistema de banco de dados está terminando de inicializar. Aguarde 3 segundos e clique novamente.");
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = "Iniciar Expediente";
+                }
+            } catch (e) {
+                console.error("Erro ao registrar cadastro inicial: ", e);
+                alert("Houve um erro de comunicação com o servidor. Verifique se o seu banco Firestore foi ativado em Modo de Teste.");
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Iniciar Expediente";
+            }
+        }
+
         function iniciarJogo() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            const nameInput = document.getElementById('player-name-input').value.trim();
-            if(nameInput !== "") nomeDoAtendente = nameInput;
-            document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
-            document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
 
             document.getElementById('main-menu').style.opacity = '0';
             montarBotoesInterface("1");
@@ -728,7 +775,6 @@
         function abrirCaptacaoLeads() { document.getElementById('leads-modal').style.display = 'flex'; }
         function fecharLeads() { document.getElementById('leads-modal').style.display = 'none'; }
 
-        // SALVA CAPTAÇÃO DE LEADS NO BANCO DE DADOS FIRESTORE
         async function enviarLead(event) {
             event.preventDefault();
             const nome = document.getElementById('lead-name').value;
@@ -746,12 +792,10 @@
                     });
                     alert(`Obrigado, ${nome}! Seus dados foram enviados com prioridade máxima para a mesa comercial de Alta Renda do ToroBank.`);
                     fecharLeads();
-                } else {
-                    alert("O Firebase está terminando de carregar. Aguarde 3 segundos e tente novamente!");
                 }
             } catch(e) {
                 console.error("Erro ao registrar lead: ", e);
-                alert("Ocorreu um erro ao salvar o contato no banco. Certifique-se de que o Firestore foi criado em Modo de Teste.");
+                alert("Ocorreu um erro ao salvar o contato no banco.");
             }
         }
     </script>
