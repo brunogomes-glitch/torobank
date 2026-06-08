@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToroBank - RPG Analítico</title>
+    <style>
+        :root {
+            --primary-color: #002f6c;
+            --secondary-color: #0073e6;
+            --accent-color: #ffd700;
+            --bg-color: #90a4ae;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --success-color: #2e7d32;
+            --error-color: #c62828;
+            --floor-color: #eceff1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 950px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-height: 600px;
+        }
+
+        /* --- TELA DE MENU --- */
+        .menu-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #001f4d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            padding: 30px 20px;
+            box-sizing: border-box;
+        }
+
+        .menu-logo { font-size: 52px; font-weight: 800; letter-spacing: 2px; margin-bottom: 5px; }
+        .menu-logo span { color: var(--accent-color); }
+        .menu-subtitle { font-size: 16px; opacity: 0.8; margin-bottom: 25px; font-style: italic; }
+
+        .menu-form {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 25px 35px;
+            border-radius: 14px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            margin-bottom: 25px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #2c3e50; box-sizing: border-box; outline: none; }
+
+        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 14px 45px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-start:hover { transform: translateY(-2px); background: #ffffff; }
+        
+        .btn-support { margin-top: 20px; background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 8px 18px; font-size: 13px; border-radius: 20px; cursor: pointer; transition: all 0.2s; font-weight: bold;}
+        .btn-support:hover { background: var(--accent-color); color: var(--primary-color); }
+
+        /* --- BARRAS DE STATUS RPG --- */
+        .stats-bar { display: flex; justify-content: space-around; align-items: center; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 13px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
+        .rpg-status { display: flex; align-items: center; gap: 8px; }
+        .bar-container { width: 100px; height: 12px; background: #555; border-radius: 6px; overflow: hidden; border: 1px solid #fff; }
+        .bar-fill { height: 100%; width: 100%; transition: width 0.4s ease; }
+        .paciencia-fill { background: #ff9100; }
+        .resiliencia-fill { background: #00e676; }
+
+        /* --- PALCO GRÁFICO --- */
+        .stage-area { height: 440px; background: linear-gradient(to bottom, #607d8b, #263238); position: relative; border-bottom: 6px solid #1a252c; }
+        .iso-grid { position: absolute; top: 45%; left: 50%; width: 680px; height: 560px; background-color: var(--floor-color); background-image: linear-gradient(rgba(0,47,108,0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(0,47,108,0.04) 2px, transparent 2px); background-size: 40px 40px; transform: translate(-50%, -50%) rotateX(60deg) rotateZ(45deg); transform-style: preserve-3d; box-shadow: -15px 15px 35px rgba(0,0,0,0.4); border: 6px solid #ffffff; }
+        .iso-object { position: absolute; z-index: 2; }
+
+        /* CENOGRAFIA BANCÁRIA */
+        .bank-door { top: 8%; left: 84%; width: 75px; height: 110px; border: 4px solid #37474f; background: rgba(128, 222, 234, 0.4); border-radius: 4px; }
+        .bank-door::before { content: ''; position: absolute; left: 50%; width: 2px; height: 100%; background: #37474f; }
+        .bank-door::after { content: '▲ TOROBANK'; position: absolute; top: -18px; left: -5px; font-size: 8px; font-weight: bold; color: #000; background: var(--accent-color); padding: 2px 4px; border-radius: 2px; white-space: nowrap;}
+        .entry-mat { top: 25%; left: 80%; width: 65px; height: 45px; background: #1a1a1a; opacity: 0.85; transform: skewX(-12deg); border-left: 3px solid var(--accent-color); }
+        .tactile-floor { top: 42%; left: 45%; width: 240px; height: 8px; background: #ffea00; transform: rotate(-25deg); opacity: 0.7; z-index: 1; }
+        .teller-booth { top: 12%; width: 50px; height: 40px; background: #90a4ae; border: 2px solid #455a64; border-radius: 2px; }
+        .teller-booth::before { content: 'CAIXA'; color: white; font-size: 8px; font-weight: bold; position: absolute; top: -14px; left: 8px; background: #455a64; padding: 1px 4px; border-radius: 2px; }
+        .booth1 { left: 40%; } .booth2 { left: 50%; }
+        .queue-barrier { top: 32%; left: 74%; width: 4px; height: 25px; background: #37474f; }
+        .queue-barrier::before { content: ''; position: absolute; top: 3px; left: 2px; width: 45px; height: 3px; background: #d32f2f; }
+        .atm-machine { width: 24px; height: 45px; background: #546e7a; border: 2px solid #263238; border-radius: 3px; }
+        .atm-machine::before { content: ''; position: absolute; top: 6px; left: 4px; width: 14px; height: 10px; background: #00e5ff; }
+        .atm1 { top: 8%; left: 65%; } .atm2 { top: 11%; left: 72%; }
+        .bank-sign { top: 3%; left: 42%; padding: 3px 10px; background: #263238; color: #fff; font-size: 9px; font-weight: bold; border-radius: 3px; border-left: 3px solid var(--secondary-color); }
+        .password-panel { top: 8%; left: 28%; width: 60px; height: 18px; background: #111; border: 2px solid #555; border-radius: 4px; color: #ff3d00; font-family: monospace; font-size: 11px; text-align: center; line-height: 18px; box-shadow: 0 0 8px #ff3d00; }
+        .bank-totem { top: 22%; left: 77%; width: 14px; height: 48px; background: var(--primary-color); border: 1px solid #fff; }
+        .bank-totem::before { content: 'S'; color: var(--accent-color); font-weight: bold; font-size: 10px; position: absolute; top: 4px; width: 100%; text-align: center; }
+        .waiting-chairs { top: 38%; left: 55%; width: 100px; height: 20px; background: #1565c0; border-bottom: 4px solid #0d47a1; border-radius: 2px; }
+        .water-dispenser { top: 35%; left: 51%; width: 12px; height: 30px; background: #cfd8dc; border: 1px solid #90a4ae; }
+        .water-dispenser::before { content: ''; position: absolute; top: -12px; left: 1px; width: 8px; height: 12px; background: rgba(33, 150, 243, 0.6); border-radius: 4px 4px 1px 1px; }
+        .security-camera { top: 4%; left: 94%; width: 10px; height: 10px; background: #111; border-radius: 50%; }
+        .privacy-wall { top: 42%; left: 24%; width: 6px; height: 120px; background: rgba(128, 222, 234, 0.2); border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(1px); z-index: 4; }
+        .bank-plant { top: 24%; left: 19%; width: 22px; height: 22px; background: #4e342e; border-radius: 50%; }
+        .bank-plant::before { content: '🌿'; font-size: 24px; position: absolute; top: -20px; left: -2px; }
+        .desk { top: 52%; left: 28%; width: 115px; height: 65px; background: #cfd8dc; border: 3px solid #b0bec5; border-radius: 4px; box-shadow: -8px 12px 8px rgba(0,0,0,0.15); }
+        .computer { top: 49%; left: 32%; width: 28px; height: 20px; background: #263238; border-radius: 2px; z-index: 3; }
+
+        /* --- PERSONAGENS --- */
+        .character { width: 42px; height: 75px; position: absolute; transition: all 3.5s ease-in-out; z-index: 10; }
+        .character.walking { animation: walkSteps 0.4s infinite alternate; }
+        @keyframes walkSteps { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+
+        .char-body { width: 100%; height: 52px; border-radius: 20px 20px 5px 5px; position: absolute; bottom: 0; box-shadow: 0 5px 8px rgba(0,0,0,0.3); }
+        .char-head { width: 32px; height: 32px; border-radius: 50%; background: #ffcc80; position: absolute; top: -15px; left: 5px; }
+
+        .lucas { top: 46%; left: 19%; }
+        .lucas .char-body { background: var(--primary-color); border-top: 4px solid #fff; }
+
+        .cliente { top: 11%; left: 83%; opacity: 0; }
+        .cliente .char-body { background: #e57373; }
+
+        .npc-extra { transition: all 6s linear !important; opacity: 0.85; }
+        .extra-fila .char-body { background: #9b59b6; }
+        .extra-seguranca { width: 45px; height: 78px; }
+        .extra-seguranca .char-body { background: #2c3e50; border-top: 3px solid #f1c40f; }
+
+        .char-label { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); color: white; padding: 1px 6px; border-radius: 3px; font-size: 10px; white-space: nowrap; }
+
+        /* BALÕES DE FALA */
+        .npc-bubble {
+            position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%) scale(0);
+            width: 240px; background: #ffffff; border: 2px solid var(--primary-color); border-radius: 14px;
+            padding: 12px 15px; font-size: 13px; line-height: 1.4; color: #2c3e50;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; z-index: 9999; transform-origin: bottom center;
+        }
+        .npc-bubble::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-width: 10px 10px 0; border-style: solid; border-color: #ffffff transparent; }
+        .npc-bubble.show { transform: translateX(-50%) scale(1); }
+
+        .atend-bubble { border-color: var(--secondary-color); background: #e3f2fd; }
+        .atend-bubble::after { border-color: #e3f2fd transparent; }
+
+        .mood-cloud { position: absolute; top: -65px; left: 50%; transform: translateX(-50%); width: 26px; height: 26px; border-radius: 50%; display: none; justify-content: center; align-items: center; font-weight: bold; font-size: 14px; color: white; box-shadow: 0 3px 6px rgba(0,0,0,0.3); animation: bounce 0.4s infinite alternate; z-index: 9998; }
+        .mood-cloud.happy { background: var(--success-color); display: flex;}
+        .mood-cloud.sad { background: var(--error-color); display: flex;}
+
+        @keyframes bounce { from { transform: translate(-50%, 0); } to { transform: translate(-50%, -5px); } }
+
+        /* --- PAINEL DE INTERAÇÃO DIRETA --- */
+        .interaction-panel { padding: 15px 20px; background: #f8f9fa; border-top: 2px solid #e9ecef; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+        
+        .feedback-inline-box { 
+            font-size: 14px; line-height: 1.5; padding: 12px 15px; border-radius: 8px; 
+            background: #ffffff; border-left: 5px solid #ccc; display: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .options-container-row { display: flex; flex-direction: column; gap: 8px; }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .btn-option { background: white; border: 2px solid #e2e8f0; padding: 12px 16px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 13.5px; transition: all 0.2s; }
+        .btn-option:hover { border-color: var(--secondary-color); background: #f0f7ff; transform: translateX(2px); }
+
+        .btn-help-manager { background: #fff5cc; border: 2px dashed #ffcc00; color: #8a6d00; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; text-align: center; transition: all 0.2s; }
+        .btn-help-manager:hover:not(:disabled) { background: #ffd700; color: #000; }
+        .btn-help-manager:disabled { opacity: 0.5; cursor: not-allowed; border-color: #ccc; color: #999; background: #eee; }
+
+        /* RELATÓRIO */
+        .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; margin: 20px 0; }
+        .report-card { background: #f1f2f6; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary-color); font-size: 13px; }
+        .report-card h4 { margin: 0 0 5px 0; font-size: 14px; }
+
+        /* MODAL DE LEADS */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 10000; padding: 20px; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 100%; text-align: center; position: relative;}
+        .btn-next { background: var(--primary-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; box-sizing: border-box; margin-top: 10px;}
+        
+        .lead-form-group { text-align: left; margin-bottom: 12px; }
+        .lead-form-group label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;}
+        .lead-form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .close-modal-btn { position: absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: #999; }
+
+        .hide { display: none !important; }
+        .invisible-buttons { opacity: 0; pointer-events: none; }
+    </style>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // SUAS CHAVES REAIS CONFIGURADAS COM SUCESSO
+        const firebaseConfig = {
+            apiKey: "AIzaSyAjZyD-0Tu2-o3ornqChE6E7B6EIjDGebk",
+            authDomain: "torobank-simulador.firebaseapp.com",
+            projectId: "torobank-simulador",
+            storageBucket: "torobank-simulador.firebasestorage.app",
+            messagingSenderId: "543549857480",
+            appId: "1:543549857480:web:5c0835b579ef123eb08ffd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Expõe globalmente para o jogo usar
+        window.db = db;
+        window.collection = collection;
+        window.addDoc = addDoc;
+    </script>
+</head>
+<body>
+
+    <div class="game-container">
+        <div class="menu-screen" id="main-menu">
+            <div class="menu-logo">Toro<span>Bank</span></div>
+            <div class="menu-subtitle">Módulo RPG Avançado & Diagnóstico</div>
+            
+            <div class="menu-form">
+                <div class="form-group">
+                    <label for="player-name-input">Nome do Atendente</label>
+                    <input type="text" id="player-name-input" value="Alex" placeholder="Digite seu nome...">
+                </div>
+                <div class="form-group">
+                    <label for="tree-select">Selecione o Cenário de Treinamento</label>
+                    <select id="tree-select">
+                        <option value="modulo_financas">Módulo 1003: Finanças Comportamentais</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="btn-start" onclick="iniciarJogo()">Iniciar Expediente</button>
+            <button class="btn-support" onclick="abrirCaptacaoLeads()">Fale com um de nossos especialistas</button>
+        </div>
+
+        <div class="stats-bar">
+            <div>ToroBank Corp.</div>
+            <div>Atendente: <span id="label-atendente-nome">Alex</span></div>
+            
+            <div class="rpg-status">
+                <span>Paciência do Cliente:</span>
+                <div class="bar-container">
+                    <div class="bar-fill paciencia-fill" id="bar-paciencia"></div>
+                </div>
+            </div>
+            <div class="rpg-status">
+                <span>Sua Resiliência:</span>
+                <div class="bar-container">
+                    <div class="bar-fill resiliencia-fill" id="bar-resiliencia"></div>
+                </div>
+            </div>
+            <div>Pontos: <span id="score-txt">0</span></div>
+        </div>
+
+        <div class="stage-area">
+            <div class="iso-grid"></div>
+
+            <div class="iso-object security-camera"></div>
+            <div class="iso-object bank-door"></div>
+            <div class="iso-object entry-mat"></div>
+            <div class="iso-object tactile-floor"></div>
+            <div class="iso-object teller-booth booth1"></div>
+            <div class="iso-object teller-booth booth2"></div>
+            <div class="iso-object queue-barrier"></div>
+            <div class="iso-object atm-machine atm1"></div>
+            <div class="iso-object atm-machine atm2"></div>
+            <div class="iso-object bank-sign">◀ INVESTIMENTOS</div>
+            <div class="iso-object password-panel">T-103</div>
+            <div class="iso-object bank-totem"></div>
+            <div class="iso-object safety-line"></div>
+            <div class="iso-object water-dispenser"></div>
+            <div class="iso-object waiting-chairs"></div>
+            <div class="iso-object privacy-wall"></div>
+            <div class="iso-object bank-plant"></div>
+            <div class="iso-object desk"></div>
+            <div class="iso-object computer"></div>
+
+            <div class="character npc-extra extra-fila" id="extra-cliente" style="top: 22%; left: 63%;">
+                <div class="char-label">Fila / Caixa</div>
+                <div class="char-head" style="background:#aaccff;"></div>
+                <div class="char-body"></div>
+            </div>
+
+            <div class="character npc-extra extra-seguranca" id="extra-guarda" style="top: 38%; left: 74%;">
+                <div class="char-label">Segurança</div>
+                <div class="char-head" style="background:#e0e0e0;"></div>
+                <div class="char-body"></div>
+            </div>
+
+            <div class="character lucas" id="avatar-atendente">
+                <div class="npc-bubble atend-bubble" id="atend-speech-bubble">...</div>
+                <div class="char-label" id="sprite-atendente-nome">Você</div>
+                <div class="char-head"></div>
+                <div class="char-body"></div>
+            </div>
+
+            <div class="character cliente" id="avatar-cliente">
+                <div class="npc-bubble" id="npc-speech-bubble">...</div>
+                <div class="char-label">Cliente (35a)</div>
+                <div class="mood-cloud" id="cliente-mood">☺</div>
+                <div class="char-head"></div>
+                <div class="char-body" id="cliente-body-color"></div>
+            </div>
+        </div>
+
+        <div class="interaction-panel" id="screen-game">
+            <div class="feedback-inline-box" id="feedback-inline-box"></div>
+            <div class="options-container-row">
+                <button class="btn-help-manager" id="btn-manager-help" onclick="usarDicaGerente()">
+                    🔔 Consultar Gerente Geral (Dicas Disponíveis: <span id="help-count-txt">2</span>/2)
+                </button>
+                <div class="options-grid invisible-buttons" id="options-grid"></div>
+            </div>
+        </div>
+
+        <div class="interaction-panel hide" id="screen-end" style="text-align: center; padding: 25px;">
+            <h2 id="end-title">Expediente Encerrado!</h2>
+            <p id="end-desc">Módulo finalizado.</p>
+            
+            <h3 style="margin-bottom: 5px; color: var(--primary-color);">Relatório Comportamental do Consultor</h3>
+            <div class="report-grid">
+                <div class="report-card"><h4>Disponibilidade / Impulso</h4><span id="rep-dispo">Avaliando...</span></div>
+                <div class="report-card"><h4>Representatividade / Saliência</h4><span id="rep-repre">Avaliando...</span></div>
+                <div class="report-card"><h4>Ancoragem / Projeções</h4><span id="rep-ancora">Avaliando...</span></div>
+                <div class="report-card"><h4>Confiança / Aversão à Perda</h4><span id="rep-perda">Avaliando...</span></div>
+            </div>
+
+            <h1 style="color: var(--secondary-color); font-size: 38px; margin: 10px 0;"><span id="final-score-txt">0</span> pts</h1>
+            <button class="btn-next" onclick="window.location.reload()" style="max-width: 250px; margin: 0 auto;">Reiniciar Simulador</button>
+        </div>
+    </div>
+
+    <div class="modal" id="leads-modal">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="fecharLeads()">&times;</button>
+            <h3 style="color: var(--primary-color); margin-top: 10px;">Fale com um Especialista ToroBank</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Preencha os campos abaixo e nosso time comercial de alta renda entrará em contato.</p>
+            <form id="lead-form" onsubmit="enviarLead(event)">
+                <div class="lead-form-group"> <label>Seu Nome Completo</label> <input type="text" id="lead-name" required placeholder="Ex: João Silva"> </div>
+                <div class="lead-form-group"> <label>E-mail Corporativo</label> <input type="email" id="lead-email" required placeholder="Ex: joao@empresa.com"> </div>
+                <div class="lead-form-group"> <label>Telefone / WhatsApp</label> <input type="tel" id="lead-phone" required placeholder="Ex: (11) 99999-9999"> </div>
+                <button type="submit" class="btn-next">Enviar para o Time de Vendas</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let bgmInterval = null;
+
+        function playTone(freq, type, duration, vol) {
+            try {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = type; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function sfxPlimBanco() { playTone(987.77, 'sine', 0.15, 0.15); setTimeout(() => playTone(1318.51, 'sine', 0.4, 0.15), 120); }
+        function sfxSucesso() { playTone(523.25, 'triangle', 0.1, 0.2); setTimeout(() => playTone(659.25, 'triangle', 0.1, 0.2), 80); setTimeout(() => playTone(1046.50, 'triangle', 0.3, 0.2), 240); }
+        function sfxErro() { playTone(220.00, 'sawtooth', 0.15, 0.15); setTimeout(() => playTone(196.00, 'sawtooth', 0.3, 0.15), 100); }
+        function iniciarMusicaFundo() { const notasJazz = [261.63, 329.63, 392.00, 493.88]; let i = 0; bgmInterval = setInterval(() => { if(Math.random() > 0.3) { playTone(notasJazz[i % notasJazz.length], 'sine', 0.8, 0.03); } i++; }, 600); }
+
+        // Mapeamento Completo da Árvore
+        const gameData = {
+          "steps": {
+            "1": {
+              "viés": "disponibilidade",
+              "prompt": "[NOME], tenho 35 anos e invisto muito pelo que vejo nas notícias e pelo que meus amigos comentam. Quero ganhar mais, mas percebo que decido rápido demais. Por onde começamos?",
+              "options": {
+                "A": { "content": "Vamos escolher logo os ativos mais comentados e ajustar depois, porque rapidez conta muito.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Essa resposta reforça a disponibilidade e o comportamento impulsivo, sem diagnosticar objetivos estruturados antes." },
+                "B": { "content": "Vamos mapear objetivos, horizonte, risco e vieses antes de discutir qualquer ativo específico.", "score": 5, "next": "2", "explanation": "Abordagem correta! A orientação consultiva começa pelo diagnóstico do investidor e dos vieses que distorcem as suas escolhas." },
+                "C": { "content": "Vamos repetir a estratégia do seu amigo, já que ela parece ter funcionado recentemente.", "score": 0, "next": "2", "explanation": "Abordagem incorreta. Copiar terceiros sem contexto favorece representatividade e negligencia a tolerância a riscos." },
+                "D": { "content": "Vamos focar apenas na rentabilidade passada para encontrar o investment vencedor.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Rentabilidade passada isolada ativa extrapolação e excesso de confiança." }
+              }
+            },
+            "2": {
+              "viés": "representatividade",
+              "prompt": "Eu gosto de investir em empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.",
+              "options": {
+                "A": { "content": "Faz sentido, uma boa história recente costuma indicar retorno superior e risco menor.", "score": 0, "next": "3", "explanation": "Incorreta. Uma narrativa convincente não garante retornos futuros, caindo no viés de representatividade." },
+                "B": { "content": "Podemos comprar mais, pois empresas famosas normalmente superam empresas discretas.", "score": 0, "next": "3", "explanation": "Incorreta. Fama e saliência não equivalem a preço justo ou vantagem competitiva real." },
+                "C": { "content": "Vamos separar narrativa de dados, comparando preço, fundamentos, risco e cenário provável.", "score": 5, "next": "3", "explanation": "Correta! Essa abordagem reduz o viés de representatividade ao confrontar a história midiática com as evidências analíticas." },
+                "D": { "content": "Melhor evitar qualquer empresa noticiada, pois notícia positiva quase sempre vira bolha.", "score": 0, "next": "3", "explanation": "Incorreta. O problema não é a notícia, mas sim decidir baseado nela sem uma análise estruturada." }
+              }
+            },
+            "3": {
+              "viés": "disponibilidade",
+              "prompt": "Quando vejo muitas reportagens sobre crise, fico com vontade de vender tudo. Parece que a chance de perda ficou enorme só porque o assunto está em todo lugar.",
+              "options": {
+                "A": { "content": "Isso pode be disponibilidade; vamos medir probabilidade, impacto e plano antes de agir.", "score": 5, "next": "4", "explanation": "Correta! A heurística da disponibilidade superestima eventos recentes ou vívidos. Medir dados reais acalma a reação reativa." },
+                "B": { "content": "Se a notícia está em todo lugar, o melhor é vender agora e recomprar depois.", "score": 0, "next": "4", "explanation": "Incorreta. Vender puramente por saliência midiática pode transformar ruídos diários em prejuízo consolidado." },
+                "C": { "content": "Ignore totalmente as notícias, porque elas nunca ajudam a avaliar riscos reais.", "score": 0, "next": "4", "explanation": "Incorreta. As notícias contêm dados úteis, elas só precisam ser filtradas metodologicamente por probabilidade." },
+                "D": { "content": "Use a manchete principal do dia como guia para aumentar ou reduzir a carteira.", "score": 0, "next": "4", "explanation": "Incorreta. Decidir por manchetes amplia drasticamente o viés de disponibilidade e a rotatividade desnecessária." }
+              }
+            },
+            "4": {
+              "viés": "representatividade",
+              "prompt": "Meu colega disse que uma ação parecida com outra que subiu muito deve repetir o mesmo movimento. Eu tendo a acreditar porque os casos parecem iguais.",
+              "options": {
+                "A": { "content": "Se os casos parecem iguais, podemos assumir que o retorno também será parecido.", "score": 0, "next": "5", "explanation": "Incorreta. Similaridades superficiais não garantem distribuições idênticas de retorno. Isso é representatividade." },
+                "B": { "content": "Vamos priorizar o setor mais quente, pois padrões visíveis quase sempre se repetem.", "score": 0, "next": "5", "explanation": "Incorreta. Setores populares podem estar inflados ou concentrar riscos nocivos para a carteira." },
+                "C": { "content": "Basta comparar gráficos recentes para validar se o padrão é realmente confiável.", "score": 0, "next": "5", "explanation": "Incorreta. Gráficos isolados induzem à extrapolação e ignoram as bases de valuation." },
+                "D": { "content": "Vamos testar a semelhança com dados-base, fundamentos, preço e riscos específicos.", "score": 5, "next": "5", "explanation": "Correta! Usar taxas-base e fatores corporativos objetivos impede generalizações indevidas por similaridade aparente." }
+              }
+            },
+            "5": {
+              "viés": "disponibilidade",
+              "prompt": "Então, para não cair nessas armadilhas, eu deveria ter uma regra prática? Tenho medo de ficar paralisado se analisar demais.",
+              "options": {
+                "A": { "content": "Use só uma regra simples: compre o que subiu mais nos últimos três meses.", "score": 0, "next": "6", "explanation": "Incorreta. Essa regra reforça a extrapolação de curto prazo e compra ativos sem margem de segurança." },
+                "B": { "content": "Use um checklist curto com objetivo, risco, preço, evidência e motivo de venda.", "score": 5, "next": "6", "explanation": "Correta! Um checklist curto equilibra agilidade e disciplina operacional, bloqueando decisões automáticas." },
+                "C": { "content": "Decida pelo primeiro bom argumento, para evitar excesso de informação e demora.", "score": 0, "next": "6", "explanation": "Incorreta. O primeiro argumento pode servir como narrativa sedutora ou âncora." },
+                "D": { "content": "Siga sempre a opinião majoritária, pois o grupo costuma errar menos que você.", "score": 0, "next": "6", "explanation": "Incorreta. O consenso de manada reflete apenas disponibilidade técnica e não considera o seu perfil." }
+              }
+            },
+            "6": {
+              "viés": "geral",
+              "prompt": "Gostei do checklist. Antes de investir, quero transformar isso em uma rotina para não agir no impulso quando surgir uma oportunidade chamativa.",
+              "options": {
+                "A": { "content": "Registre só o preço de compra e acompanhe se a notícia continua favorável.", "score": 0, "next": "END", "explanation": "Incorreta. Monitorar apenas o preço e notícias superficiais mantém os vieses comportamentais em ponto cego." },
+                "B": { "content": "Revise apenas quando houver queda forte, porque é quando os vieses mais aparecem.", "score": 0, "next": "END", "explanation": "Incorreta. Os vieses são extremamente perigosos na euforia. As revisões precisam ser fixas." },
+                "C": { "content": "Documente a tese, premissas, riscos, gatilhos de revisão e limite por ativo.", "score": 5, "next": "END", "explanation": "Correta! Documentar decisões cria memória imutável, impede a reconstrução retrospectiva de narrativas e gera disciplina." },
+                "D": { "content": "Escolha ativos em dias tranquilos e depois evite rever a decisão por um ano.", "score": 0, "next": "END", "explanation": "Incorreta. Evitar revisões programadas impede correções vitais caso premissas estruturais mudem." }
+              }
+            },
+            "7": {
+              "viés": "ancoragem",
+              "prompt": "Um analista falou que o preço justo de uma ação é R$ 80. Ela está em R$ 60, então acho que é quase certo chegar lá. Esse número ficou na minha cabeça.",
+              "options": {
+                "A": { "content": "Use os R$ 80 como meta fixa, pois estimativas de analistas já incorporam tudo.", "score": 0, "next": "8", "explanation": "Incorreta. Tratar uma estimativa como certeza é cair no viés de ancoragem." },
+                "B": { "content": "Compre agora e só venda quando chegar a R$ 80, sem reavaliar o cenário.", "score": 0, "next": "8", "explanation": "Incorreta. Essa conduta prende a decisão à âncora fixa." },
+                "C": { "content": "Aumente a posição se cair mais, porque a distância até R$ 80 ficará maior.", "score": 0, "next": "8", "explanation": "Incorreta. Quedas contínuas podem refletir deteriorações estruturais da empresa." },
+                "D": { "content": "Vamos tratar R$ 80 como hipótese e testar cenários, premissas e margem de segurança.", "score": 5, "next": "8", "explanation": "Correta! A âncora matemática deve ser constantemente desafiada por análises de estresse e fundamentos." }
+              }
+            },
+            "8": {
+              "viés": "confianca",
+              "prompt": "Eu também acho que consigo prever bem o mercado. Nos últimos meses acertei algumas operações e estou pensando em concentrar metade da carteira nelas.",
+              "options": {
+                "A": { "content": "Acertos recentes podem inflar confiança; vamos limitar concentração e revisar evidências.", "score": 5, "next": "9", "explanation": "Correta! O excesso de confiança infla o giro de carteira e subestima os riscos." },
+                "B": { "content": "Se você acertou recentemente, faz sentido dobrar a exposição antes que o mercado veja.", "score": 0, "next": "9", "explanation": "Incorreta. Ganhos de curto prazo podem decorrer de aleatoriedade cíclica." },
+                "C": { "content": "Concentre a carteira nos ativos que você entende melhor e ignore diversificação.", "score": 0, "next": "9", "explanation": "Incorreta. A familiaridade com uma marca não anula o risco de mercado." },
+                "D": { "content": "Opere mais vezes para aproveitar sua fase boa e confirmar sua capacidade preditiva.", "score": 0, "next": "9", "explanation": "Incorreta. Intensificar operações eleva custos e riscos." }
+              }
+            },
+            "9": {
+              "viés": "perda",
+              "prompt": "Uma posição caiu 15%. Eu não quero vender porque, enquanto não vendo, sinto que não perdi de verdade. Prefiro esperar voltar ao preço de compra.",
+              "options": {
+                "A": { "content": "Espere voltar ao preço de compra, pois vender agora transformaria a perda em real.", "score": 0, "next": "10", "explanation": "Incorreta. A deterioração patrimonial já ocorreu. Recusar a liquidação revela aversão à perda." },
+                "B": { "content": "Vamos reavaliar a tese; se ela quebrou, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! A permanência deve se amparar nas premissas de hoje, não no preço histórico." },
+                "C": { "content": "Compre mais para reduzir o preço médio, assim fica mais fácil recuperar logo.", "score": 0, "next": "10", "explanation": "Incorreta. Reduzir preço médio em teses ruins apenas amplifica a exposição." },
+                "D": { "content": "Mantenha sem analisar, porque paciência sempre vence quedas temporárias do mercado.", "score": 0, "next": "10", "explanation": "Incorreta. A resiliência só funciona se os fundamentos seguirem intactos." }
+              }
+            },
+            "10": {
+              "viés": "perda",
+              "prompt": "Percebo que sofro mais com uma perda de R$ 1.000 do que fico feliz com um ganho de R$ 1.000. Isso mexe muito com minhas decisões.",
+              "options": {
+                "A": { "content": "Evite ativos de risco por completo, porque qualquer perda prejudica sua racionalidade.", "score": 0, "next": "11", "explanation": "Incorreta. Eliminar qualquer volatilidade inviabiliza o cumprimento de metas de longo prazo." },
+                "B": { "content": "Busque apenas produtos com garantia, mesmo que isso reduza muito o retorno esperado.", "score": 0, "next": "11", "explanation": "Incorreta. Blindagens completas cobram pedágios severos na rentabilidade real." },
+                "C": { "content": "Vamos ajustar alocação, reserva e limites para suportar perdas sem abandonar o plano.", "score": 5, "next": "11", "explanation": "Correta! Mapear a assimetria psicológica da aversão à perda permite parametrizar volatilidades aceitáveis." },
+                "D": { "content": "Compense perdas assumindo riscos maiores, para recuperar rápido e aliviar o incômodo.", "score": 0, "next": "11", "explanation": "Incorreta. Tentar reaver perdas aceleradamente ativa o comportamento reativo de aposta." }
+              }
+            },
+            "11": {
+              "viés": "geral",
+              "prompt": "Quero sair daqui com um plano simples para lidar com âncoras, excesso de confiança e aversão à perda antes de investir de novo.",
+              "options": {
+                "A": { "content": "Defina um preço-alvo único, confie na sua leitura e segure perdas até empatar.", "score": 0, "next": "END", "explanation": "Incorreta. Essa resposta aglutina simultaneamente ancoragem e aversão à perda." },
+                "B": { "content": "Acompanhe previsões de mercado diariamente e ajuste a carteira a cada nova opinião.", "score": 0, "next": "END", "explanation": "Incorreta. Ajustes por ruídos macroeconômicos quebram a consistência." },
+                "C": { "content": "Invista somente quando tiver certeza alta, pois dúvida é sinal de decisão ruim.", "score": 0, "next": "END", "explanation": "Incorreta. Exigir certezas absolutas mascara o excesso de confiança." },
+                "D": { "content": "Use cenários, limites de posição, critérios de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! A governança por processos minimiza reações passionais, controlando os vieses." }
+              }
+            }
+          }
+        };
+
+        let errosPorVies = { disponibilidade: 0, representatividade: 0, ancoragem: 0, confianca: 0, perda: 0 };
+        let acertosPorVies = { disponibilidade: 0, representatividade: 0, ancoragem: 0, confianca: 0, perda: 0 };
+        
+        let dicasDisponiveis = 2;
+        let score = 0; let currentStep = "1";
+        let nomeDoAtendente = "Alex"; let pacienciaCliente = 100; let resilienciaAtendente = 100;
+
+        const avatar = document.getElementById('avatar-cliente');
+        const bubble = document.getElementById('npc-speech-bubble');
+        const atendBubble = document.getElementById('atend-speech-bubble');
+        const grid = document.getElementById('options-grid');
+        const inlineFeedback = document.getElementById('feedback-inline-box');
+
+        function iniciarJogo() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            if(nameInput !== "") nomeDoAtendente = nameInput;
+            document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
+            document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
+
+            document.getElementById('main-menu').style.opacity = '0';
+            montarBotoesInterface("1");
+            iniciarMovimentacaoFigurantes();
+            iniciarMusicaFundo();
+
+            setTimeout(() => {
+                document.getElementById('main-menu').style.display = 'none';
+                avatar.classList.add('walking'); avatar.style.opacity = "1";
+                avatar.style.top = "56%"; avatar.style.left = "40%";
+                
+                setTimeout(() => {
+                    avatar.classList.remove('walking');
+                    sfxPlimBanco();
+                    bubble.classList.add('show');
+                    grid.classList.remove('invisible-buttons');
+                }, 3500); 
+            }, 500);
+        }
+
+        function iniciarMovimentacaoFigurantes() {
+            const clienteFila = document.getElementById('extra-cliente');
+            const guarda = document.getElementById('extra-guarda');
+            setInterval(() => {
+                const rotas = [{top: '22%', left: '63%'}, {top: '16%', left: '74%'}, {top: '36%', left: '62%'}];
+                let d = rotas[Math.floor(Math.random() * rotas.length)];
+                if(clienteFila) {
+                    clienteFila.style.top = d.top; clienteFila.style.left = d.left;
+                }
+            }, 6000);
+            setInterval(() => {
+                const rotas = [{top: '38%', left: '74%'}, {top: '18%', left: '80%'}, {top: '20%', left: '45%'}];
+                let d = rotas[Math.floor(Math.random() * rotas.length)];
+                if(guarda) {
+                    guarda.style.top = d.top; guarda.style.left = d.left;
+                }
+            }, 7500);
+        }
+
+        function montarBotoesInterface(stepId) {
+            currentStep = stepId;
+            const step = gameData.steps[stepId];
+            
+            let textoTratado = step.prompt.replace("[NOME]", nomeDoAtendente);
+            bubble.innerText = textoTratado;
+            bubble.classList.add('show');
+            grid.innerHTML = '';
+
+            document.getElementById('btn-manager-help').disabled = (dicasDisponiveis <= 0);
+
+            Object.keys(step.options).forEach(key => {
+                const opt = step.options[key];
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.setAttribute('data-key', key);
+                btn.setAttribute('data-score', opt.score);
+                btn.innerText = `${key}) ${opt.content}`;
+                btn.onclick = () => handleChoice(opt);
+                grid.appendChild(btn);
+            });
+            grid.classList.remove('invisible-buttons');
+        }
+
+        function usarDicaGerente() {
+            if (dicasDisponiveis <= 0) return;
+            dicasDisponiveis--;
+            document.getElementById('help-count-txt').innerText = dicasDisponiveis;
+            document.getElementById('btn-manager-help').disabled = true;
+
+            const botoes = Array.from(grid.getElementsByClassName('btn-option'));
+            const botoesErrados = botoes.filter(btn => parseInt(btn.getAttribute('data-score')) === 0);
+            
+            botoesErrados.sort(() => Math.random() - 0.5);
+            let eliminados = 0;
+            botoesErrados.forEach(btn => {
+                if (eliminados < 2) {
+                    btn.style.opacity = "0.3";
+                    btn.style.textDecoration = "line-through";
+                    btn.disabled = true;
+                    eliminados++;
+                }
+            });
+            playTone(880, 'sine', 0.2, 0.1);
+        }
+
+        function handleChoice(option) {
+            score += option.score;
+            document.getElementById('score-txt').innerText = score;
+            
+            bubble.classList.remove('show');
+            grid.classList.add('invisible-buttons');
+            document.getElementById('btn-manager-help').disabled = true;
+
+            atendBubble.innerText = option.content;
+            atendBubble.classList.add('show');
+
+            inlineFeedback.innerText = option.explanation;
+            inlineFeedback.style.display = "block";
+            inlineFeedback.style.borderLeftColor = option.score > 0 ? "var(--success-color)" : "var(--error-color)";
+            inlineFeedback.style.backgroundColor = option.score > 0 ? "#e8f5e9" : "#ffebee";
+
+            const categoriaVies = gameData.steps[currentStep].viés;
+            if(categoriaVies && categoriaVies !== "geral") {
+                if(option.score > 0) acertosPorVies[categoriaVies]++;
+                else errosPorVies[categoriaVies]++;
+            }
+
+            const mood = document.getElementById('cliente-mood');
+            if(option.score > 0) {
+                sfxSucesso(); mood.innerText = "✓"; mood.className = "mood-cloud happy";
+                resilienciaAtendente = Math.min(100, resilienciaAtendente + 5);
+            } else {
+                sfxErro(); mood.innerText = "⚡"; mood.className = "mood-cloud sad";
+                pacienciaCliente = Math.max(0, pacienciaCliente - 25);
+                resilienciaAtendente = Math.max(0, resilienciaAtendente - 20);
+                
+                if (pacienciaCliente < 40) document.getElementById('cliente-body-color').style.backgroundColor = "#8e44ad";
+                else if (pacienciaCliente < 70) document.getElementById('cliente-body-color').style.backgroundColor = "#d35400";
+            }
+
+            document.getElementById('bar-paciencia').style.width = pacienciaCliente + "%";
+            document.getElementById('bar-resiliencia').style.width = resilienciaAtendente + "%";
+
+            setTimeout(() => {
+                atendBubble.classList.remove('show');
+                inlineFeedback.style.display = "none";
+                document.getElementById('cliente-mood').className = "mood-cloud"; 
+
+                if (pacienciaCliente <= 0) {
+                    showEndGame("CLIENTE_DESISTIU");
+                } else if (resilienciaAtendente <= 0) {
+                    showEndGame("BURNOUT");
+                } else if (option.next === "END") {
+                    showEndGame("SUCESSO");
+                } else {
+                    montarBotoesInterface(option.next);
+                }
+            }, 4500);
+        }
+
+        function calcularRelatorioVieses() {
+            const formatarLinha = (vies) => {
+                if (acertosPorVies[vies] === 0 && errosPorVies[vies] === 0) return "Não testado.";
+                return `Acertos: ${acertosPorVies[vies]} | Erros: ${errosPorVies[vies]}`;
+            };
+            document.getElementById('rep-dispo').innerText = formatarLinha('disponibilidade');
+            document.getElementById('rep-repre').innerText = formatarLinha('representatividade');
+            document.getElementById('rep-ancora').innerText = formatarLinha('ancoragem');
+            document.getElementById('rep-perda').innerText = formatarLinha('perda');
+        }
+
+        // SALVA DADOS NO FIREBASE FIRESTORE EM TEMPO REAL
+        let gravacaoConcluida = false;
+        async function salvarResultadoNoFirebase(motivoTermino) {
+            try {
+                if(window.addDoc && window.collection && window.db) {
+                    await window.addDoc(window.collection(window.db, "resultados_jogos"), {
+                        atendente: nomeDoAtendente,
+                        pontuacao_final: score,
+                        motivo_encerramento: motivoTermino,
+                        acertos_detalhes: acertosPorVies,
+                        erros_detalhes: errosPorVies,
+                        data_partida: new Date()
+                    });
+                    console.log("Desempenho salvo com sucesso no Firestore!");
+                    gravacaoConcluida = true;
+                }
+            } catch (e) {
+                console.error("Erro ao salvar resultado final: ", e);
+            }
+        }
+
+        function showEndGame(motivo) {
+            if(bgmInterval) clearInterval(bgmInterval);
+            bubble.classList.remove('show'); atendBubble.classList.remove('show'); inlineFeedback.style.display = "none";
+            document.getElementById('screen-game').classList.add('hide');
+            
+            const endScreen = document.getElementById('screen-end');
+            const title = document.getElementById('end-title');
+            const desc = document.getElementById('end-desc');
+            
+            salvarResultadoNoFirebase(motivo); 
+
+            if (motivo === "CLIENTE_DESISTIU") {
+                title.innerText = "Fim de Jogo: Cliente sem Paciência!";
+                desc.innerText = "O investidor achou a abordagem confusa, levantou e saiu da agência.";
+                title.style.color = "var(--error-color)";
+            } else if (motivo === "BURNOUT") {
+                title.innerText = "Fim de Jogo: Limite de Estresse!";
+                desc.innerText = "O estresse operacional drenou suas forças de consultoria.";
+                title.style.color = "var(--error-color)";
+            } else {
+                title.innerText = "Módulo Concluído!";
+                desc.innerText = "Sucesso! Você desarmou com maestria os vieses comportamentais.";
+                title.style.color = "var(--success-color)";
+            }
+
+            calcularRelatorioVieses();
+            endScreen.classList.remove('hide');
+            document.getElementById('final-score-txt').innerText = score;
+            
+            avatar.classList.add('walking'); avatar.style.top = "11%"; avatar.style.left = "83%";
+            setTimeout(() => { avatar.style.opacity = "0"; avatar.classList.remove('walking'); }, 3500);
+        }
+
+        function abrirCaptacaoLeads() { document.getElementById('leads-modal').style.display = 'flex'; }
+        function fecharLeads() { document.getElementById('leads-modal').style.display = 'none'; }
+
+        // SALVA CAPTAÇÃO DE LEADS NO BANCO DE DADOS FIRESTORE
+        async function enviarLead(event) {
+            event.preventDefault();
+            const nome = document.getElementById('lead-name').value;
+            const email = document.getElementById('lead-email').value;
+            const telefone = document.getElementById('lead-phone').value;
+
+            try {
+                if(window.addDoc && window.collection && window.db) {
+                    await window.addDoc(window.collection(window.db, "leads_comercial"), {
+                        nome: nome,
+                        email: email,
+                        telefone: telefone,
+                        status: "Novo Lead - Time de Vendas",
+                        data_cadastro: new Date()
+                    });
+                    alert(`Obrigado, ${nome}! Seus dados foram enviados com prioridade máxima para a mesa comercial de Alta Renda do ToroBank.`);
+                    fecharLeads();
+                } else {
+                    alert("O Firebase está terminando de carregar. Aguarde 3 segundos e tente novamente!");
+                }
+            } catch(e) {
+                console.error("Erro ao registrar lead: ", e);
+                alert("Ocorreu um erro ao salvar o contato no banco. Certifique-se de que o Firestore foi criado em Modo de Teste.");
+            }
+        }
+    </script>
+</body>
+</html>
