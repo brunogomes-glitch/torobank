@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToroBank - RPG Analítico</title>
+    <title>ToroBank - RPG Analítico Multi-Cenários</title>
     <style>
         :root {
             --primary-color: #002f6c;
@@ -67,7 +67,7 @@
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            padding: 25px 35px;
+            padding: 20px 35px;
             border-radius: 14px;
             max-width: 500px;
             width: 100%;
@@ -77,7 +77,7 @@
             box-sizing: border-box;
         }
 
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.5px; }
         .form-group input, .form-group select { width: 100%; padding: 11px; background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #2c3e50; box-sizing: border-box; outline: none; }
         .form-group input:focus { border-color: var(--secondary-color); background: #ffffff; }
@@ -95,7 +95,7 @@
         .resiliencia-fill { background: #00e676; }
 
         /* --- PALCO GRÁFICO --- */
-        .stage-area { height: 440px; background: linear-gradient(to bottom, #607d8b, #263238); position: relative; border-bottom: 6px solid #1a252c; }
+        .stage-area { height: 440px; background: linear-gradient(to bottom, #607d8b, #263238); position: relative; border-bottom: 6px solid #1a252c; overflow: hidden; }
         .iso-grid { position: absolute; top: 45%; left: 50%; width: 680px; height: 560px; background-color: var(--floor-color); background-image: linear-gradient(rgba(0,47,108,0.04) 2px, transparent 2px), linear-gradient(90deg, rgba(0,47,108,0.04) 2px, transparent 2px); background-size: 40px 40px; transform: translate(-50%, -50%) rotateX(60deg) rotateZ(45deg); transform-style: preserve-3d; box-shadow: -15px 15px 35px rgba(0,0,0,0.4); border: 6px solid #ffffff; }
         .iso-object { position: absolute; z-index: 2; }
 
@@ -191,16 +191,6 @@
         .report-card { background: #f1f2f6; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary-color); font-size: 13px; }
         .report-card h4 { margin: 0 0 5px 0; font-size: 14px; }
 
-        /* MODAL DE LEADS */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 10000; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 12px; max-width: 500px; width: 100%; text-align: center; position: relative;}
-        .btn-next { background: var(--primary-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; box-sizing: border-box; margin-top: 10px;}
-        
-        .lead-form-group { text-align: left; margin-bottom: 12px; }
-        .lead-form-group label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-bottom: 4px;}
-        .lead-form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .close-modal-btn { position: absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: #999; }
-
         .hide { display: none !important; }
         .invisible-buttons { opacity: 0; pointer-events: none; }
     </style>
@@ -209,7 +199,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // CHAVES CORRIGIDAS DO SEU BANCO ATUAL (TOROBANK-82B54)
         const firebaseConfig = {
             apiKey: "AIzaSyAjZyD-0Tu2-o3ornqChE6E7B6EIjDGebk",
             authDomain: "torobank-82b54.firebaseapp.com",
@@ -233,25 +222,32 @@
         
         <div class="menu-screen" id="main-menu">
             <div class="menu-logo">Toro<span>Bank</span></div>
-            <div class="menu-subtitle">Módulo RPG Avançado & Diagnóstico</div>
+            <div class="menu-subtitle" id="menu-sub-title-label">Módulo RPG Avançado & Diagnóstico</div>
             
             <form class="menu-form" id="cadastro-inicial-form" onsubmit="processarCadastroEIniciar(event)">
-                <div class="form-group">
-                    <label for="player-name-input">Seu Nome Completo (Atendente)</label>
-                    <input type="text" id="player-name-input" required placeholder="Ex: Alex Silva">
+                <div id="campos-cadastro-jogador">
+                    <div class="form-group">
+                        <label for="player-name-input">Seu Nome Completo (Atendente)</label>
+                        <input type="text" id="player-name-input" required placeholder="Ex: Alex Silva">
+                    </div>
+                    <div class="form-group">
+                        <label for="player-email-input">E-mail de Trabalho/Estudante</label>
+                        <input type="email" id="player-email-input" required placeholder="Ex: alex@empresa.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="player-phone-input">WhatsApp / Celular</label>
+                        <input type="tel" id="player-phone-input" required placeholder="Ex: (11) 99999-9999">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="player-email-input">E-mail de Trabalho/Estudante</label>
-                    <input type="email" id="player-email-input" required placeholder="Ex: alex@empresa.com">
-                </div>
-                <div class="form-group">
-                    <label for="player-phone-input">WhatsApp / Celular</label>
-                    <input type="tel" id="player-phone-input" required placeholder="Ex: (11) 99999-9999">
-                </div>
-                <div class="form-group">
-                    <label for="tree-select">Cenário Disponível</label>
+                    <label for="tree-select">Escolha o Cenário/Módulo</label>
                     <select id="tree-select">
                         <option value="modulo_financas">Módulo 1003: Finanças Comportamentais</option>
+                        <option value="FP-ARB-INT-001">Módulo CEA/CPA-20: Investidor Herdeiro (19 anos)</option>
+                        <option value="IRPF-PF-ARV-001">Módulo IRPF: Pessoa Física Recém-Casada</option>
+                        <option value="TAT-EDU-INT-001">Módulo TAT: Escuta Ativa e Ética no Atendimento</option>
+                        <option value="AD-CPROR-2004">Módulo C-Pro R: Orçamento Familiar e Viagens</option>
+                        <option value="AD-CPROR-3004">Módulo C-Pro R: Previdência (PGBL vs VGBL)</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
@@ -321,7 +317,7 @@
 
             <div class="character cliente" id="avatar-cliente">
                 <div class="npc-bubble" id="npc-speech-bubble">...</div>
-                <div class="char-label">Cliente (35a)</div>
+                <div class="char-label" id="label-tipo-cliente">Cliente</div>
                 <div class="mood-cloud" id="cliente-mood">☺</div>
                 <div class="char-head"></div>
                 <div class="char-body" id="cliente-body-color"></div>
@@ -344,454 +340,81 @@
             
             <h3 style="margin-bottom: 5px; color: var(--primary-color);">Relatório Comportamental do Consultor</h3>
             <div class="report-grid">
-                <div class="report-card"><h4>Disponibilidade / Impulso</h4><span id="rep-dispo">Avaliando...</span></div>
-                <div class="report-card"><h4>Representatividade / Saliência</h4><span id="rep-repre">Avaliando...</span></div>
-                <div class="report-card"><h4>Ancoragem / Projeções</h4><span id="rep-ancora">Avaliando...</span></div>
-                <div class="report-card"><h4>Confiança / Aversão à Perda</h4><span id="rep-perda">Avaliando...</span></div>
+                <div class="report-card"><h4>Categoria Metodológica A</h4><span id="rep-dispo">Avaliando...</span></div>
+                <div class="report-card"><h4>Categoria Metodológica B</h4><span id="rep-repre">Avaliando...</span></div>
+                <div class="report-card"><h4>Categoria Metodológica C</h4><span id="rep-ancora">Avaliando...</span></div>
+                <div class="report-card"><h4>Categoria Metodológica D</h4><span id="rep-perda">Avaliando...</span></div>
             </div>
 
             <h1 style="color: var(--secondary-color); font-size: 38px; margin: 10px 0;"><span id="final-score-txt">0</span> pts</h1>
-            <button class="btn-next" onclick="window.location.reload()" style="max-width: 250px; margin: 0 auto;">Reiniciar Simulador</button>
-        </div>
-    </div>
-
-    <div class="modal" id="leads-modal">
-        <div class="modal-content">
-            <button class="close-modal-btn" onclick="fecharLeads()">&times;</button>
-            <h3 style="color: var(--primary-color); margin-top: 10px;">Fale com um Especialista ToroBank</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">Preencha os campos abaixo e nosso time comercial de alta renda entrará em contato.</p>
-            <form id="lead-form" onsubmit="enviarLead(event)">
-                <div class="lead-form-group"> <label>Seu Nome Completo</label> <input type="text" id="lead-name" required placeholder="Ex: João Silva"> </div>
-                <div class="lead-form-group"> <label>E-mail Corporativo</label> <input type="email" id="lead-email" required placeholder="Ex: joao@empresa.com"> </div>
-                <div class="lead-form-group"> <label>Telefone / WhatsApp</label> <input type="tel" id="lead-phone" required placeholder="Ex: (11) 99999-9999"> </div>
-                <button type="submit" class="btn-next">Enviar para o Time de Vendas</button>
-            </form>
+            <button class="btn-next" onclick="prepararNovoCenarioSemCadastro()" style="max-width: 250px; margin: 0 auto; background: var(--success-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">Mudar de Cenário / Jogar de Novo</button>
         </div>
     </div>
 
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let bgmInterval = null;
-
-        function playTone(freq, type, duration, vol) {
-            try {
-                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                osc.type = type; osc.frequency.value = freq;
-                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
-        }
-
-        function sfxPlimBanco() { playTone(987.77, 'sine', 0.15, 0.15); setTimeout(() => playTone(1318.51, 'sine', 0.4, 0.15), 120); }
-        function sfxSucesso() { playTone(523.25, 'triangle', 0.1, 0.2); setTimeout(() => playTone(659.25, 'triangle', 0.1, 0.2), 80); setTimeout(() => playTone(1046.50, 'triangle', 0.3, 0.2), 240); }
-        function sfxErro() { playTone(220.00, 'sawtooth', 0.15, 0.15); setTimeout(() => playTone(196.00, 'sawtooth', 0.3, 0.15), 100); }
-        function iniciarMusicaFundo() { const notasJazz = [261.63, 329.63, 392.00, 493.88]; let i = 0; bgmInterval = setInterval(() => { if(Math.random() > 0.3) { playTone(notasJazz[i % notasJazz.length], 'sine', 0.8, 0.03); } i++; }, 600); }
-
-        const gameData = {
-          "steps": {
-            "1": {
-              "viés": "disponibilidade",
-              "prompt": "[NOME], tenho 35 anos e invisto muito pelo que vejo nas notícias e pelo que meus amigos comentam. Quero ganhar mais, mas percebo que decido rápido demais. Por onde começamos?",
-              "options": {
-                "A": { "content": "Vamos escolher logo os ativos mais comentados e ajustar depois, porque rapidez conta muito.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Essa resposta reforça a disponibilidade e o comportamento impulsivo, sem diagnosticar objetivos estruturados antes." },
-                "B": { "content": "Vamos mapear objetivos, horizonte, risco e vieses antes de discutir qualquer ativo específico.", "score": 5, "next": "2", "explanation": "Abordagem correta! A orientação consultiva começa pelo diagnóstico do investidor e dos vieses que distorcem as suas escolhas." },
-                "C": { "content": "Vamos repetir a estratégia do seu amigo, já que ela parece ter funcionado recentemente.", "score": 0, "next": "2", "explanation": "Abordagem incorreta. Copiar terceiros sem contexto favorece representatividade e negligencia a tolerância a riscos." },
-                "D": { "content": "Vamos focar apenas na rentabilidade passada para encontrar o investimento vencedor.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Rentabilidade passada isolada ativa extrapolação e excesso de confiança." }
-              }
-            },
-            "2": {
-              "viés": "representatividade",
-              "prompt": "Eu gosto de investir em empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.",
-              "options": {
-                "A": { "content": "Faz sentido, uma boa história recente costuma indicar retorno superior e risco menor.", "score": 0, "next": "3", "explanation": "Incorreta. Uma narrativa convincente não garante retornos futuros, caindo no viés de representatividade." },
-                "B": { "content": "Podemos comprar mais, pois empresas famosas normalmente superam empresas discretas.", "score": 0, "next": "3", "explanation": "Incorreta. Fama e saliência não equivalem a preço justo ou vantagem competitiva real." },
-                "C": { "content": "Vamos separar narrativa de dados, comparando preço, fundamentos, risco e cenário provável.", "score": 5, "next": "3", "explanation": "Correta! Essa abordagem reduz o viés de representatividade ao confrontar a história midiática com as evidências analíticas." },
-                "D": { "content": "Melhor evitar qualquer empresa noticiada, pois notícia positiva quase sempre vira bolha.", "score": 0, "next": "3", "explanation": "Incorreta. O problema não é a notícia, mas sim decidir baseado nela sem uma análise estruturada." }
-              }
-            },
-            "3": {
-              "viés": "disponibilidade",
-              "prompt": "Quando vejo muitas reportagens sobre crise, fico com vontade de vender tudo. Parece que a chance de perda ficou enorme só porque o assunto está em todo lugar.",
-              "options": {
-                "A": { "content": "Isso pode ser disponibilidade; vamos medir probabilidade, impacto e plano antes de agir.", "score": 5, "next": "4", "explanation": "Correta! A heurística da disponibilidade superestima eventos recentes ou vívidos. Medir dados reais acalma a reação reativa." },
-                "B": { "content": "Se a notícia está em todo lugar, o melhor é vender agora e recomprar depois.", "score": 0, "next": "4", "explanation": "Incorreta. Vender puramente por saliência midiática pode transformar ruídos diários em prejuízo consolidado." },
-                "C": { "content": "Ignore totalmente as notícias, porque elas nunca ajudam a avaliar riscos reais.", "score": 0, "next": "4", "explanation": "Incorreta. As notícias contêm dados úteis, elas só precisam ser filtradas metodologicamente por probabilidade." },
-                "D": { "content": "Use a manchete principal do dia como guia para aumentar ou reduzir a carteira.", "score": 0, "next": "4", "explanation": "Incorreta. Decidir por manchetes amplia drasticamente o viés de disponibilidade e a rotatividade desnecessária." }
-              }
-            },
-            "4": {
-              "viés": "representatividade",
-              "prompt": "Meu colega disse que uma ação parecida com outra que subiu muito deve repetir o mesmo movimento. Eu tendo a acreditar porque os casos parecem iguais.",
-              "options": {
-                "A": { "content": "Se os casos parecem iguais, podemos assumir que o retorno também será parecido.", "score": 0, "next": "5", "explanation": "Incorreta. Similaridades superficiais não garantem distribuições idênticas de retorno. Isso é representatividade." },
-                "B": { "content": "Vamos priorizar o setor mais quente, pois padrões visíveis quase sempre se repetem.", "score": 0, "next": "5", "explanation": "Incorreta. Setores populares podem estar inflados ou concentrar riscos nocivos para a carteira." },
-                "C": { "content": "Basta comparar gráficos recentes para validar se o padrão é realmente confiável.", "score": 0, "next": "5", "explanation": "Incorreta. Gráficos isolados induzem à extrapolação e ignoram as bases de valuation." },
-                "D": { "content": "Vamos testar a semelhança com dados-base, fundamentos, preço e riscos específicos.", "score": 5, "next": "5", "explanation": "Correta! Usar taxas-base e fatores corporativos objetivos impede generalizações indevidas por similaridade aparente." }
-              }
-            },
-            "5": {
-              "viés": "disponibilidade",
-              "prompt": "Então, para não cair nessas armadilhas, eu deveria ter uma regra prática? Tenho medo de ficar paralisado se analisar demais.",
-              "options": {
-                "A": { "content": "Use só uma regra simples: compre o que subiu mais nos últimos três meses.", "score": 0, "next": "6", "explanation": "Incorreta. Essa regra reforça a extrapolação de curto prazo e compra ativos sem margem de segurança." },
-                "B": { "content": "Use um checklist curto com objetivo, risco, preço, evidência e motivo de venda.", "score": 5, "next": "6", "explanation": "Correta! Um checklist curto equilibra agilidade e disciplina operacional, bloqueando decisões automáticas." },
-                "C": { "content": "Decida pelo primeiro bom argumento, para evitar excesso de informação e demora.", "score": 0, "next": "6", "explanation": "Incorreta. O primeiro argumento pode servir como narrativa sedutora ou âncora." },
-                "D": { "content": "Siga sempre a opinião majoritária, pois o grupo costuma errar menos que você.", "score": 0, "next": "6", "explanation": "Incorreta. O consenso de manada reflete apenas disponibilidade técnica e não considera o seu perfil." }
-              }
-            },
-            "6": {
-              "viés": "geral",
-              "prompt": "Gostei do checklist. Antes de investir, quero transformar isso em uma rotina para não agir no impulso quando surgir uma oportunidade chamativa.",
-              "options": {
-                "A": { "content": "Registre só o preço de compra e acompanhe se a notícia continua favorável.", "score": 0, "next": "END", "explanation": "Incorreta. Monitorar apenas o preço e notícias superficiais mantém os vieses comportamentais em ponto cego." },
-                "B": { "content": "Revise apenas quando houver queda forte, porque é quando os vieses mais aparecem.", "score": 0, "next": "END", "explanation": "Incorreta. Os vieses são extremamente perigosos na euforia. As revisões precisam ser fixas." },
-                "C": { "content": "Documente a tese, premissas, riscos, gatilhos de revisão e limite por ativo.", "score": 5, "next": "END", "explanation": "Correta! Documentar decisões cria memória imutável, impede a reconstrução retrospectiva de narrativas e gera disciplina." },
-                "D": { "content": "Escolha ativos em dias tranquilos e depois evite rever a decisão por um ano.", "score": 0, "next": "END", "explanation": "Incorreta. Evitar revisões programadas impede correções vitais caso premissas estruturais mudem." }
-              }
-            },
-            "7": {
-              "viés": "ancoragem",
-              "prompt": "Um analista falou que o preço justo de uma ação é R$ 80. Ela está em R$ 60, então acho que é quase certo chegar lá. Esse número ficou na minha cabeça.",
-              "options": {
-                "A": { "content": "Use os R$ 80 como meta fixa, pois estimativas de analistas já incorporam tudo.", "score": 0, "next": "8", "explanation": "Incorreta. Tratar uma estimativa como certeza é cair no viés de ancoragem." },
-                "B": { "content": "Compre agora e só venda quando chegar a R$ 80, sem reavaliar o cenário.", "score": 0, "next": "8", "explanation": "Incorreta. Essa conduta prende a decisão à âncora fixa." },
-                "C": { "content": "Aumente a posição se cair mais, porque a distância até R$ 80 ficará maior.", "score": 0, "next": "8", "explanation": "Incorreta. Quedas contínuas podem refletir deteriorações estruturais da empresa." },
-                "D": { "content": "Vamos tratar R$ 80 como hipótese e testar cenários, premissas e margem de segurança.", "score": 5, "next": "8", "explanation": "Correta! A âncora matemática deve ser constantemente desafiada por análises de estresse e fundamentos." }
-              }
-            },
-            "8": {
-              "viés": "confianca",
-              "prompt": "Eu também acho que consigo prever bem o mercado. Nos últimos meses acertei algumas operações e estou pensando em concentrar metade da carteira nelas.",
-              "options": {
-                "A": { "content": "Acertos recentes podem inflar confiança; vamos limitar concentração e revisar evidências.", "score": 5, "next": "9", "explanation": "Correta! O excesso de confiança infla o giro de carteira e subestima os riscos." },
-                "B": { "content": "Se você acertou recentemente, faz sentido dobrar a exposição antes que o mercado veja.", "score": 0, "next": "9", "explanation": "Incorreta. Ganhos de curto prazo podem decorrer de aleatoriedade cíclica." },
-                "C": { "content": "Concentre a carteira nos ativos que você entende melhor e ignore diversificação.", "score": 0, "next": "9", "explanation": "Incorreta. A familiaridade com uma marca não anula o risco de mercado." },
-                "D": { "content": "Opere mais vezes para aproveitar sua fase boa e confirmar sua capacidade preditiva.", "score": 0, "next": "9", "explanation": "Incorreta. Intensificar operações eleva custos e riscos." }
-              }
-            },
-            "9": {
-              "viés": "perda",
-              "prompt": "Uma posição caiu 15%. Eu não quero vender porque, enquanto não vendo, sinto que não perdi de verdade. Prefiro esperar voltar ao preço de compra.",
-              "options": {
-                "A": { "content": "Espere voltar ao preço de compra, pois vender agora transformaria a perda em real.", "score": 0, "next": "10", "explanation": "Incorreta. A deterioração patrimonial já ocorreu. Recusar a liquidação revela aversão à perda." },
-                "B": { "content": "Vamos reavaliar a tese; se ela quebrou, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! A permanência deve se amparar nas premissas de hoje, não no preço histórico." },
-                "C": { "content": "Compre mais para reduzir o preço médio, assim fica mais fácil recuperar logo.", "score": 0, "next": "10", "explanation": "Incorreta. Reduzir preço médio em teses ruins apenas amplifica a exposição." },
-                "D": { "content": "Mantenha sem analisar, porque paciência sempre vence quedas temporárias do mercado.", "score": 0, "next": "10", "explanation": "Incorreta. A resiliência só funciona se os fundamentos seguirem intactos." }
-              }
-            },
-            "10": {
-              "viés": "perda",
-              "prompt": "Percebo que sofro mais com uma perda de R$ 1.000 do que fico feliz com um ganho de R$ 1.000. Isso mexe muito com minhas decisões.",
-              "options": {
-                "A": { "content": "Evite ativos de risco por completo, porque qualquer perda prejudica sua racionalidade.", "score": 0, "next": "11", "explanation": "Incorreta. Eliminar qualquer volatilidade inviabiliza o cumprimento de metas de longo prazo." },
-                "B": { "content": "Busque apenas produtos com garantia, mesmo que isso reduza muito o retorno esperado.", "score": 0, "next": "11", "explanation": "Incorreta. Blindagens completas cobram pedágios severos na rentabilidade real." },
-                "C": { "content": "Vamos ajustar alocação, reserva e limites para suportar perdas sem abandonar o plano.", "score": 5, "next": "11", "explanation": "Correta! Mapear a assimetria psicológica da aversão à perda permite parametrizar volatilidades aceitáveis." },
-                "D": { "content": "Compense perdas assumindo riscos maiores, para recuperar rápido e aliviar o incômodo.", "score": 0, "next": "11", "explanation": "Incorreta. Tentar reaver perdas aceleradamente ativa o comportamento reativo de aposta." }
-              }
-            },
-            "11": {
-              "viés": "geral",
-              "prompt": "Quero sair daqui com um plano simples para lidar com âncoras, excesso de confiança e aversão à perda antes de investir de novo.",
-              "options": {
-                "A": { "content": "Defina um preço-alvo único, confie na sua leitura e segure perdas até empatar.", "score": 0, "next": "END", "explanation": "Incorreta. Essa resposta aglutina simultaneamente ancoragem e aversão à perda." },
-                "B": { "content": "Acompanhe previsões de mercado diariamente e ajuste a carteira a cada nova opinião.", "score": 0, "next": "END", "explanation": "Incorreta. Ajustes por ruídos macroeconômicos quebram a consistência." },
-                "C": { "content": "Invista somente quando tiver certeza alta, pois dúvida é sinal de decisão ruim.", "score": 0, "next": "END", "explanation": "Incorreta. Exigir certezas absolutas mascara o excesso de confiança." },
-                "D": { "content": "Use cenários, limites de posição, critérios de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! A governança por processos minimiza reações passionais, controlando os vieses." }
-              }
+        // BIBLIOTECA COMPLETA DE CENÁRIOS UNIFICADOS (JSONs INTEGRADOS)
+        const bibliotecaCenarios = {
+          "modulo_financas": {
+            "nome_exibicao": "Finanças Comportamentais",
+            "perfil_cliente": "Cliente (35a)",
+            "categoria_labels": ["Disponibilidade / Impulso", "Representatividade / Saliência", "Ancoragem / Projeções", "Confiança / Aversão à Perda"],
+            "steps": {
+              "1": { "viés": "cat_a", "prompt": "[NOME], tenho 35 anos e invisto muito pelo que vejo nas notícias e pelo que meus amigos comentam. Quero ganhar mais, mas percebo que decido rápido demais. Por onde começamos?", "options": { "A": { "content": "Vamos escolher logo os ativos mais comentados e ajustar depois, porque rapidez conta muito.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Essa resposta reforça a disponibilidade e o comportamento impulsivo." }, "B": { "content": "Vamos mapear objetivos, horizonte, risco e vieses antes de discutir qualquer ativo específico.", "score": 5, "next": "2", "explanation": "Abordagem correta! A orientação consultiva começa pelo diagnóstico estruturado." }, "C": { "content": "Vamos repetir a estratégia do seu amigo, já que ela parece ter funcionado recentemente.", "score": 0, "next": "2", "explanation": "Abordagem incorreta. Copiar terceiros negligencia o perfil individual." }, "D": { "content": "Vamos focar apenas na rentabilidade passada para encontrar o investimento vencedor.", "score": 0, "next": "7", "explanation": "Abordagem incorreta. Rentabilidade passada isolada ativa o excesso de confiança." } } },
+              "2": { "viés": "cat_b", "prompt": "Eu gosto de investir em empresas que aparecem muito como histórias de sucesso. Se uma empresa virou notícia positiva, acho que ela deve continuar subindo.", "options": { "A": { "content": "Faz sentido, uma boa história recente costuma indicar retorno superior e risco menor.", "score": 0, "next": "3", "explanation": "Incorreta. Uma narrativa convincente não garante retornos futuros." }, "B": { "content": "Podemos comprar mais, pois empresas famosas normalmente superam empresas discretas.", "score": 0, "next": "3", "explanation": "Incorreta. Saliência não equivale a preço justo ou vantagem competitiva real." }, "C": { "content": "Vamos separar narrativa de dados, comparando preço, fundamentos, risco e cenário provável.", "score": 5, "next": "3", "explanation": "Correta! Reduz o viés de representatividade confrontando histórias com fundamentos." }, "D": { "content": "Melhor evitar qualquer empresa noticiada, pois notícia positiva quase sempre vira bolha.", "score": 0, "next": "3", "explanation": "Incorreta. O problema é decidir sem análise estruturada, e não a notícia em si." } } },
+              "3": { "viés": "cat_a", "prompt": "Quando vejo muitas reportagens sobre crise, fico com vontade de vender tudo. Parece que a chance de perda ficou enorme só porque o assunto está em todo lugar.", "options": { "A": { "content": "Isso pode ser disponibilidade; vamos medir probabilidade, impacto e plano antes de agir.", "score": 5, "next": "4", "explanation": "Correta! Medir dados reais acalma a reação reativa da heurística da disponibilidade." }, "B": { "content": "Se a notícia está em todo lugar, o melhor é vender agora e recomprar depois.", "score": 0, "next": "4", "explanation": "Incorreta. Transforma ruídos em prejuízo consolidado." }, "C": { "content": "Ignore totalmente as notícias, porque elas nunca ajudam a avaliar riscos reais.", "score": 0, "next": "4", "explanation": "Incorreta. As notícias contêm dados, mas precisam ser filtradas metodologicamente." }, "D": { "content": "Use a manchete principal do dia como guia para aumentar ou reduzir a carteira.", "score": 0, "next": "4", "explanation": "Incorreta. Decidir por manchetes amplia o viés de disponibilidade." } } },
+              "4": { "viés": "cat_b", "prompt": "Meu colega disse que uma ação parecida com outra que subiu muito deve repetir o mesmo movimento. Eu tendo a acreditar porque os casos parecem iguais.", "options": { "A": { "content": "Se os casos parecem iguais, podemos assumir que o retorno também será parecido.", "score": 0, "next": "5", "explanation": "Incorreta. Similaridades superficiais não garantem retornos idênticos." }, "B": { "content": "Vamos priorizar o setor mais quente, pois padrões visíveis quase sempre se repetem.", "score": 0, "next": "5", "explanation": "Incorreta. Setores populares podem estar inflados ou concentrar riscos." }, "C": { "content": "Basta comparar gráficos recentes para validar se o padrão é realmente confiável.", "score": 0, "next": "5", "explanation": "Incorreta. Gráficos isolados induzem à extrapolação irracional." }, "D": { "content": "Vamos testar a semelhança com dados-base, fundamentos, preço e riscos específicos.", "score": 5, "next": "5", "explanation": "Correta! Impedir generalizações indevidas por similaridade aparente." } } },
+              "5": { "viés": "cat_a", "prompt": "Então, para não cair nessas armadilhas, eu deveria ter uma regra prática? Tenho medo de ficar paralisado se analisar demais.", "options": { "A": { "content": "Use só uma regra simples: compre o que subiu mais nos últimos três meses.", "score": 0, "next": "6", "explanation": "Incorreta. Reforça a extrapolação de curto prazo." }, "B": { "content": "Use um checklist curto com objetivo, risco, preço, evidência e motivo de venda.", "score": 5, "next": "6", "explanation": "Correta! O checklist curto equilibra agilidade e disciplina contra automações mentais." }, "C": { "content": "Decida pelo primeiro bom argumento, para evitar excesso de informação e demora.", "score": 0, "next": "6", "explanation": "Incorreta. O primeiro argumento pode servir apenas de âncora sedutora." }, "D": { "content": "Siga sempre a opinião majoritária, pois o grupo costuma errar menos que você.", "score": 0, "next": "6", "explanation": "Incorreta. O consenso de manada reflete apenas comportamento de manada." } } },
+              "6": { "viés": "geral", "prompt": "Gostei do checklist. Antes de investir, quero transformar isso em uma rotina para não agir no impulso quando surgir uma oportunidade chamativa.", "options": { "A": { "content": "Registre só o preço de compra e acompanhe se a notícia continua favorável.", "score": 0, "next": "END", "explanation": "Incorreta. Monitorar notícias superficiais mantém os vieses em ponto cego." }, "B": { "content": "Revise apenas quando houver queda forte, porque é quando os vieses mais aparecem.", "score": 0, "next": "END", "explanation": "Incorreta. Vieses são perigosos também na euforia." }, "C": { "content": "Documente a tese, premissas, riscos, gatilhos de revisão e limite por ativo.", "score": 5, "next": "END", "explanation": "Correta! Impede a reconstrução retrospectiva de narrativas criando disciplina." }, "D": { "content": "Escolha ativos em dias tranquilos e depois evite rever a decisão por um ano.", "score": 0, "next": "END", "explanation": "Incorreta. Impede correções vitais caso premissas mudem." } } },
+              "7": { "viés": "cat_c", "prompt": "Um analista falou que o preço justo de uma ação é R$ 80. Ela está em R$ 60, então acho que é quase certo chegar lá. Esse número ficou na minha cabeça.", "options": { "A": { "content": "Use os R$ 80 como meta fixa, pois estimativas de analistas já incorporam tudo.", "score": 0, "next": "8", "explanation": "Incorreta. Tratar estimativas como certezas absolutas é cair em ancoragem." }, "B": { "content": "Compre agora e só venda quando chegar a R$ 80, sem reavaliar o cenário.", "score": 0, "next": "8", "explanation": "Incorreta. Prende sua conduta operacional a uma âncora fixa estática." }, "C": { "content": "Aumente a posição se cair mais, porque a distância até R$ 80 ficará maior.", "score": 0, "next": "8", "explanation": "Incorreta. Quedas contínuas podem refletir deteriorações estruturais reais da tese." }, "D": { "content": "Vamos tratar R$ 80 como hipótese e testar cenários, premissas e margem de segurança.", "score": 5, "next": "8", "explanation": "Correta! Desafiar a âncora matemática com estresses e fundamentos reais." } } },
+              "8": { "viés": "cat_d", "prompt": "Eu também acho que consigo prever bem o mercado. Nos últimos meses acertei algumas operações e estou pensando em concentrar metade da carteira nelas.", "options": { "A": { "content": "Acertos recentes podem inflar confiança; vamos limitar concentração e revisar evidências.", "score": 5, "next": "9", "explanation": "Correta! Controla o excesso de confiança que costuma ignorar riscos e inflar custos." }, "B": { "content": "Se você acertou recentemente, faz sentido dobrar a exposição antes que o mercado veja.", "score": 0, "next": "9", "explanation": "Incorreta. Ganhos curtos podem advir de pura aleatoriedade cíclica." }, "C": { "content": "Concentre a carteira nos ativos que você entende melhor e ignore diversificação.", "score": 0, "next": "9", "explanation": "Incorreta. Familiaridade de marca não anula o risco sistêmico." }, "D": { "content": "Opere mais vezes para aproveitar sua fase boa e confirmar sua capacidade preditiva.", "score": 0, "next": "9", "explanation": "Incorreta. Intensificar operações eleva giros nocivos e custos corporativos." } } },
+              "9": { "viés": "cat_d", "prompt": "Uma posição caiu 15%. Eu não quero vender porque, enquanto não vendo, sinto que não perdi de verdade. Prefiro esperar voltar ao preço de compra.", "options": { "A": { "content": "Espere voltar ao preço de compra, pois vender agora transformaria a perda em real.", "score": 0, "next": "10", "explanation": "Incorreta. A deterioração patrimonial já existiu. Recusar a realização é aversão à perda pura." }, "B": { "content": "Vamos reavaliar a tese; se ela quebrou, vender pode proteger o plano total.", "score": 5, "next": "10", "explanation": "Correta! Permanência deve se amparar nas premissas de hoje, não no valor histórico." }, "C": { "content": "Compre mais para reduzir o preço médio, assim fica mais fácil recuperar logo.", "score": 0, "next": "10", "explanation": "Incorreta. Reduzir preço médio em teses ruins apenas amplifica o prejuízo potencial." }, "D": { "content": "Mantenha sem analisar, porque paciência sempre vence quedas temporárias do mercado.", "score": 0, "next": "10", "explanation": "Incorreta. Resiliência exige fundamentos de sustentabilidade intactos." } } },
+              "10": { "viés": "cat_d", "prompt": "Percebo que sofro mais com uma perda de R$ 1.000 do que fico feliz com um ganho de R$ 1.000. Isso mexe muito com minhas decisões.", "options": { "A": { "content": "Evite ativos de risco por completo, porque qualquer perda prejudica sua racionalidade.", "score": 0, "next": "11", "explanation": "Incorreta. Eliminar volatilidade impede o cumprimento de metas reais de longo prazo." }, "B": { "content": "Busque apenas produtos com garantia, mesmo que isso reduza muito o retorno esperado.", "score": 0, "next": "11", "explanation": "Incorreta. Blindagens completas cobram pedágios severos de rentabilidade real." }, "C": { "content": "Vamos ajustar alocação, reserva e limites para suportar perdas sem abandonar o plano.", "score": 5, "next": "11", "explanation": "Correta! Parametrizar volatilidades aceitáveis mapeando a assimetria psicológica da dor." }, "D": { "content": "Compense perdas assumindo riscos maiores, para recuperar rápido e aliviar o incômodo.", "score": 0, "next": "11", "explanation": "Incorreta. Tentar reaver perdas aceleradamente ativa o comportamento compulsivo de aposta." } } },
+              "11": { "viés": "geral", "prompt": "Quero sair daqui com um plano simples para lidar com âncoras, excesso de confiança e aversão à perda antes de investir de novo.", "options": { "A": { "content": "Defina um preço-alvo único, confie na sua leitura e segure perdas até empatar.", "score": 0, "next": "END", "explanation": "Incorreta. Essa resposta aglutina simultaneamente ancoragem nociva e aversão à perda." }, "B": { "content": "Acompanhe previsões de mercado diariamente e ajuste a carteira a cada nova opinião.", "score": 0, "next": "END", "explanation": "Incorreta. Ajustes constantes por ruídos diários destroem a consistência." }, "C": { "content": "Invista somente quando tiver certeza alta, pois dúvida é sinal de decisão ruim.", "score": 0, "next": "END", "explanation": "Incorreta. Exigir certezas absolutas mascara o excesso de confiança perigoso." }, "D": { "content": "Use cenários, limites de posição, critérios de venda e revisão periódica documentada.", "score": 5, "next": "END", "explanation": "Correta! Governança por processos minimiza reações passionais no mercado." } } }
             }
-          }
-        };
-
-        let errosPorVies = { disponibilidade: 0, representatividade: 0, ancoragem: 0, confianca: 0, perda: 0 };
-        let acertosPorVies = { disponibilidade: 0, representatividade: 0, ancoragem: 0, confianca: 0, perda: 0 };
-        
-        let dicasDisponiveis = 2;
-        let score = 0; let currentStep = "1";
-        let nomeDoAtendente = "Alex"; let pacienciaCliente = 100; let resilienciaAtendente = 100;
-
-        const avatar = document.getElementById('avatar-cliente');
-        const bubble = document.getElementById('npc-speech-bubble');
-        const atendBubble = document.getElementById('atend-speech-bubble');
-        const grid = document.getElementById('options-grid');
-        const inlineFeedback = document.getElementById('feedback-inline-box');
-
-        async function processarCadastroEIniciar(event) {
-            event.preventDefault();
-            
-            const btnSubmit = document.getElementById('btn-submit-cadastro');
-            const nameInput = document.getElementById('player-name-input').value.trim();
-            const emailInput = document.getElementById('player-email-input').value.trim();
-            const phoneInput = document.getElementById('player-phone-input').value.trim();
-
-            if (!nameInput || !emailInput || !phoneInput) {
-                alert("Por favor, preencha todos os campos do cadastro para iniciar.");
-                return;
+          },
+          "FP-ARB-INT-001": {
+            "nome_exibicao": "Módulo CEA/CPA-20: Investidor Herdeiro (19 anos)",
+            "perfil_cliente": "Herdeiro (19a)",
+            "categoria_labels": ["Metodologia Consultiva", "Suitability / Horizonte", "Estratégia de Alocação", "Prevenção de Riscos"],
+            "steps": {
+              "1": { "viés": "cat_a", "prompt": "Tenho 19 anos, sou herdeiro e quero investir com responsabilidade. Não sei por onde começar nem quais produtos servem para meu perfil. Como me orientar?", "options": { "A": { "content": "Podemos começar escolhendo ações e cripto mais quentes e depois ajustamos o risco conforme o mercado reagir.", "score": 0, "next": "7", "explanation": "Começar por produtos da moda inverte a lógica do suitability estratégico." }, "B": { "content": "Antes de falar de produtos, vamos mapear objetivos, horizonte, liquidez e tolerância; depois montamos alocação alinhada ao seu perfil.", "score": 5, "next": "2", "explanation": "Correto! A sequência técnica correta começa pelo planejamento estruturado." }, "C": { "content": "Vamos usar uma regra rápida de idade para definir o percentual em ações e aplicar o restante em fundos imobiliários.", "score": 0, "next": "2", "explanation": "Regras de bolso genéricas ignoram a volatilidade suportada e necessidades reais de liquidez." }, "D": { "content": "O ideal é colocar tudo em renda fixa de longo prazo para proteger a herança antes de aprender sobre o mercado.", "score": 0, "next": "7", "explanation": "Impor uma alocação conservadora sem diagnóstico viola o princípio do atendimento consultivo." } } },
+              "2": { "viés": "cat_b", "prompt": "Entendi. Meus objetivos principais são fazer intercâmbio em 2 anos e comprar um imóvel em 10. Como alinhar os prazos?", "options": { "A": { "content": "Investir tudo em ações de dividendos, pois pagam recorrentemente e servem para prazos curtos ou longos.", "score": 0, "next": "3", "explanation": "Ações possuem volatilidade incompatível com objetivos curtos de curtíssimo prazo de 2 anos." }, "B": { "content": "Separar em duas caixas: liquidez e baixo risco para o intercâmbio, e ativos diversificados de longo prazo para o imóvel.", "score": 5, "next": "3", "explanation": "Correto! A imunização e casamento de prazos (Duration) mitiga o risco de resgates forçados com perdas." }, "C": { "content": "Usar fundos multimercados agressivos para tentar inflar o patrimônio rapidamente e antecipar ambos os planos.", "score": 0, "next": "3", "explanation": "Agressividade em horizontes de curto prazo eleva expressivamente as chances de ruína do projeto." }, "D": { "content": "Deixar todo o dinheiro em conta corrente para garantir flexibilidade total nas datas de uso.", "score": 0, "next": "3", "explanation": "Prejudica o patrimônio pela perda do poder de compra real frente à inflação de mercado." } } },
+              "3": { "viés": "cat_c", "prompt": "Quero entender quais produtos de renda fixa e variável são adequados para compor essa carteira do imóvel de 10 anos.", "options": { "A": { "content": "Comprar apenas títulos públicos IPCA+ e misturar com fundos de índice (ETFs) globais e ações de valor.", "score": 5, "next": "4", "explanation": "Correto! Alinha proteção inflacionária na renda fixa e diversificação global sistemática em renda variável." }, "B": { "content": "Comprar debêntures de empresas em recuperação judicial, buscando altos retornos pela promessa de ganho.", "score": 0, "next": "4", "explanation": "Exõe o jovem herdeiro a riscos de crédito extremos e alta probabilidade de inadimplência profunda." }, "C": { "content": "Focar em fundos imobiliários monocomitentes e ações small caps de alto giro no mercado interno.", "score": 0, "next": "4", "explanation": "Falta de diversificação e concentração em ativos cíclicos locais amplificam riscos desnecessários." }, "D": { "content": "Usar apenas CDBs de bancos de varejo com liquidez diária, pois rendem 100% do CDI fixo.", "score": 0, "next": "4", "explanation": "Limita o potencial de crescimento patrimonial real em horizontes de longo prazo estendidos." } } },
+              "4": { "viés": "cat_d", "prompt": "Ouvi dizer que operar derivativos e opções acelera os ganhos. Vale a pena incluir um percentual pequeno?", "options": { "A": { "content": "Sim, é uma ótima ferramenta para traders iniciantes aumentarem o caixa sem precisar de grandes aportes.", "score": 0, "next": "5", "explanation": "Derivativos alavancados sem hedge destroem patrimônios e exigem alto conhecimento técnico." }, "B": { "content": "Apenas se for para especular de forma concentrada com 30% do patrimônio líquido da herança.", "score": 0, "next": "5", "explanation": "Concentração especulativa viola governança básica de carteiras educacionais prudentes." }, "C": { "content": "Derivativos devem ser usados predominantemente para proteção (Hedge) ou alocações táticas limitadas por profissionais.", "score": 5, "next": "5", "explanation": "Correto! Preserva o patrimônio ao contextualizar opções como instrumentos de mitigação de riscos estruturais." }, "D": { "content": "Melhor esquecer que renda variável existe e focar apenas em poupança protegida.", "score": 0, "next": "5", "explanation": "Abordagem fóbica não educativa que anula o ganho real de prêmios de risco de longo prazo." } } },
+              "5": { "viés": "geral", "prompt": "E quanto à diversificação internacional? Vale a pena abrir conta no exterior ou comprar ativos globais?", "options": { "A": { "content": "Não vale o custo tributário; o mercado nacional já oferece alternativas completas e risco controlado.", "score": 0, "next": "6", "explanation": "Manter 100% no Brasil expõe o herdeiro a riscos de jurisdição e volatilidade cambial exclusiva." }, "B": { "content": "Sim, a diversificação geográfica e em moedas fortes reduz a volatilidade total da carteira e protege o poder de compra global.", "score": 5, "next": "6", "explanation": "Correto! A diversificação internacional reduz o risco idiossincrático de um único país." }, "C": { "content": "Coloque 100% do dinheiro fora do Brasil em ações de tecnologia de alta volatilidade.", "score": 0, "next": "6", "explanation": "Mudar a concentração de país para setor agressivo mantém a carteira desequilibrada e desprotegida." }, "D": { "content": "Apenas envie fundos se o dólar cair mais de 20% no acumulado dos últimos trinta dias.", "score": 0, "next": "6", "explanation": "Ancoragem cambial técnica que impede a execução sistemática de aportes periódicos estáveis." } } },
+              "6": { "viés": "geral", "prompt": "Para fechar o diagnóstico: como acompanhamos essa carteira ao longo do tempo sem cair em giros excessivos por impulso?", "options": { "A": { "content": "Rever a carteira a cada movimentação diária do mercado, alterando posições conforme as notícias.", "score": 0, "next": "END", "explanation": "Girar posições por ruídos gera custos transacionais altos e destrói estratégias de longo prazo." }, "B": { "content": "Definir rebalanceamentos semestrais ou por desvios percentuais fixos das metas originais acordadas.", "score": 5, "next": "END", "explanation": "Correto! O rebalanceamento mecânico vende ativos inflados e compra os subvalorizados sistematicamente." }, "C": { "content": "Deixar os investimentos parados sem revisão por dez anos, independente do que aconteça no cenário macro.", "score": 0, "next": "END", "explanation": "Negligenciar mudanças estruturais de fundamentos ou prazos corporativos quebra o suitability." }, "D": { "content": "Mudar a carteira apenas se o gerente da agência indicar um novo produto estruturado da moda.", "score": 0, "next": "END", "explanation": "Terceiriza a estratégia para produtos comerciais, violando a autonomia da governança pessoal." } } },
+              "7": { "viés": "cat_c", "prompt": "Vejo influenciadores mostrando lucros gigantes diários com operações de Day Trade. Por que não tentar com uma fatia da herança?", "options": { "A": { "content": "Se o lucro é grande, podemos separar metade do patrimônio para buscar essa aceleração rápida.", "score": 0, "next": "8", "explanation": "Estudos mostram que mais de 97% dos investidores perdem capital operando Day Trade de forma sistemática." }, "B": { "content": "Operações de curto prazo possuem perfil estatístico desfavorável para iniciantes. Vamos focar na geração de valor consistente.", "score": 5, "next": "8", "explanation": "Correto! Direciona o jovem investidor à mentalidade de sócio e acumulador consistente de valor real." }, "C": { "content": "Tente apenas se comprar um curso avançado de análise gráfica que garanta ganhos semanais.", "score": 0, "next": "8", "explanation": "Garantias de retorno em renda variável não existem e promessas gráficas costumam mascarar armadilhas." }, "D": { "content": "O Day Trade é proibido por lei para menores de trinta anos devido aos riscos psicológicos associados.", "score": 0, "next": "8", "explanation": "Informação regulatória incorreta usada como barreira impositiva em vez de orientação técnica." } } },
+              "8": { "viés": "cat_d", "prompt": "Um amigo sugeriu aplicar em pirâmides financeiras disfarçadas de criptoativos com retornos de 10% ao mês garantidos. O que acha?", "options": { "A": { "content": "Retornos altos assim são normais no mercado cripto; vale aplicar parte relevante do caixa.", "score": 0, "next": "9", "explanation": "Promessa de lucros certos e elevados em renda variável indica fraude estrutural financeira." }, "B": { "content": "Promessas de rentabilidade fixa e exorbitante indicam alto risco de golpe. Vamos focar em mercados regulados e ativos transparentes.", "score": 5, "next": "9", "explanation": "Correto! Protege o herdeiro ativando compliance analítico básico sobre rentabilidades irreais." }, "C": { "content": "Podemos investir uma quantia pequena sabendo que é golpe, apenas para tentar sair antes da quebra.", "score": 0, "next": "9", "explanation": "Alimentar esquemas fraudulentos conscientemente viola a ética consultiva profissional e acarreta perdas certas." }, "D": { "content": "Criptoativos não possuem valor algum e deveriam ser banidos de qualquer portfólio moderno.", "score": 0, "next": "9", "explanation": "Visão radical desatualizada que desconsidera criptoativos consolidados regulados em ETFs mundiais." } } },
+              "9": { "viés": "cat_d", "prompt": "E se a inflação subir muito e corroer o valor real da herança que está em títulos prefixados?", "options": { "A": { "content": "Títulos prefixados protegem contra inflação alta pois a taxa de rentabilidade já foi fixada no início.", "score": 0, "next": "10", "explanation": "Prefixados sofrem severamente em cenários de inflação ascendente devido à desvalorização real de juros." }, "B": { "content": "Para proteção inflacionária estrutural, devemos migrar para títulos pós-fixados indexados ao IPCA (Notas do Tesouro IPCA+).", "score": 5, "next": "10", "explanation": "Correto! Garante ganho real acima da inflação medida, blindando o poder de compra patrimonial." }, "C": { "content": "Em alta de inflação o melhor caminho é sacar o dinheiro físico e estocar em cofres residenciais seguros.", "score": 0, "next": "10", "explanation": "Dinheiro físico fora de circulação perde valor nominal de compra exponencialmente em espirais inflacionárias." }, "D": { "content": "Compre contratos de commodities agrícolas futuras de forma alavancada no mercado futuro de balcão.", "score": 0, "next": "10", "explanation": "Derivativos de commodities agregam riscos operacionais severos incompatíveis com preservação herdeira." } } },
+              "10": { "viés": "cat_d", "prompt": "Entendi. Se o cenário econômico global mudar drasticamente, nossa carteira pode sofrer perdas temporárias?", "options": { "A": { "content": "Uma carteira bem montada por profissionais nunca sofre variações negativas ou perdas nominais em hipótese alguma.", "score": 0, "next": "11", "explanation": "Renda variável oscila e oscilações fazem parte da dinâmica de prêmios de risco de prazos longos." }, "B": { "content": "Sim, oscilações de curto prazo (volatilidade) ocorrem, mas a diversificação mitiga perdas permanentes de capital no horizonte.", "score": 5, "next": "11", "explanation": "Correto! Alinha a expectativa psicológica do aluno com o comportamento matemático real de carteiras." }, "C": { "content": "Caso haja qualquer variação negativa na semana, liquidamos tudo imediatamente para evitar maiores quedas.", "score": 0, "next": "11", "explanation": "Consolida prejuízos contábeis temporários transformando-os em perdas reais por falta de horizonte." }, "D": { "content": "A volatilidade é um erro de cálculo do planejador que deve ser compensado com reembolsos diretos.", "score": 0, "next": "11", "explanation": "Desconhecimento regulatório e técnico elementar sobre o funcionamento de riscos de mercado ordinários." } } },
+              "11": { "viés": "geral", "prompt": "Quero um plano com espaço para risco, mas sem comprometer meu futuro. Qual desenho final sugerido?", "options": { "A": { "content": "Três baldes: reserva em Selic/DI, metas de médio prazo em baixo risco, e longo prazo com ETFs globais/Brasil, multimercado e 5%–10% em cripto, sem alavancagem.", "score": 5, "next": "END", "explanation": "Alinha liquidez e risco por horizonte, diversifica e limita ativos voláteis para proteger o plano." }, "B": { "content": "Concentrar em ações locais de crescimento e usar crédito consignado para aumentar a exposição.", "score": 0, "next": "END", "explanation": "Concentração e alavancagem por dívida elevam risco de ruína e fluxos de caixa negativos." }, "C": { "content": "Alternar meses de cripto 100% com meses de renda fixa 100% para equilibrar emoções.", "score": 0, "next": "END", "explanation": "Market timing extremo adiciona volatilidade e tende a destruir retorno por erros de timing." }, "D": { "content": "Comprar imóvel e viver do aluguel agora, deixando o restante parado em conta corrente.", "score": 0, "next": "END", "explanation": "Imóvel reduz flexibilidade e expõe o jovem a risco de liquidez exagerada sem diversificação financeira de base." } } }
             }
-
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Registrando Entrada...";
-
-            try {
-                if (window.addDoc && window.collection && window.db) {
-                    await window.addDoc(window.collection(window.db, "leads_cadastro"), {
-                        nome: nameInput,
-                        email: emailInput,
-                        telefone: phoneInput,
-                        data_cadastro: new Date()
-                    });
-                    
-                    nomeDoAtendente = nameInput;
-                    document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
-                    document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
-
-                    iniciarJogo();
-                } else {
-                    alert("O sistema de banco de dados está terminando de inicializar. Aguarde 3 segundos e clique novamente.");
-                    btnSubmit.disabled = false;
-                    btnSubmit.innerText = "Iniciar Expediente";
-                }
-            } catch (e) {
-                console.error("Erro ao registrar cadastro inicial: ", e);
-                alert("Houve um erro de comunicação com o servidor. Verifique se o seu banco Firestore foi ativado em Modo de Teste.");
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Iniciar Expediente";
+          },
+          "IRPF-PF-ARV-001": {
+            "nome_exibicao": "Módulo IRPF: Pessoa Física Recém-Casada",
+            "perfil_cliente": "Cônjuge (32a)",
+            "categoria_labels": ["Regime Tributário", "Opção Conjunta/Separada", "Bens e Direitos", "Conformidade Fiscal"],
+            "steps": {
+              "1": { "viés": "cat_a", "prompt": "Casei recentemente e quero saber o que muda na minha declaração de IR. Preciso fazer algo diferente por estar casado?", "options": { "A": { "content": "Nada muda na prática; mantenha a sua declaração igual e não inclua dados do cônjuge em nenhuma hipótese.", "score": 0, "next": "7", "explanation": "Incorreto. O estado civil, CPF do cônjuge e a decisão entre declaração conjunta ou separada podem alterar a apuração." }, "B": { "content": "Após o casamento, a lei obriga sempre a declaração em conjunto e o cônjuge perde a necessidade de declarar sozinho.", "score": 0, "next": "7", "explanation": "Incorreto. A declaração conjunta é opcional; o casal pode optar por declarar em conjunto ou separado conforme simulação." }, "C": { "content": "Devemos analisar se vale a pena declarar em conjunto ou separado, informando a nova condição e o CPF do parceiro.", "score": 5, "next": "2", "explanation": "Correto. O casamento abre a opção de declaração conjunta ou separada, exigindo análise comparativa de vantagens fiscais." }, "D": { "content": "Mude seu regime de tributação imediatamente para o simplificado, que é o único permitido por lei para casados.", "score": 0, "next": "2", "explanation": "Incorreto. A escolha entre deduções legais ou desconto simplificado independe do estado civil do contribuinte." } } },
+              "2": { "viés": "cat_b", "prompt": "Como decidir se fazemos a declaração conjunta ou se continuamos declarando separados?", "options": { "A": { "content": "A conjunta sempre reduz o imposto pois o sistema da Receita unifica as faixas de isenção de ambos automaticamente.", "score": 0, "next": "3", "explanation": "Incorreto. Na conjunta, os rendimentos se somam e podem empurrar a base para alíquotas maiores, elevando o imposto devido." }, "B": { "content": "A conjunta vale a pena se um dos cônjuges for dependente ou tiver rendimentos baixos e muitas despesas dedutíveis.", "score": 5, "next": "3", "explanation": "Correto. A unificação compensa se as despesas dedutíveis do dependente ajudarem a abater a base tributável do titular principal." }, "C": { "content": "Separados é proibido se vocês morarem na mesma residência fiscal e possuírem contas correntes conjuntas ativos.", "score": 0, "next": "3", "explanation": "Incorreto. Residir sob o mesmo teto ou ter contas conjuntas não impede declarações de imposto de renda separadas." }, "D": { "content": "A decisão deve seguir apenas quem ganha mais: o de maior renda declara em conjunto absorvendo o parceiro.", "score": 0, "next": "3", "explanation": "Incorreto. A decisão depende da soma de rendimentos e deduções de ambos, exigindo simulação técnica de impacto." } } },
+              "3": { "viés": "cat_c", "prompt": "Compramos um apartamento financiado este ano. Como devemos declarar esse bem imóvel se optarmos por declarações separadas?", "options": { "A": { "content": "Cada um declara metade do valor total do imóvel e metade do saldo devedor do financiamento em suas respectivas fichas.", "score": 0, "next": "4", "explanation": "Incorreto. Bens comuns sob regime de comunhão parcial devem constar integralmente na declaração de apenas um dos cônjuges." }, "B": { "content": "O bem comum deve figurar na declaração de um dos cônjuges, enquanto o outro informa o código de cônjuge na sua própria.", "score": 5, "next": "4", "explanation": "Correto. Em declarações separadas, os bens comuns são listados por completo em um dos IRs, referenciando o CPF do parceiro no outro." }, "C": { "content": "Não se declaram imóveis financiados até que todas as parcelas bancárias estejam totalmente quitadas e baixadas.", "score": 0, "next": "4", "explanation": "Incorreto. Deve-se declarar o imóvel informando os valores efetivamente pagos acumulados (entrada + parcelas do ano)." }, "D": { "content": "O apartamento deve ser omitido e declarado apenas como despesa de aluguel fictícia para gerar restituição indevida.", "score": 0, "next": "4", "explanation": "Incorreto. Lançar posse como aluguel configura fraude fiscal grave sujeita a multas pesadas da Receita Federal." } } },
+              "4": { "viés": "cat_d", "prompt": "Minha esposa tem despesas médicas altas e declaramos separados. Posso lançar os recibos dela na minha declaração para deduzir?", "options": { "A": { "content": "Sim, despesas de saúde de casais podem ser divididas livremente entre as declarações para maximizar deduções.", "score": 0, "next": "5", "explanation": "Incorreto. Em declarações separadas, despesas médicas só podem ser deduzidas se ela constar como sua dependente legal." }, "B": { "content": "Não; se declaram separados, cada um deduz suas próprias despesas médicas conforme os respectivos CPFs nos recibos.", "score": 5, "next": "5", "explanation": "Correto. Mantendo o envio separado e sem dependência, os comprovantes médicos devem casar com o contribuinte que sofreu a despesa." }, "C": { "content": "Despesas médicas de cônjuges deixam de ser dedutíveis no ano do casamento por regras de transição fiscal.", "score": 0, "next": "5", "explanation": "Incorreto. Despesas médicas continuam dedutíveis sem limites de valor, respeitando as regras de titularidade ou dependência." }, "D": { "content": "Pode lançar, desde que mude o nome dela nos recibos originais usando rasuras simples.", "score": 0, "next": "5", "explanation": "Incorreto. Alterar ou rasurar documentos fiscais comprobatórios configura falsificação material e crime de sonegação." } } },
+              "5": { "viés": "geral", "prompt": "Recebi uma doação em dinheiro do meu sogro para ajudar na mobília. Como declarar esse valor no meu imposto de renda?", "options": { "A": { "content": "Doações não precisam ser declaradas por serem isentas de imposto de renda federal na fonte.", "score": 0, "next": "6", "explanation": "Incorreto. Embora isentas de IR, doações devem ser informadas para justificar a evolução do patrimônio do contribuinte." }, "B": { "content": "Deve constar na ficha de Rendimentos Isentos e Não Tributáveis, informando o CPF/CNPJ do doador original.", "score": 5, "next": "6", "explanation": "Correto. O lançamento em Rendimentos Isentos ampara o acréscimo patrimonial sem gerar bitributação federal de renda." }, "C": { "content": "Declare como rendimento recebido de pessoa física na ficha de Carnê-Leão, pagando imposto mensal pela tabela progressiva.", "score": 0, "next": "6", "explanation": "Incorreto. Doações não se confundem com prestação de serviços ou pensões sujeitas ao recolhimento mensal por Carnê-Leão." }, "D": { "content": "Lance o valor como despesa de investimento financeiro dedutível na ficha de pagamentos efetuados gerais.", "score": 0, "next": "6", "explanation": "Incorreto. Lançar recebimentos como deduções distorce a contabilidade fiscal gerando retenção imediata em malha fina." } } },
+              "6": { "viés": "geral", "prompt": "Se decidirmos pela declaração separada, o que revisar para garantir consistência com a do meu cônjuge?", "options": { "A": { "content": "Excluir qualquer referência ao cônjuge, pois duas declarações não podem conter dados cruzados do casal.", "score": 0, "next": "END", "explanation": "Incorreto. É preciso informar o CPF do cônjuge e manter consistência de bens comuns, dependentes e rendimentos." }, "B": { "content": "Estado civil, CPF do cônjuge, bens comuns sem duplicidade, dependentes, recibos e informes em ambos os IRs.", "score": 5, "next": "END", "explanation": "Correto. A coerência entre as declarações e a documentação minimiza divergências e riscos de malha fina." }, "C": { "content": "Trocar para a conjunta na última hora, pois o sistema ajusta automaticamente rendimentos e deduções do casal.", "score": 0, "next": "END", "explanation": "Incorreto. A escolha deve seguir simulação; o sistema não ajusta tudo sozinho e pode haver diferenças relevantes." }, "D": { "content": "Não declarar bens adquiridos no ano, pois só entram no IR após cinco anos de uso contínuo pelo proprietário.", "score": 0, "next": "END", "explanation": "Incorreto. Bens e direitos devem ser atualizados anualmente conforme aquisição, custos e documentação comprobatória." } } },
+              "7": { "viés": "cat_c", "prompt": "Temos uma conta poupança conjunta com R$ 50 mil guardados. Como declarar esse saldo se enviarmos separados?", "options": { "A": { "content": "Os R$ 50 mil devem ser ocultados, pois contas conjuntas bancárias são imunes à fiscalização federal automática.", "score": 0, "next": "8", "explanation": "Saldos bancários acima de R$ 140 devem ser obrigatoriamente informados na ficha de Bens e Direitos." }, "B": { "content": "O saldo pode ser declarado 100% na ficha de um deles ou dividido 50% para cada um, guardando a consistência dos informes.", "score": 5, "next": "8", "explanation": "Correto! Contas conjuntas permitem a partição proporcional ou centralização total no IR de um dos titulares parceiros." }, "C": { "content": "Obrigatório declarar o valor duplicado: R$ 50 mil no IR dele e R$ 50 mil no IR dela ao mesmo tempo.", "score": 0, "next": "8", "explanation": "Duplicar saldos infla artificialmente o patrimônio do casal gerando graves inconsistências patrimoniais." }, "D": { "content": "Declarar na ficha de dívidas e ônus como um empréstimo mútuo compulsório entre marido e esposa.", "score": 0, "next": "8", "explanation": "Lançar saldos ativos positivos como passivos exigíveis distorce a realidade patrimonial contábil." } } },
+              "8": { "viés": "cat_d", "prompt": "Esqueci de declarar um informe de rendimentos de um emprego antigo do início do ano passado. O que acontece agora?", "options": { "A": { "content": "A Receita Federal perdoa omissões automáticas se o valor sonegado for menor que R$ 10.000 anuais.", "score": 0, "next": "9", "explanation": "Omissões de rendimentos tributáveis disparam retenções em malha fina independente de tetos arbitrários." }, "B": { "content": "A omissão gerará malha fina por cruzamento de dados (DIRF). Devemos enviar uma declaração retificadora corrigindo o erro.", "score": 5, "next": "9", "explanation": "Correto! A retificação voluntária corrige o erro antes de notificações formais com aplicação de multas punitivas." }, "C": { "content": "Aguardar cinco anos até o erro caducar por decurso de prazo decadencial tributário sem fazer nada.", "score": 0, "next": "9", "explanation": "O cruzamento eletrônico é ágil e notificações com multas de até 75% ocorrem muito antes do prazo de decadência." }, "D": { "content": "Excluir o CPF do sistema da Receita Federal abrindo um cadastro novo do zero absoluto.", "score": 0, "next": "9", "explanation": "Inviabilidade técnica e legal. CPFs são registros permanentes imutáveis vinculados ao cidadão." } } },
+              "9": { "viés": "cat_d", "prompt": "Minha esposa possui um dependente legal do casamento anterior. Se fizermos a conjunta, podemos incluí-lo?", "options": { "A": { "content": "Enteados podem constar como dependentes na declaração conjunta do casal, deduzindo gastos legais associados.", "score": 5, "next": "10", "explanation": "Correto! A legislação tributária equipara enteados a filhos para fins de dependência e deduções no IR." }, "B": { "content": "Proibido incluir parentes de casamentos anteriores por restrições de consanguinidade fiscal estritas.", "score": 0, "next": "10", "explanation": "A regra de dependência abrange afinidades civis diretas como enteados e menores sob guarda regulamentar." }, "C": { "content": "Pode incluir, mas os rendimentos próprios que o dependente receber devem ser ocultados da ficha de receitas.", "score": 0, "next": "10", "explanation": "Se incluir o dependente, todas as receitas dele devem ser somadas obrigatoriamente à base tributável do titular." }, "D": { "content": "Inclua-o como despesa operacional dedutível direta na ficha de doações de caridade incentivadas.", "score": 0, "next": "10", "explanation": "Dependentes possuem fichas e deduções próprias reguladas e não se enquadram em doações de incentivo fiscal." } } },
+              "10": { "viés": "cat_d", "prompt": "Contratei um plano de previdência VGBL este ano. Consigo usar esse plano para abater 12% da minha renda tributável no IR?", "options": { "A": { "content": "Sim, qualquer plano de previdência privada gera abatimentos diretos na base de cálculo anual do imposto.", "score": 0, "next": "11", "explanation": "Apenas planos do tipo PGBL permitem deduções da base tributável, limitadas a 12% dos rendimentos brutos." }, "B": { "content": "O plano VGBL não gera deduções na base de cálculo; ele serve para quem faz a simplificada ou já estourou o teto do PGBL.", "score": 5, "next": "11", "explanation": "Correto! No VGBL o imposto incide apenas sobre o rendimento no resgate, sem direito a abatimentos anuais ordinários." }, "C": { "content": "O VGBL abate até 24% se for casado sob regime de comunhão universal total de bens patrimoniais.", "score": 0, "next": "11", "explanation": "O teto de dedução é exclusivo do PGBL, pessoal, intransferível e limitado rigidamente a 12% em declarações completas." }, "D": { "content": "O VGBL permite deduzir o valor total aportado diretamente do imposto final a pagar, como crédito puro.", "score": 0, "next": "11", "explanation": "Previdências operam como deduções de base de cálculo (PGBL) ou diferimento (VGBL), nunca como créditos diretos de imposto." } } },
+              "11": { "viés": "geral", "prompt": "Quero um resumo do que priorizar nas próximas semanas para organizar nossos documentos fiscais de casados.", "options": { "A": { "content": "Juntar informes de renda, simular conjunta vs separada, centralizar bens comuns em uma única pasta e cruzar CPFs de recibos médicos.", "score": 5, "next": "END", "explanation": "Síntese ideal: organização documental, simulação técnica de cenários e consistência cruzada eliminam riscos de malha fina." }, "B": { "content": "Destruir recibos antigos, inventar despesas dedutíveis e atrasar o envio até o último segundo do prazo legal.", "score": 0, "next": "END", "explanation": "Conduta irregular de alto risco que atrai fiscalizações severas e aplicação de multas por atraso e fraude." }, "C": { "content": "Enviar as duas declarações idênticas duplicando rendimentos e despesas para empatar os processamentos.", "score": 0, "next": "END", "explanation": "Duplicações geram retenções automáticas imediatas nos computadores da Receita por quebra de taxas-base." }, "D": { "content": "Apenas pagar um despachante informal e assinar o documento final sem conferir nenhuma informação lançada.", "score": 0, "next": "END", "explanation": "A responsabilidade civil e criminal pelas informações prestadas no IR é sempre exclusiva do contribuinte titular." } } }
             }
-        }
-
-        function iniciarJogo() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            document.getElementById('main-menu').style.opacity = '0';
-            montarBotoesInterface("1");
-            iniciarMovimentacaoFigurantes();
-            iniciarMusicaFundo();
-
-            setTimeout(() => {
-                document.getElementById('main-menu').style.display = 'none';
-                avatar.classList.add('walking'); avatar.style.opacity = "1";
-                avatar.style.top = "56%"; avatar.style.left = "40%";
-                
-                setTimeout(() => {
-                    avatar.classList.remove('walking');
-                    sfxPlimBanco();
-                    bubble.classList.add('show');
-                    grid.classList.remove('invisible-buttons');
-                }, 3500); 
-            }, 500);
-        }
-
-        function iniciarMovimentacaoFigurantes() {
-            const clienteFila = document.getElementById('extra-cliente');
-            const guarda = document.getElementById('extra-guarda');
-            setInterval(() => {
-                const rotas = [{top: '22%', left: '63%'}, {top: '16%', left: '74%'}, {top: '36%', left: '62%'}];
-                let d = rotas[Math.floor(Math.random() * rotas.length)];
-                if(clienteFila) {
-                    clienteFila.style.top = d.top; clienteFila.style.left = d.left;
-                }
-            }, 6000);
-            setInterval(() => {
-                const rotas = [{top: '38%', left: '74%'}, {top: '18%', left: '80%'}, {top: '20%', left: '45%'}];
-                let d = rotas[Math.floor(Math.random() * rotas.length)];
-                if(guarda) {
-                    guarda.style.top = d.top; guarda.style.left = d.left;
-                }
-            }, 7500);
-        }
-
-        function montarBotoesInterface(stepId) {
-            currentStep = stepId;
-            const step = gameData.steps[stepId];
-            
-            let textoTratado = step.prompt.replace("[NOME]", nomeDoAtendente);
-            bubble.innerText = textoTratado;
-            bubble.classList.add('show');
-            grid.innerHTML = '';
-
-            document.getElementById('btn-manager-help').disabled = (dicasDisponiveis <= 0);
-
-            Object.keys(step.options).forEach(key => {
-                const opt = step.options[key];
-                const btn = document.createElement('button');
-                btn.className = 'btn-option';
-                btn.setAttribute('data-key', key);
-                btn.setAttribute('data-score', opt.score);
-                btn.innerText = `${key}) ${opt.content}`;
-                btn.onclick = () => handleChoice(opt);
-                grid.appendChild(btn);
-            });
-            grid.classList.remove('invisible-buttons');
-        }
-
-        function usarDicaGerente() {
-            if (dicasDisponiveis <= 0) return;
-            dicasDisponiveis--;
-            document.getElementById('help-count-txt').innerText = dicasDisponiveis;
-            document.getElementById('btn-manager-help').disabled = true;
-
-            const botoes = Array.from(grid.getElementsByClassName('btn-option'));
-            const botoesErrados = botoes.filter(btn => parseInt(btn.getAttribute('data-score')) === 0);
-            
-            botoesErrados.sort(() => Math.random() - 0.5);
-            let eliminados = 0;
-            botoesErrados.forEach(btn => {
-                if (eliminados < 2) {
-                    btn.style.opacity = "0.3";
-                    btn.style.textDecoration = "line-through";
-                    btn.disabled = true;
-                    eliminados++;
-                }
-            });
-            playTone(880, 'sine', 0.2, 0.1);
-        }
-
-        function handleChoice(option) {
-            score += option.score;
-            document.getElementById('score-txt').innerText = score;
-            
-            bubble.classList.remove('show');
-            grid.classList.add('invisible-buttons');
-            document.getElementById('btn-manager-help').disabled = true;
-
-            atendBubble.innerText = option.content;
-            atendBubble.classList.add('show');
-
-            inlineFeedback.innerText = option.explanation;
-            inlineFeedback.style.display = "block";
-            inlineFeedback.style.borderLeftColor = option.score > 0 ? "var(--success-color)" : "var(--error-color)";
-            inlineFeedback.style.backgroundColor = option.score > 0 ? "#e8f5e9" : "#ffebee";
-
-            const categoriaVies = gameData.steps[currentStep].viés;
-            if(categoriaVies && categoriaVies !== "geral") {
-                if(option.score > 0) acertosPorVies[categoriaVies]++;
-                else errosPorVies[categoriaVies]++;
-            }
-
-            const mood = document.getElementById('cliente-mood');
-            if(option.score > 0) {
-                sfxSucesso(); mood.innerText = "✓"; mood.className = "mood-cloud happy";
-                resilienciaAtendente = Math.min(100, resilienciaAtendente + 5);
-            } else {
-                sfxErro(); mood.innerText = "⚡"; mood.className = "mood-cloud sad";
-                pacienciaCliente = Math.max(0, pacienciaCliente - 25);
-                resilienciaAtendente = Math.max(0, resilienciaAtendente - 20);
-                
-                if (pacienciaCliente < 40) document.getElementById('cliente-body-color').style.backgroundColor = "#8e44ad";
-                else if (pacienciaCliente < 70) document.getElementById('cliente-body-color').style.backgroundColor = "#d35400";
-            }
-
-            document.getElementById('bar-paciencia').style.width = pacienciaCliente + "%";
-            document.getElementById('bar-resiliencia').style.width = resilienciaAtendente + "%";
-
-            setTimeout(() => {
-                atendBubble.classList.remove('show');
-                inlineFeedback.style.display = "none";
-                document.getElementById('cliente-mood').className = "mood-cloud"; 
-
-                if (pacienciaCliente <= 0) {
-                    showEndGame("CLIENTE_DESISTIU");
-                } else if (resilienciaAtendente <= 0) {
-                    showEndGame("BURNOUT");
-                } else if (option.next === "END") {
-                    showEndGame("SUCESSO");
-                } else {
-                    montarBotoesInterface(option.next);
-                }
-            }, 4500);
-        }
-
-        function calcularRelatorioVieses() {
-            const formatarLinha = (vies) => {
-                if (acertosPorVies[vies] === 0 && errosPorVies[vies] === 0) return "Não testado.";
-                return `Acertos: ${acertosPorVies[vies]} | Erros: ${errosPorVies[vies]}`;
-            };
-            document.getElementById('rep-dispo').innerText = formatarLinha('disponibilidade');
-            document.getElementById('rep-repre').innerText = formatarLinha('representatividade');
-            document.getElementById('rep-ancora').innerText = formatarLinha('ancoragem');
-            document.getElementById('rep-perda').innerText = formatarLinha('perda');
-        }
-
-        let gravacaoConcluida = false;
-        async function salvarResultadoNoFirebase(motivoTermino) {
-            try {
-                if(window.addDoc && window.collection && window.db) {
-                    await window.addDoc(window.collection(window.db, "resultados_jogos"), {
-                        atendente: nomeDoAtendente,
-                        pontuacao_final: score,
-                        motivo_encerramento: motivoTermino,
-                        acertos_detalhes: acertosPorVies,
-                        erros_detalhes: errosPorVies,
-                        data_partida: new Date()
-                    });
-                    console.log("Desempenho salvo com sucesso no Firestore!");
-                    gravacaoConcluida = true;
-                }
-            } catch (e) {
-                console.error("Erro ao salvar resultado final: ", e);
-            }
-        }
-
-        function showEndGame(motivo) {
-            if(bgmInterval) clearInterval(bgmInterval);
-            bubble.classList.remove('show'); atendBubble.classList.remove('show'); inlineFeedback.style.display = "none";
-            document.getElementById('screen-game').classList.add('hide');
-            
-            const endScreen = document.getElementById('screen-end');
-            const title = document.getElementById('end-title');
-            const desc = document.getElementById('end-desc');
-            
-            salvarResultadoNoFirebase(motivo); 
-
-            if (motivo === "CLIENTE_DESISTIU") {
-                title.innerText = "Fim de Jogo: Cliente sem Paciência!";
-                desc.innerText = "O investidor achou a abordagem confusa, levantou e saiu da agência.";
-                title.style.color = "var(--error-color)";
-            } else if (motivo === "BURNOUT") {
-                title.innerText = "Fim de Jogo: Limite de Estresse!";
-                desc.innerText = "O estresse operacional drenou suas forças de consultoria.";
-                title.style.color = "var(--error-color)";
-            } else {
-                title.innerText = "Módulo Concluído!";
-                desc.innerText = "Sucesso! Você desarmou com maestria os vieses comportamentais.";
-                title.style.color = "var(--success-color)";
-            }
-
-            calcularRelatorioVieses();
-            endScreen.classList.remove('hide');
-            document.getElementById('final-score-txt').innerText = score;
-            
-            avatar.classList.add('walking'); avatar.style.top = "11%"; avatar.style.left = "83%";
-            setTimeout(() => { avatar.style.opacity = "0"; avatar.classList.remove('walking'); }, 3500);
-        }
-
-        function abrirCaptacaoLeads() { document.getElementById('leads-modal').style.display = 'flex'; }
-        function fecharLeads() { document.getElementById('leads-modal').style.display = 'none'; }
-
-        async function enviarLead(event) {
-            event.preventDefault();
-            const nome = document.getElementById('lead-name').value;
-            const email = document.getElementById('lead-email').value;
-            const telefone = document.getElementById('lead-phone').value;
-
-            try {
-                if(window.addDoc && window.collection && window.db) {
-                    await window.addDoc(window.collection(window.db, "leads_comercial"), {
-                        nome: nome,
-                        email: email,
-                        telefone: telefone,
-                        status: "Novo Lead - Time de Vendas",
-                        data_cadastro: new Date()
-                    });
-                    alert(`Obrigado, ${nome}! Seus dados foram enviados com prioridade máxima para a mesa comercial de Alta Renda do ToroBank.`);
-                    fecharLeads();
-                }
-            } catch(e) {
-                console.error("Erro ao registrar lead: ", e);
-                alert("Ocorreu um erro ao salvar o contato no banco.");
-            }
-        }
-    </script>
-</body>
-</html>
+          },
+          "TAT-EDU-INT-001": {
+            "nome_exibicao": "Módulo TAT: Escuta Ativa e Ética no Atendimento",
+            "perfil_cliente": "Aprendiz (22a)",
+            "categoria_labels": ["Técnicas de Escuta", "Solução Proativa", "Gestão de Conflitos", "Ética Profissional"],
+            "steps": {
+              "1": { "viés": "cat_a", "prompt": "Sou filho de um profissional renomado e quero entrar no atendimento. Por onde começo para criar base sólida?", "options": { "A": { "content": "Mapear scripts prontos e repetir respostas padrão antes de falar com clientes reais no balcão.", "score": 0, "next": "2", "explanation": "Decorar scripts sem entender o cliente limita a qualidade do atendimento e reduz a adaptação às necessidades." }, "B": { "content": "Começar dominando escuta ativa: ouvir sem julgar, parafrasear e checar entendimento com o cliente.", "score": 5, "next": "2", "explanation": "A escuta ativa é a base de todo atendimento: reduz ruído, cria empatia e orienta soluções eficazes." }, "C": { "content": "Pedir dicas rápidas do meu pai e improvisar até pegar prática, evitando protocolos muito rígidos.", "score": 0, "next": "2", "explanation": "O puro improviso sem método técnico eleva ruídos operacionais e quebra a consistência do serviço." }, "D": { "content": "Focar em técnicas de fechamento de vendas agressivo antes de estudar o diagnóstico do cliente.", "score": 0, "next": "2", "explanation": "Forçar fechamentos sem ouvir a demanda real do cliente destrói a confiança de longo prazo." } } },
+              "2": { "viés": "cat_b", "prompt": "Entendi a escuta ativa. Mas e se o cliente chegar irritado e gritando por causa de um erro do sistema?", "options": { "A": { "content": "Interromper o cliente imediatamente, explicar que o erro não é seu e pedir para ele se acalmar.", "score": 0, "next": "3", "explanation": "Interrupções e tom defensivo inflam a agressividade; valide a emoção antes de propor soluções." }, "B": { "content": "Ouvir o desabafo, validar a frustração dele, assumir a responsabilidade institucional e focar na solução imediata.", "score": 5, "next": "3", "explanation": "Acolher o sentimento neutraliza a hostilidade e abre canal racional para resolver o problema." }, "C": { "content": "Ignorar o tom de voz dele, responder de forma fria e monossilábica e transferir para outro setor.", "score": 0, "next": "3", "explanation": "Frieza e transferências injustificadas geram percepção de descaso multiplicando a insatisfação." }, "D": { "content": "Chamar a segurança da agência de imediato para retirar o cliente do recinto por desacato operacional.", "score": 0, "next": "3", "explanation": "Acionar força de segurança para desabafos verbais comuns de problemas operacionais é desproporcional." } } },
+              "3": { "viés": "cat_c", "prompt": "Um cliente pede uma exceção nas regras de segurança do banco para liberar uma transferência urgente sem documentos comprovatórios. O que fazer?", "options": { "A": { "content": "Liberar por empatia, afinal resolver o problema do cliente de forma ágil é a prioridade máxima.", "score": 0, "next": "4", "explanation": "Quebrar normas de segurança e compliance expõe a instituição a fraudes e o profissional a demissões por justa causa." }, "B": { "content": "Explicar com clareza o motivo da norma (proteger o patrimônio dele) e oferecer o caminho legal mais rápido para validação.", "score": 5, "next": "4", "explanation": "Educar o cliente sobre o propósito da segurança mantém a firmeza operacional sem perder a cortesia do atendimento." }, "C": { "content": "Recusar de forma ríspida dizendo que regras são regras e o banco não abre exceções para ninguém.", "score": 0, "next": "4", "explanation": "Posturas inflexíveis e autoritárias sem explicações lógicas geram rupturas e revoltas no relacionamento comercial." }, "D": { "content": "Simular que fez a transferência no sistema, emitindo um comprovante falso apenas para acalmar o balcão.", "score": 0, "next": "4", "explanation": "Emitir documentos fraudulentos configura crime de falsidade ideológica e conduta antiética gravíssima." } } },
+              "4": { "viés": "cat_d", "prompt": "Percebi que um colega de equipe repassou informações enganosas sobre taxas para bater a meta do mês. Devo intervir de que forma?", "options": { "A": { "content": "Ficar em silêncio, pois o resultado comercial dele ajuda a agência inteira a atingir os bônus coletivos.", "score": 0, "next": "5", "explanation": "A cumplicidade com práticas enganosas destrói a reputação da marca e viola códigos de ética institucionais." }, "B": { "content": "Conversar com o colega de forma construtiva e, se a prática persistir, reportar formalmente aos canais de compliance ou ouvidoria.", "score": 5, "next": "5", "explanation": "Zelar pela integridade das vendas protege os clientes, a agência e consolida a postura ética corporativa." }, "C": { "content": "Expor o erro do colega publicamente no grupo de WhatsApp da empresa para desmascará-lo perante todos.", "score": 0, "next": "5", "explanation": "Exposições públicas humilhantes destroem o clima organizacional e geram passivos trabalhistas graves." }, "D": { "content": "Adotar a mesma prática enganosa para não ficar para trás no ranking de vendas mensais da mesa.", "score": 0, "next": "5", "explanation": "Replicar condutas antiéticas por pressão competitiva anula qualquer base profissional íntegra futura." } } },
+              "5": { "viés": "geral", "prompt": "O que fazer quando não soubermos a resposta para uma dúvida técnica complexa trazida por um cliente de alta renda?", "options": { "A": { "content": "Inventar uma resposta plausível na hora para manter a autoridade e não demonstrar fraqueza técnica.", "score": 0, "next": "6", "explanation": "Passar dados falsos destrói a credibilidade profissional assim que o cliente descobrir o erro." }, "B": { "content": "Assumir com transparência que precisa confirmar o dado, dar um prazo firme e retornar com a resposta exata avaliada.", "score": 5, "next": "6", "explanation": "A honestidade técnica associada ao compromisso de retorno fortalece a confiança mútua e a postura consultiva." }, "C": { "content": "Dizer que o banco não responde
