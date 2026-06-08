@@ -67,7 +67,6 @@
             justify-content: flex-start;
         }
 
-        /* IDENTIDADE VISUAL TEXTUAL ORIGINAL - TOROBANK */
         .brand-container {
             margin-bottom: 20px;
             text-align: center;
@@ -101,7 +100,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* ESTILIZAÇÃO DO SITE NO RODAPÉ */
         .company-website {
             margin-top: auto;
             font-size: 13px;
@@ -147,9 +145,6 @@
         .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 15px 45px; font-size: 16px; font-weight: 800; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-top: 10px;}
         .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 6px 20px rgba(255,215,0,0.4); }
         .btn-start:disabled { background: #cccccc; color: #666666; cursor: not-allowed; transform: none; box-shadow: none; }
-
-        .btn-admin-trigger { position: absolute; bottom: 15px; left: 15px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); padding: 5px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
-        .btn-admin-trigger:hover { color: white; border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
 
         .admin-actions { display: flex; gap: 10px; margin-top: 15px; }
         .btn-admin-save { background: #2e7d32; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 2; }
@@ -295,6 +290,8 @@
 
         setTimeout(() => {
             requestAnimationFrame(carregarCenariosDoBanco);
+            // INTERCEPTA A URL SECRETA DO ADMINISTRADOR LOGO NO BOOT
+            verificarUrlSecretaAdmin();
         }, 800);
     </script>
 </head>
@@ -379,8 +376,6 @@
                     <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
                 </div>
             </form>
-            
-            <button class="btn-admin-trigger" type="button" onclick="abrirModalSenhaAdmin()">Painel Geral</button>
 
             <div class="company-website">
                 Visite nosso site: <a href="https://www.academiarafaeltoro.com.br/" target="_blank">academiarafaeltoro.com.br</a>
@@ -500,6 +495,14 @@
         const atendBubble = document.getElementById('atend-speech-bubble');
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
+
+        // LÓGICA DE CAPTURA DO PARAMETRO ?admin=true NA URL
+        function verificarUrlSecretaAdmin() {
+            const parametrosUrl = new URLSearchParams(window.location.search);
+            if (parametrosUrl.get('admin') === 'true') {
+                abrirModalSenhaAdmin();
+            }
+        }
 
         async function carregarCenariosDoBanco() {
             try {
