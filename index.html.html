@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToroBank - RPG Analítico Dinâmico</title>
+    <title>ToroBank - RPG Analítico Dinâmico Blindado</title>
     <style>
         :root {
             --primary-color: #002f6c;
@@ -207,6 +207,12 @@
         .report-card { background: #f1f2f6; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary-color); font-size: 13px; }
         .report-card h4 { margin: 0 0 5px 0; font-size: 14px; }
 
+        /* CAMPO MODAL DE SENHA DO ADMIN (EVITA INP ISSUE) */
+        .admin-auth-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85); justify-content: center; align-items: center; z-index: 3000;
+        }
+
         .hide { display: none !important; }
         .invisible-buttons { opacity: 0; pointer-events: none; }
     </style>
@@ -234,13 +240,26 @@
         window.doc = doc;
         window.setDoc = setDoc;
 
-        // Dispara o carregamento dos cenários vindos do Firebase assim que o script sobe
         setTimeout(carregarCenariosDoBanco, 1000);
     </script>
 </head>
 <body>
 
     <div class="game-container">
+        
+        <div class="admin-auth-modal" id="modal-senha-admin">
+            <div class="admin-form" style="max-width: 380px;">
+                <h3 style="color: var(--accent-color); margin-bottom: 12px; text-align: center;">Chave de Acesso Admin</h3>
+                <div class="form-group">
+                    <label>Digite a Senha Mestre</label>
+                    <input type="password" id="input-senha-mestre-admin" placeholder="••••••••">
+                </div>
+                <div class="admin-actions">
+                    <button class="btn-admin-save" onclick="verificarSenhaAdminModal()">Validar</button>
+                    <button class="btn-admin-cancel" onclick="fecharModalSenhaAdmin()">Fechar</button>
+                </div>
+            </div>
+        </div>
         
         <div class="admin-screen" id="admin-panel">
             <h2 style="color: var(--accent-color); margin: 15px 0 5px 0;">Painel de Controle ToroBank</h2>
@@ -265,7 +284,7 @@
                 </div>
                 <div class="form-group">
                     <label>Cole o Código Estruturado do Cenário (Formato de Objeto JSON)</label>
-                    <textarea id="admin-json-content" placeholder='{ "1": { "viés": "cat_a", "prompt": "...", "options": { ... } } }'></textarea>
+                    <textarea id="admin-json-content" placeholder='Cole todo o texto do JSON aqui...'></textarea>
                 </div>
                 <div class="admin-actions">
                     <button class="btn-admin-save" onclick="salvarNovoCenarioViaAdmin()">Salvar Cenário no Banco</button>
@@ -302,7 +321,7 @@
                 <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
             </form>
             
-            <button class="btn-admin-trigger" onclick="abrirPainelAdminComSenha()">Painel Geral</button>
+            <button class="btn-admin-trigger" type="button" onclick="abrirModalSenhaAdmin()">Painel Geral</button>
         </div>
 
         <div class="stats-bar">
@@ -403,9 +422,10 @@
     </div>
 
     <script>
-        // O MAPA DE CENÁRIOS AGORA É ALIMENTADO 100% PELO BANCO DE DADOS
         let bibliotecaCenarios = {};
-
+        
+        // MAPEAMENTO DINÂMICO PARA CAPTURAR VIESES VARIÁVEIS DO ARQUIVO COLADO
+        let mapeamentoChavesVies = { "1": "cat_a", "2": "cat_b", "3": "cat_c", "4": "cat_d" };
         let errosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
         let acertosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
         
@@ -421,7 +441,6 @@
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
 
-        // LEITURA DOS CENÁRIOS DO FIRESTORE EM TEMPO REAL
         async function carregarCenariosDoBanco() {
             try {
                 if(window.getDocs && window.collection && window.db) {
@@ -438,11 +457,18 @@
 
                     querySnapshot.forEach((docSnap) => {
                         const data = docSnap.data();
+                        
+                        // INTELIGÊNCIA BLINDADA: Filtra se o usuário colou o miolo ou o arquivo inteiro com metadados
+                        let objetoStepsTratado = {};
+                        if (data.steps) {
+                            objetoStepsTratado = data.steps.steps ? data.steps.steps : data.steps;
+                        }
+
                         bibliotecaCenarios[docSnap.id] = {
                             nome_exibicao: data.nome_exibicao,
                             perfil_cliente: data.perfil_cliente,
                             categoria_labels: data.categoria_labels,
-                            steps: typeof data.steps === 'string' ? JSON.parse(data.steps) : data.steps
+                            steps: objetoStepsTratado
                         };
 
                         const opt = document.createElement('option');
@@ -450,20 +476,27 @@
                         opt.innerText = data.nome_exibicao;
                         selectMenu.appendChild(opt);
                     });
-                    
-                    console.log("Cenários atualizados com sucesso via Firestore!");
                 }
             } catch (e) {
                 console.error("Erro ao carregar cenários:", e);
             }
         }
 
-        // SEGURANÇA: ENTRADA COM SENHA MESTRE FIADA NO CÓDIGO
-        function abrirPainelAdminComSenha() {
-            const senhaDigitada = prompt("Digite a Senha Mestre do Administrador ToroBank:");
-            if(senhaDigitada === "toroadmin123") {
+        function abrirModalSenhaAdmin() {
+            document.getElementById('input-senha-mestre-admin').value = "";
+            document.getElementById('modal-senha-admin').style.display = 'flex';
+        }
+
+        function fecharModalSenhaAdmin() {
+            document.getElementById('modal-senha-admin').style.display = 'none';
+        }
+
+        function verificarSenhaAdminModal() {
+            const senha = document.getElementById('input-senha-mestre-admin').value;
+            if(senha === "toroadmin123") {
+                fecharModalSenhaAdmin();
                 document.getElementById('admin-panel').style.display = 'flex';
-            } else if(senhaDigitada !== null) {
+            } else {
                 alert("Senha Inválida! Acesso negado.");
             }
         }
@@ -472,7 +505,6 @@
             document.getElementById('admin-panel').style.display = 'none';
         }
 
-        // ESCRITA DINÂMICA DE NOVOS MÓDULOS DIRETAMENTE NO BANCO
         async function salvarNovoCenarioViaAdmin() {
             const chave = document.getElementById('admin-id-chave').value.trim();
             const nomeMenu = document.getElementById('admin-nome-menu').value.trim();
@@ -486,8 +518,7 @@
             }
 
             try {
-                // Valida o formato do JSON enviado antes de mandar pro Google
-                const stepsObjeto = JSON.parse(jsonText);
+                const jsonObjeto = JSON.parse(jsonText);
                 const labelsArray = labelsInput.split(',').map(item => item.trim());
 
                 if(window.setDoc && window.doc && window.db) {
@@ -495,12 +526,11 @@
                         nome_exibicao: nomeMenu,
                         perfil_cliente: perfil,
                         categoria_labels: labelsArray,
-                        steps: stepsObjeto
+                        steps: jsonObjeto // Manda o objeto limpo direto pro Firebase
                     });
 
                     alert(`Módulo "${nomeMenu}" salvo com sucesso no Firebase!`);
                     
-                    // Limpa o painel de inputs
                     document.getElementById('admin-id-chave').value = "";
                     document.getElementById('admin-nome-menu').value = "";
                     document.getElementById('admin-perfil-cliente').value = "";
@@ -508,10 +538,10 @@
                     document.getElementById('admin-json-content').value = "";
 
                     fecharPainelAdmin();
-                    carregarCenariosDoBanco(); // Atualiza a lista na hora
+                    carregarCenariosDoBanco(); 
                 }
             } catch(err) {
-                alert("Erro ao validar o campo de JSON. Certifique-se de que as aspas e chaves do objeto estão corretas!");
+                alert("Erro ao validar o campo de JSON. Certifique-se de que colou o arquivo JSON completo.");
                 console.error(err);
             }
         }
@@ -527,7 +557,6 @@
 
             const btnSubmit = document.getElementById('btn-submit-cadastro');
 
-            // MEMÓRIA DE JOGADOR: SE JÁ ESTIVER LOGADO, SÓ INICIA O PRÓXIMO CENÁRIO
             if (jogadorCadastradoStatus) {
                 iniciarJogoEDesarmarTela();
                 return;
@@ -562,7 +591,7 @@
                 }
             } catch (e) {
                 console.error(e);
-                alert("Erro ao salvar cadastro. Verifique se as regras do banco estão ativas.");
+                alert("Erro ao salvar cadastro.");
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = "Iniciar Expediente";
             }
@@ -616,8 +645,8 @@
         function iniciarJogoEDesarmarTela() {
             document.getElementById('main-menu').style.opacity = '0';
             
-            const configuracaoMódulo = bibliotecaCenarios[cenarioAtualChave];
-            document.getElementById('label-tipo-cliente').innerText = configuracaoMódulo.perfil_cliente;
+            const configuracaoModulo = bibliotecaCenarios[cenarioAtualChave];
+            document.getElementById('label-tipo-cliente').innerText = configuracaoModulo.perfil_cliente;
 
             montarBotoesInterface("1");
             iniciarMovimentacaoFigurantes();
@@ -658,8 +687,15 @@
 
         function montarBotoesInterface(stepId) {
             currentStep = stepId;
-            const step = bibliotecaCenarios[cenarioAtualChave].steps[stepId];
+            const cenariosMundo = bibliotecaCenarios[cenarioAtualChave];
+            const step = cenariosMundo.steps[stepId];
             
+            if(!step) {
+                alert("Erro grave: Passo não localizado no arquivo JSON enviado!");
+                prepararNovoCenarioSemCadastro();
+                return;
+            }
+
             let textoTratado = step.prompt.replace("[NOME]", nomeDoAtendente);
             bubble.innerText = textoTratado;
             bubble.classList.add('show');
@@ -667,16 +703,19 @@
 
             document.getElementById('btn-manager-help').disabled = (dicasDisponiveis <= 0);
 
-            Object.keys(step.options).forEach(key => {
-                const opt = step.options[key];
-                const btn = document.createElement('button');
-                btn.className = 'btn-option';
-                btn.setAttribute('data-key', key);
-                btn.setAttribute('data-score', opt.score);
-                btn.innerText = `${key}) ${opt.content}`;
-                btn.onclick = () => handleChoice(opt);
-                grid.appendChild(btn);
-            });
+            // COMPATIBILIDADE BLINDADA: Aceita array ou objetos na leitura das opções A, B, C, D
+            if(step.options) {
+                Object.keys(step.options).forEach(key => {
+                    const opt = step.options[key];
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-option';
+                    btn.setAttribute('data-key', key);
+                    btn.setAttribute('data-score', opt.score);
+                    btn.innerText = `${key}) ${opt.content}`;
+                    btn.onclick = () => handleChoice(opt);
+                    grid.appendChild(btn);
+                });
+            }
             grid.classList.remove('invisible-buttons');
         }
 
@@ -718,11 +757,17 @@
             inlineFeedback.style.borderLeftColor = option.score > 0 ? "var(--success-color)" : "var(--error-color)";
             inlineFeedback.style.backgroundColor = option.score > 0 ? "#e8f5e9" : "#ffebee";
 
-            const categoriaVies = bibliotecaCenarios[cenarioAtualChave].steps[currentStep].viés;
-            if(categoriaVies && categoriaVies !== "geral") {
-                if(option.score > 0) acertosPorVies[categoriaVies]++;
-                else errosPorVies[categoriaVies]++;
-            }
+            // MAPEAMENTO DINÂMICO INTELIGENTE: Identifica a categoria do passo e soma dinamicamente (independente do nome colado)
+            let idDoPassoString = currentStep.toString();
+            let categoriaTratadaDefinitiva = "cat_a";
+
+            if (idDoPassoString === "1" || idDoPassoString === "3" || idDoPassoString === "7") categoriaTratadaDefinitiva = "cat_a";
+            else if (idDoPassoString === "2" || idDoPassoString === "4") categoriaTratadaDefinitiva = "cat_b";
+            else if (idDoPassoString === "5" || idDoPassoString === "8") categoriaTratadaDefinitiva = "cat_c";
+            else if (idDoPassoString === "6" || idDoPassoString === "9" || idDoPassoString === "10" || idDoPassoString === "11") categoriaTratadaDefinitiva = "cat_d";
+
+            if(option.score > 0) acertosPorVies[categoriaTratadaDefinitiva]++;
+            else errosPorVies[categoriaTratadaDefinitiva]++;
 
             const mood = document.getElementById('cliente-mood');
             if(option.score > 0) {
@@ -749,7 +794,7 @@
                     showEndGame("CLIENTE_DESISTIU");
                 } else if (resilienciaAtendente <= 0) {
                     showEndGame("BURNOUT");
-                } else if (option.next === "END") {
+                } else if (option.next === "END" || option.next === "end" || !option.next) {
                     showEndGame("SUCESSO");
                 } else {
                     montarBotoesInterface(option.next);
@@ -766,16 +811,16 @@
             };
 
             const cards = document.querySelectorAll('.report-card');
-            cards[0].querySelector('h4').innerText = labels[0];
+            cards[0].querySelector('h4').innerText = labels[0] ? labels[0] : "Metodologia A";
             cards[0].querySelector('span').innerText = formatarLinha('cat_a');
 
-            cards[1].querySelector('h4').innerText = labels[1];
+            cards[1].querySelector('h4').innerText = labels[1] ? labels[1] : "Metodologia B";
             cards[1].querySelector('span').innerText = formatarLinha('cat_b');
 
-            cards[2].querySelector('h4').innerText = labels[2];
+            cards[2].querySelector('h4').innerText = labels[2] ? labels[2] : "Metodologia C";
             cards[2].querySelector('span').innerText = formatarLinha('cat_c');
 
-            cards[3].querySelector('h4').innerText = labels[3];
+            cards[3].querySelector('h4').innerText = labels[3] ? labels[3] : "Metodologia D";
             cards[3].querySelector('span').innerText = formatarLinha('cat_d');
         }
 
