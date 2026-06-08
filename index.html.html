@@ -67,41 +67,33 @@
             justify-content: flex-start;
         }
 
-        /* IDENTIDADE VISUAL RAFAEL TORO ACADEMIA DE FINANÇAS */
+        /* IDENTIDADE VISUAL ATUALIZADA - LOGO OFICIAL */
         .brand-container {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
             animation: fadeInDown 0.8s ease;
         }
-        .brand-sub {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #ffffff;
-            opacity: 0.6;
-            margin-bottom: 2px;
-            font-weight: 600;
+        
+        .brand-logo-img {
+            width: 100%;
+            max-width: 420px; /* Tamanho calibrado para o formato horizontal */
+            height: auto;
+            filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.15));
+            margin-bottom: 5px;
         }
-        .brand-main {
-            font-size: 44px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            line-height: 1;
-            color: #ffffff;
-        }
-        .brand-main span {
-            color: var(--accent-color);
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-        }
+
         .menu-subtitle { 
-            font-size: 15px; 
-            color: #a5b4fc; 
-            margin-top: 8px;
-            font-weight: 500;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 16px;
+            font-size: 14px; 
+            color: #ffffff; 
+            letter-spacing: 1px;
+            margin-top: 5px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 5px 20px;
             border-radius: 20px;
             display: inline-block;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         @keyframes fadeInDown {
@@ -208,7 +200,7 @@
             position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%) scale(0);
             width: 240px; background: #ffffff; border: 2px solid var(--primary-color); border-radius: 14px;
             padding: 12px 15px; font-size: 13px; line-height: 1.4; color: #2c3e50;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35); transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none; z-index: 9999; transform-origin: bottom center;
         }
         .npc-bubble::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); border-width: 10px 10px 0; border-style: solid; border-color: #ffffff transparent; }
@@ -336,9 +328,9 @@
         
         <div class="menu-screen" id="main-menu">
             <div class="brand-container">
-                <div class="brand-sub">Academia de Finanças</div>
-                <div class="brand-main">Rafael <span>Toro</span></div>
-                <div class="menu-subtitle" id="menu-sub-title-label">Simulador RPG • ToroBank Corp</div>
+                <img src="logo.png" alt="Rafael Toro - Academia de Finanças" class="brand-logo-img">
+                <br>
+                <div class="menu-subtitle" id="menu-sub-title-label">Módulo de Treinamento e Diagnóstico</div>
             </div>
             
             <form class="menu-form" id="cadastro-inicial-form" onsubmit="processarCadastroEIniciar(event)">
@@ -357,7 +349,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="tree-select">Selecione o Módulo de Treinamento</label>
+                    <label for="tree-select">Escolha o Cenário Temático</label>
                     <select id="tree-select">
                         <option value="">Carregando cenários disponíveis...</option>
                     </select>
@@ -576,7 +568,7 @@
                         steps: jsonObjeto
                     });
 
-                    alert(`Módulo "${nomeMenu}" salvo com sucesso no Firebase!`);
+                    alert(`Módulo "${nomeMenu}" saved no Firebase!`);
                     
                     document.getElementById('admin-id-chave').value = "";
                     document.getElementById('admin-nome-menu').value = "";
@@ -588,7 +580,7 @@
                     await carregarCenariosDoBanco(); 
                 }
             } catch(err) {
-                alert("Erro ao processar arquivo JSON. Certifique-se de colar o conteúdo estruturado corretamente.");
+                alert("Erro ao processar o arquivo JSON. Certifique-se de que colou o conteúdo completo.");
                 console.error(err);
             } finally {
                 btnSave.disabled = false;
