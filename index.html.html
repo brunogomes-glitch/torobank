@@ -417,4 +417,380 @@
               "2": { "viés": "cat_b", "prompt": "Entendi a escuta ativa. Mas e se o cliente chegar irritado e gritando por causa de um erro do sistema?", "options": { "A": { "content": "Interromper o cliente imediatamente, explicar que o erro não é seu e pedir para ele se acalmar.", "score": 0, "next": "3", "explanation": "Interrupções e tom defensivo inflam a agressividade; valide a emoção antes de propor soluções." }, "B": { "content": "Ouvir o desabafo, validar a frustração dele, assumir a responsabilidade institucional e focar na solução imediata.", "score": 5, "next": "3", "explanation": "Acolher o sentimento neutraliza a hostilidade e abre canal racional para resolver o problema." }, "C": { "content": "Ignorar o tom de voz dele, responder de forma fria e monossilábica e transferir para outro setor.", "score": 0, "next": "3", "explanation": "Frieza e transferências injustificadas geram percepção de descaso multiplicando a insatisfação." }, "D": { "content": "Chamar a segurança da agência de imediato para retirar o cliente do recinto por desacato operacional.", "score": 0, "next": "3", "explanation": "Acionar força de segurança para desabafos verbais comuns de problemas operacionais é desproporcional." } } },
               "3": { "viés": "cat_c", "prompt": "Um cliente pede uma exceção nas regras de segurança do banco para liberar uma transferência urgente sem documentos comprovatórios. O que fazer?", "options": { "A": { "content": "Liberar por empatia, afinal resolver o problema do cliente de forma ágil é a prioridade máxima.", "score": 0, "next": "4", "explanation": "Quebrar normas de segurança e compliance expõe a instituição a fraudes e o profissional a demissões por justa causa." }, "B": { "content": "Explicar com clareza o motivo da norma (proteger o patrimônio dele) e oferecer o caminho legal mais rápido para validação.", "score": 5, "next": "4", "explanation": "Educar o cliente sobre o propósito da segurança mantém a firmeza operacional sem perder a cortesia do atendimento." }, "C": { "content": "Recusar de forma ríspida dizendo que regras são regras e o banco não abre exceções para ninguém.", "score": 0, "next": "4", "explanation": "Posturas inflexíveis e autoritárias sem explicações lógicas geram rupturas e revoltas no relacionamento comercial." }, "D": { "content": "Simular que fez a transferência no sistema, emitindo um comprovante falso apenas para acalmar o balcão.", "score": 0, "next": "4", "explanation": "Emitir documentos fraudulentos configura crime de falsidade ideológica e conduta antiética gravíssima." } } },
               "4": { "viés": "cat_d", "prompt": "Percebi que um colega de equipe repassou informações enganosas sobre taxas para bater a meta do mês. Devo intervir de que forma?", "options": { "A": { "content": "Ficar em silêncio, pois o resultado comercial dele ajuda a agência inteira a atingir os bônus coletivos.", "score": 0, "next": "5", "explanation": "A cumplicidade com práticas enganosas destrói a reputação da marca e viola códigos de ética institucionais." }, "B": { "content": "Conversar com o colega de forma construtiva e, se a prática persistir, reportar formalmente aos canais de compliance ou ouvidoria.", "score": 5, "next": "5", "explanation": "Zelar pela integridade das vendas protege os clientes, a agência e consolida a postura ética corporativa." }, "C": { "content": "Expor o erro do colega publicamente no grupo de WhatsApp da empresa para desmascará-lo perante todos.", "score": 0, "next": "5", "explanation": "Exposições públicas humilhantes destroem o clima organizacional e geram passivos trabalhistas graves." }, "D": { "content": "Adotar a mesma prática enganosa para não ficar para trás no ranking de vendas mensais da mesa.", "score": 0, "next": "5", "explanation": "Replicar condutas antiéticas por pressão competitiva anula qualquer base profissional íntegra futura." } } },
-              "5": { "viés": "geral", "prompt": "O que fazer quando não soubermos a resposta para uma dúvida técnica complexa trazida por um cliente de alta renda?", "options": { "A": { "content": "Inventar uma resposta plausível na hora para manter a autoridade e não demonstrar fraqueza técnica.", "score": 0, "next": "6", "explanation": "Passar dados falsos destrói a credibilidade profissional assim que o cliente descobrir o erro." }, "B": { "content": "Assumir com transparência que precisa confirmar o dado, dar um prazo firme e retornar com a resposta exata avaliada.", "score": 5, "next": "6", "explanation": "A honestidade técnica associada ao compromisso de retorno fortalece a confiança mútua e a postura consultiva." }, "C": { "content": "Dizer que o banco não responde
+              "5": { "viés": "geral", "prompt": "O que fazer quando não soubermos a resposta para uma dúvida técnica complexa trazida por um cliente de alta renda?", "options": { "A": { "content": "Inventar uma resposta plausível na hora para manter a autoridade e não demonstrar fraqueza técnica.", "score": 0, "next": "6", "explanation": "Passar dados falsos destrói a credibilidade profissional assim que o cliente descobrir o erro." }, "B": { "content": "Assumir com transparência que precisa confirmar o dado, dar um prazo firme e retornar com a resposta exata avaliada.", "score": 5, "next": "6", "explanation": "A honestidade técnica associada ao compromisso de retorno fortalece a confiança mútua e a postura consultiva." }, "C": { "content": "Dizer que o banco não responde esse tipo de questão e que ele deve procurar a resposta na internet sozinho.", "score": 0, "next": "6", "explanation": "Demonstra desinteresse e negligência explícita quebrando o pilar básico de solução consultiva de problemas." }, "D": { "content": "Chutar o produto mais caro da prateleira dizendo que ele resolve qualquer dúvida sistêmica estrutural.", "score": 0, "next": "6", "explanation": "Empurrar produtos como cortina de fumaça técnica configura venda casada abusiva indesejada." } } },
+              "6": { "viés": "geral", "prompt": "Documentar causa e correção, combinar monitoramento breve e convidar a relatar qualquer novo sinal.", "options": { "A": { "content": "Encerrar sem detalhes, pois o cliente só quer o serviço de volta e não precisa de explicações agora.", "score": 0, "next": "END", "explanation": "Sem detalhes, não há aprendizado nem prevenção; comunique causa e próximos passos." }, "B": { "content": "Prometer monitoramento ilimitado gratuito, garantindo satisfação elevada por tempo indeterminado.", "score": 0, "next": "END", "explanation": "Compromissos ilimitados são arriscados e pouco realistas; defina escopo e prazos." }, "C": { "content": "Enviar um questionário longo de NPS agora, para aproveitar o bom momento e gerar métricas.", "score": 0, "next": "END", "explanation": "Pesquisa extensa no fechamento pode cansar; priorize clareza da solução e acompanhamento." }, "D": { "content": "Documentar causa e correção, combinar monitoramento breve e convidar a relatar qualquer novo sinal.", "score": 5, "next": "END", "explanation": "Registro, monitoramento e convite ao feedback consolidam qualidade e confiança." } } }
+            }
+          },
+          "AD-CPROR-2004": {
+            "nome_exibicao": "Módulo C-Pro R: Orçamento Familiar e Viagens",
+            "perfil_cliente": "Cliente C-Pro R (45a)",
+            "categoria_labels": ["Planejamento Orçamentário", "Análise de Despesas", "Poupança Sistemática", "Metas Financeiras"],
+            "steps": {
+              "1": { "viés": "cat_a", "prompt": "Tenho 45 anos e quero viajar uma vez por ano, mas receio não ter folga no orçamento. Por onde começo sem me apertar?", "options": { "A": { "content": "Parcele já a viagem em doze vezes e depois ajuste o orçamento conforme der, contando com reajustes anuais para equilibrar.", "score": 0, "next": "7", "explanation": "Antecipar consumo e ajustar depois eleva risco e custo; priorize planejar antes de assumir parcelas." }, "B": { "content": "Mapeemos receitas e despesas por categoria e definamos uma poupança mensal para a viagem sem afetar contas essenciais, com revisão mensal.", "score": 5, "next": "2", "explanation": "Correto: conhecer fluxo e reservar um valor viável permite atingir a meta sem comprometer obrigações." }, "C": { "content": "Investir logo em ações para buscar ganhos rápidos e pagar a viagem com o lucro de curtíssimo prazo esperado.", "score": 0, "next": "2", "explanation": "Renda variável para metas de curto prazo expõe o capital a oscilações perigosas que podem inviabilizar o plano." }, "D": { "content": "Elimine todas as despesas de lazer e jantares de forma radical pelos próximos doze meses consecutivos.", "score": 0, "next": "7", "explanation": "Cortes radicais sem aderência psicológica costumam gerar frustrações e quebras precoces do planejamento." } } },
+              "2": { "viés": "cat_b", "prompt": "Mapeei. Minha receita é estável, mas as despesas com assinaturas, delivery e saídas estão consumindo 30% do que ganho. O que sugere?", "options": { "A": { "content": "Corte tudo imediatamente e viva no padrão mínimo até acumular o valor total estimado da viagem.", "score": 0, "next": "3", "explanation": "Cortes severos sem equilíbrio geram estresse familiar; adote o método de tetos de gastos negociados." }, "B": { "content": "Defina um teto mensal para despesas supérfluas (ex: 10%–15%), cancele assinaturas obsoletas e monitore via app.", "score": 5, "next": "3", "explanation": "Correto: otimizar gastos supérfluos com limites realistas mantém o bem-estar e abre espaço para poupar." }, "C": { "content": "Aumente o limite do cartão para acomodar esses confortos mantendo a meta de guardar dinheiro intacta.", "score": 0, "next": "3", "explanation": "Elevar limites sem controle real de caixa mascara o endividamento e amplia a desorganização." }, "D": { "content": "Ignore esses pequenos gastos, pois o que compromete o orçamento são apenas as parcelas grandes e fixas.", "score": 0, "next": "3", "explanation": "Pequenos gastos repetitivos geram vazamentos severos invisíveis no fluxo de caixa mensal." } } },
+              "3": { "viés": "cat_c", "prompt": "Consegui abrir margem de R$ 800 por mês. Onde devo alocar esse dinheiro para acumular os R$ 9.600 da viagem daqui a um ano?", "options": { "A": { "content": "Fundos DI de baixo custo, Tesouro Selic ou CDBs de liquidez diária com garantia do FGC.", "score": 5, "next": "4", "explanation": "Correto: metas de um ano exigem segurança, previsibilidade e liquidez imediata sem riscos de mercado nocivos." }, "B": { "content": "Fundos de ações focados em tecnologia ou derivativos cambiais de alta volatilidade.", "score": 0, "next": "4", "explanation": "A volatilidade da renda variável pode corroer o capital na data do resgate da viagem de curto prazo." }, "C": { "content": "Títulos de capitalização com sorteios mensais ou moedas de colecionadores raros de valor subjetivo.", "score": 0, "next": "4", "explanation": "Capitalização possui rendimentos pífios abaixo da inflação e não constitui investimento técnico." }, "D": { "content": "Empréstimos diretos para conhecidos ou parentes informais cobrando juros de mercado boca a boca.", "score": 0, "next": "4", "explanation": "Gera riscos de crédito e inadimplência severos, além de atritos pessoais que travam a liquidez do plano." } } },
+              "4": { "viés": "cat_d", "prompt": "Minha família quer fazer passeios extras na viagem que custam R$ 2.000 além do planejado. Devo reajustar a poupança?", "options": { "A": { "content": "Mantenha o plano inicial e use o limite do cheque especial na semana da viagem para cobrir os extras.", "score": 0, "next": "5", "explanation": "Cheque especial possui taxas abusivas que desestruturam a saúde financeira da família no pós-viagem." }, "B": { "content": "Ajuste as metas SMART: amplie o prazo em dois meses ou aumente o aporte mensal cortando mais despesas supérfluas.", "score": 5, "next": "5", "explanation": "Correto: metas SMART exigem especificidade e realismo. Ajustar o fluxo garante o passeio sem dívidas." }, "C": { "content": "Conte com a sorte ou com um prêmio inesperado na empresa para cobrir a diferença no final.", "score": 0, "next": "5", "explanation": "Basear o planejamento familiar em eventos aleatórios de sorte viola a governança patrimonial básica." }, "D": { "content": "Cancele a viagem inteira de forma imediata por causa desse aumento marginal de custos.", "score": 0, "next": "5", "explanation": "Abordagem radical desproporcional que ignora ajustes operacionais simples de alocação de caixa." } } },
+              "5": { "viés": "geral", "prompt": "Se houver um imprevisto médico no meio do ano que consuma os R$ 800 poupados daquele mês. Como agir?", "options": { "A": { "content": "Saque todo o montante acumulado da viagem e encerre definitivamente o projeto familiar.", "score": 0, "next": "6", "explanation": "Encerrar planos estruturais por imprevistos pontuais indica falta de uma reserva de emergência paralela." }, "B": { "content": "Use a Reserva de Emergência para cobrir a saúde, protegendo o caixa carimbado da viagem anual.", "score": 5, "next": "6", "explanation": "Correto: a blindagem de caixas (mental accounting) por meio da reserva de emergência mantêm metas vivas." }, "C": { "content": "Deixe de pagar as contas básicas de luz e condomínio do mês para não quebrar a poupança da viagem.", "score": 0, "next": "6", "explanation": "Inadimplir contas essenciais gera juros moratórios e cortes de serviços, piorando o quadro geral." }, "D": { "content": "Faça um empréstimo pessoal rápido com juros altos em aplicativos de fintechs não reguladas.", "score": 0, "next": "6", "explanation": "Dívidas emergenciais caras aceleram o endividamento destrutivo de orçamentos estáveis." } } },
+              "6": { "viés": "geral", "prompt": "Pague à vista quando possível, automatize aportes na meta, use cartão com disciplina e defina metas SMART, com revisões periódicas.", "options": { "A": { "content": "Foque nos pontos do cartão, mantenha parcelamentos longos e ajuste o orçamento só quando faltar dinheiro.", "score": 0, "next": "END", "explanation": "Benefícios não substituem disciplina; parcelamentos longos elevam rigidez e risco." }, "B": { "content": "Automatize apenas parte da poupança e confie no bônus para fechar a meta anual sem revisar o orçamento.", "score": 0, "next": "END", "explanation": "Contar com bônus e falta de revisão reduzem previsibilidade e controle." }, "C": { "content": "Pague à vista quando possível, automatize aportes na meta, use cartão com disciplina e defina metas SMART, com revisões periódicas.", "score": 5, "next": "END", "explanation": "Síntese correta: disciplina, automação e revisões garantem aderência e segurança." }, "D": { "content": "Eleve o limite do cartão, antecipe compras em promoção e ajuste o orçamento mensalmente quando necessário.", "score": 0, "next": "END", "explanation": "Limite maior e compras antecipadas sem plano aumentam risco de desvio do orçamento." } } }
+            }
+          },
+          "AD-CPROR-3004": {
+            "nome_exibicao": "Módulo C-Pro R: Previdência (PGBL vs VGBL)",
+            "perfil_cliente": "Investidor Previdenciário",
+            "categoria_labels": ["Elegibilidade Tributária", "Escolha do Plano", "Regimes de Tributação", "Monitoramento Contínuo"],
+            "steps": {
+              "1": { "viés": "cat_a", "prompt": "Cliente: Quero investir para aposentadoria e estou perdido entre PGBL, VGBL e o regime tributário. Pode me orientar?", "options": { "A": { "content": "Claro, escolha primeiro o regime regressivo, pois sempre cobra menos imposto no longo prazo, e depois vemos o plano.", "score": 0, "next": "7", "explanation": "Incorreto: o regressivo nem sempre é melhor; a decisão depende de horizonte, valores e alíquota marginal, além do tipo de plano." }, "B": { "content": "Antes de indicar plano e regime, preciso saber seu tipo de declaração, renda tributável anual e se contribui ao INSS.", "score": 5, "next": "2", "explanation": "Correto: diagnóstico inicial define elegibilidade do PGBL (dedução até 12%) e orienta a escolha de regime tributário." }, "C": { "content": "Escolha sempre o VGBL progressivo, pois permite resgatar a qualquer momento sem pagar imposto sobre o ganho.", "score": 0, "next": "2", "explanation": "Incorreto: VGBL tributa o ganho de capital em qualquer regime; a tabela progressiva segue a faixa do IR no resgate." }, "D": { "content": "Sugiro aplicar tudo em fundos multimercados fechados de previdência sem olhar regras fiscais, que são secundárias.", "score": 0, "next": "7", "explanation": "Incorreto: a eficiência fiscal é um dos principais fatores de retorno líquido em investimentos de previdência complementar." } } },
+              "2": { "viés": "cat_b", "prompt": "Faço a declaração Completa, contribuo ao INSS e tenho renda tributável de R$ 150 mil. Qual plano inicial é ideal?", "options": { "A": { "content": "Recomendo VGBL, pois o imposto incidirá apenas sobre o rendimento no futuro, o que protege seu patrimônio.", "score": 0, "next": "3", "explanation": "Incorreto: para quem faz declaração Completa, o PGBL oferece a vantagem de deduzir até 12% da renda bruta tributável." }, "B": { "content": "Indico alocar até 12% da sua renda bruta tributável (R$ 18 mil) em PGBL para usufruir do diferimento fiscal anual.", "score": 5, "next": "3", "explanation": "Correto: o PGBL permite deduzir os aportes da base de cálculo do IR na declaração Completa, maximizando o bolo investido." }, "C": { "content": "O ideal é colocar 50% em PGBL e 50% em VGBL de imediato, independente dos limites de dedução estabelecidos por lei.", "score": 0, "next": "3", "explanation": "Incorreto: a divisão deve respeitar o limite de 12%; aportes em PGBL acima desse teto são bitributados no resgate." }, "D": { "content": "Melhor não usar previdência privada e aplicar o valor em títulos de capitalização que oferecem prêmios em dinheiro.", "score": 0, "next": "3", "explanation": "Incorreto: títulos de capitalização não possuem foco em previdência e oferecem retornos pífios de longo prazo." } } },
+              "3": { "viés": "cat_c", "prompt": "Entendi o PGBL até o limite. Meu horizonte de investimento é superior a 12 anos. Qual regime de tributação escolher?", "options": { "A": { "content": "O regime progressivo, pois a alíquota inicial é estável e permite reajustes automáticos na declaração anual.", "score": 0, "next": "4", "explanation": "Incorreto: no longo prazo (acima de 10 anos), o regime regressivo atinge a alíquota mínima de 10%, vantajosa para rendas maiores." }, "B": { "content": "O regime regressivo, já que o prazo longo reduz a alíquota de IR até o patamar mínimo de 10% de forma definitiva.", "score": 5, "next": "4", "explanation": "Correto: a tabela regressiva premia o investidor de longo prazo com alíquotas decrescentes de imposto a cada dois anos de aporte." }, "C": { "content": "Escolha o regime simplificado corporativo que isenta resgates previdenciários acima de dez anos de acumulação.", "score": 0, "next": "4", "explanation": "Incorreto: não existe regime simplificado de isenção para previdência privada complementar no ordenamento atual." }, "D": { "content": "Deixe sem escolher nenhum regime, permitindo que a seguradora decida a menor alíquota no dia do resgate futuro.", "score": 0, "next": "4", "explanation": "Incorreto: a falta de opção expressa pelo regime regressivo faz o plano seguir por padrão o regime progressivo em lei." } } },
+              "4": { "viés": "cat_d", "prompt": "Se eu precisar fazer aportes adicionais além dos 12% da minha renda bruta, onde devo colocar esse excesso de capital?", "options": { "A": { "content": "Continue aportando no mesmo plano PGBL, pois o diferimento fiscal se expande proporcionalmente sem tetos.", "score": 0, "next": "5", "explanation": "Incorreto: aportes em PGBL acima de 12% não geram dedução nova e pagarão imposto sobre o total no resgate (bitributação)." }, "B": { "content": "Aloque o valor excedente em um plano VGBL, garantindo que o imposto futuro incida apenas sobre os rendimentos auferidos.", "score": 5, "next": "5", "explanation": "Correto: a estratégia combinada (PGBL até o teto e VGBL para o excesso) otimiza a eficiência fiscal global do portfólio." }, "C": { "content": "Saque o dinheiro e aplique em consórcios imobiliários de longo prazo para buscar taxas menores.", "score": 0, "next": "5", "explanation": "Incorreto: consórcios possuem dinâmicas de taxas de administração e lances que não se alinham à acumulação previdenciária líquida." }, "D": { "content": "Deixe o excesso parado em fundos de pensão fechados internacionais sem registro na CVM ou na SUSEP.", "score": 0, "next": "5", "explanation": "Incorreto: expõe o investidor a riscos legais, cambiais desregulados e potenciais fraudes transfronteiriças." } } },
+              "5": { "viés": "geral", "prompt": "Posso realizar a portabilidade de um plano VGBL para um plano PGBL se mudar meu tipo de declaração no futuro?", "options": { "A": { "content": "Sim, a portabilidade entre quaisquer tipos de planos de previdência privada é livre e garantida por normas da SUSEP.", "score": 0, "next": "6", "explanation": "Incorreto: a portabilidade cruzada entre tipos diferentes (VGBL para PGBL ou vice-versa) é vedada pela regulamentação." }, "B": { "content": "Não é permitida a portabilidade entre estruturas de planos diferentes (VGBL para PGBL); apenas de VGBL para VGBL.", "score": 5, "next": "6", "explanation": "Correto: as regras de previdência preservam a natureza fiscal de origem do plano nas operações de migração." }, "C": { "content": "Apenas se pagar uma taxa de penalidade de resgate antecipado de 20% do saldo total acumulado.", "score": 0, "next": "6", "explanation": "Incorreto: a portabilidade não sofre incidência de imposto de renda ou resgates coercitivos, mas a troca de tipo é proibida." }, "D": { "content": "Sim, desde que a portabilidade ocorra em anos bissextos respeitando janelas exclusivas de balcão.", "score": 0, "next": "6", "explanation": "Incorreto: critérios temporais folclóricos que não possuem amparo técnico normativo na regulação previdenciária." } } },
+              "6": { "viés": "geral", "prompt": "Acompanhe prazos por aporte no regressivo, limites e deduções no progressivo, recibos e informes para declarar corretamente.", "options": { "A": { "content": "Nada; no regressivo a seguradora calcula e você não precisa informar aportes, resgates ou benefícios na declaração.", "score": 0, "next": "END", "explanation": "Incorreto: é preciso declarar corretamente e guardar informes; no regressivo o imposto é definitivo, mas há obrigações." }, "B": { "content": "Apenas a rentabilidade; o regime e os prazos dos aportes não afetam a alíquota aplicada quando você pedir resgate.", "score": 0, "next": "END", "explanation": "Incorreto: no regressivo o prazo de cada aporte define a alíquota; no progressivo, o ajuste anual importa." }, "C": { "content": "Só o saldo total do plano; na progressiva o ajuste anual não considera rendas de previdência como tributáveis.", "score": 0, "next": "END", "explanation": "Incorreto: rendas e resgates entram na base conforme o regime; é necessário informar valores no IR." }, "D": { "content": "Acompanhe prazos por aporte no regressivo, limites e deduções no progressivo, recibos e informes para declarar corretamente.", "score": 5, "next": "END", "explanation": "Correto: monitorar prazos, limites e documentação garante tributação adequada e conformidade fiscal contínua." } } }
+            }
+          }
+        };
+
+        let errosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
+        let acertosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
+        
+        let dicasDisponiveis = 2;
+        let score = 0; let currentStep = "1";
+        let nomeDoAtendente = "Alex"; let pacienciaCliente = 100; let resilienciaAtendente = 100;
+        let cenarioAtualChave = "modulo_financas";
+        let jogadorCadastradoStatus = false;
+
+        const avatar = document.getElementById('avatar-cliente');
+        const bubble = document.getElementById('npc-speech-bubble');
+        const atendBubble = document.getElementById('atend-speech-bubble');
+        const grid = document.getElementById('options-grid');
+        const inlineFeedback = document.getElementById('feedback-inline-box');
+
+        async function processarCadastroEIniciar(event) {
+            event.preventDefault();
+            
+            cenarioAtualChave = document.getElementById('tree-select').value;
+            const btnSubmit = document.getElementById('btn-submit-cadastro');
+
+            // SE JÁ TIVER CADASTRO, APENAS PULA O FORMULÁRIO DO BANCO
+            if (jogadorCadastradoStatus) {
+                iniciarJogoEDesarmarTela();
+                return;
+            }
+
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            const emailInput = document.getElementById('player-email-input').value.trim();
+            const phoneInput = document.getElementById('player-phone-input').value.trim();
+
+            if (!nameInput || !emailInput || !phoneInput) {
+                alert("Por favor, preencha todos os campos do cadastro para iniciar.");
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Registrando Entrada...";
+
+            try {
+                if (window.addDoc && window.collection && window.db) {
+                    await window.addDoc(window.collection(window.db, "leads_cadastro"), {
+                        nome: nameInput,
+                        email: emailInput,
+                        telefone: phoneInput,
+                        modulo_inicial: cenarioAtualChave,
+                        data_cadastro: new Date()
+                    });
+                    
+                    nomeDoAtendente = nameInput;
+                    jogadorCadastradoStatus = true; // Salva o status de cadastrado
+                    document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
+                    document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
+
+                    // Oculta os campos de input de vez para que na próxima jogada só tenha o select
+                    document.getElementById('campos-cadastro-jogador').classList.add('hide');
+                    document.getElementById('menu-sub-title-label').innerText = "Jogador Identificado! Escolha seu Próximo Desafio:";
+
+                    iniciarJogoEDesarmarTela();
+                } else {
+                    alert("O sistema de banco de dados está terminando de inicializar. Aguarde 3 segundos e clique novamente.");
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = "Iniciar Expediente";
+                }
+            } catch (e) {
+                console.error("Erro ao registrar cadastro inicial: ", e);
+                alert("Houve um erro de comunicação com o servidor do Firebase.");
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "Iniciar Expediente";
+            }
+        }
+
+        function prepararNovoCenarioSemCadastro() {
+            // Limpa as pontuações e estados do RPG para a nova partida
+            score = 0;
+            currentStep = "1";
+            pacienciaCliente = 100;
+            resilienciaAtendente = 100;
+            dicasDisponiveis = 2;
+            errosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
+            acertosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
+
+            document.getElementById('score-txt').innerText = "0";
+            document.getElementById('bar-paciencia').style.width = "100%";
+            document.getElementById('bar-resiliencia').style.width = "100%";
+            document.getElementById('cliente-body-color').style.backgroundColor = "#e57373";
+
+            // Transiciona de volta para a tela de menu (sem pedir dados de cadastro)
+            document.getElementById('screen-end').classList.add('hide');
+            document.getElementById('screen-game').classList.remove('hide');
+            
+            const mainMenu = document.getElementById('main-menu');
+            mainMenu.style.display = 'flex';
+            mainMenu.style.opacity = '1';
+
+            const btnSubmit = document.getElementById('btn-submit-cadastro');
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = "Iniciar Novo Módulo";
+        }
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let bgmInterval = null;
+
+        function playTone(freq, type, duration, vol) {
+            try {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = type; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function sfxPlimBanco() { playTone(987.77, 'sine', 0.15, 0.15); setTimeout(() => playTone(1318.51, 'sine', 0.4, 0.15), 120); }
+        function sfxSucesso() { playTone(523.25, 'triangle', 0.1, 0.2); setTimeout(() => playTone(659.25, 'triangle', 0.1, 0.2), 80); setTimeout(() => playTone(1046.50, 'triangle', 0.3, 0.2), 240); }
+        function sfxErro() { playTone(220.00, 'sawtooth', 0.15, 0.15); setTimeout(() => playTone(196.00, 'sawtooth', 0.3, 0.15), 100); }
+        function iniciarMusicaFundo() { if(bgmInterval) clearInterval(bgmInterval); const notasJazz = [261.63, 329.63, 392.00, 493.88]; let i = 0; bgmInterval = setInterval(() => { if(Math.random() > 0.3) { playTone(notasJazz[i % notasJazz.length], 'sine', 0.8, 0.03); } i++; }, 600); }
+
+        function iniciarJogoEDesarmarTela() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            document.getElementById('main-menu').style.opacity = '0';
+            
+            // Injeta os rótulos corretos do cliente e relatório com base no cenário escolhido
+            const configuracaoMódulo = bibliotecaCenarios[cenarioAtualChave];
+            document.getElementById('label-tipo-cliente').innerText = configuracaoMódulo.perfil_cliente;
+
+            montarBotoesInterface("1");
+            iniciarMovimentacaoFigurantes();
+            iniciarMusicaFundo();
+
+            setTimeout(() => {
+                document.getElementById('main-menu').style.display = 'none';
+                avatar.classList.add('walking'); avatar.style.opacity = "1";
+                avatar.style.top = "56%"; avatar.style.left = "40%";
+                
+                setTimeout(() => {
+                    avatar.classList.remove('walking');
+                    sfxPlimBanco();
+                    bubble.classList.add('show');
+                    grid.classList.remove('invisible-buttons');
+                }, 3500); 
+            }, 500);
+        }
+
+        function iniciarMovimentacaoFigurantes() {
+            const clienteFila = document.getElementById('extra-cliente');
+            const guarda = document.getElementById('extra-guarda');
+            setInterval(() => {
+                const rotas = [{top: '22%', left: '63%'}, {top: '16%', left: '74%'}, {top: '36%', left: '62%'}];
+                let d = rotas[Math.floor(Math.random() * rotas.length)];
+                if(clienteFila) {
+                    clienteFila.style.top = d.top; clienteFila.style.left = d.left;
+                }
+            }, 6000);
+            setInterval(() => {
+                const rotas = [{top: '38%', left: '74%'}, {top: '18%', left: '80%'}, {top: '20%', left: '45%'}];
+                let d = rotas[Math.floor(Math.random() * rotas.length)];
+                if(guarda) {
+                    guarda.style.top = d.top; guarda.style.left = d.left;
+                }
+            }, 7500);
+        }
+
+        function montarBotoesInterface(stepId) {
+            currentStep = stepId;
+            const cenarioMundo = bibliotecaCenarios[cenarioAtualChave];
+            const step = cenarioMundo.steps[stepId];
+            
+            let textoTratado = step.prompt.replace("[NOME]", nomeDoAtendente);
+            bubble.innerText = textoTratado;
+            bubble.classList.add('show');
+            grid.innerHTML = '';
+
+            document.getElementById('btn-manager-help').disabled = (dicasDisponiveis <= 0);
+
+            Object.keys(step.options).forEach(key => {
+                const opt = step.options[key];
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.setAttribute('data-key', key);
+                btn.setAttribute('data-score', opt.score);
+                btn.innerText = `${key}) ${opt.content}`;
+                btn.onclick = () => handleChoice(opt);
+                grid.appendChild(btn);
+            });
+            grid.classList.remove('invisible-buttons');
+        }
+
+        function usarDicaGerente() {
+            if (dicasDisponiveis <= 0) return;
+            dicasDisponiveis--;
+            document.getElementById('help-count-txt').innerText = dicasDisponiveis;
+            document.getElementById('btn-manager-help').disabled = true;
+
+            const botoes = Array.from(grid.getElementsByClassName('btn-option'));
+            const botoesErrados = botoes.filter(btn => parseInt(btn.getAttribute('data-score')) === 0);
+            
+            botoesErrados.sort(() => Math.random() - 0.5);
+            let eliminados = 0;
+            botoesErrados.forEach(btn => {
+                if (eliminados < 2) {
+                    btn.style.opacity = "0.3";
+                    btn.style.textDecoration = "line-through";
+                    btn.disabled = true;
+                    eliminados++;
+                }
+            });
+            playTone(880, 'sine', 0.2, 0.1);
+        }
+
+        function handleChoice(option) {
+            score += option.score;
+            document.getElementById('score-txt').innerText = score;
+            
+            bubble.classList.remove('show');
+            grid.classList.add('invisible-buttons');
+            document.getElementById('btn-manager-help').disabled = true;
+
+            atendBubble.innerText = option.content;
+            atendBubble.classList.add('show');
+
+            inlineFeedback.innerText = option.explanation;
+            inlineFeedback.style.display = "block";
+            inlineFeedback.style.borderLeftColor = option.score > 0 ? "var(--success-color)" : "var(--error-color)";
+            inlineFeedback.style.backgroundColor = option.score > 0 ? "#e8f5e9" : "#ffebee";
+
+            const cenarioMundo = bibliotecaCenarios[cenarioAtualChave];
+            const categoriaVies = cenarioMundo.steps[currentStep].viés;
+            if(categoriaVies && categoriaVies !== "geral") {
+                if(option.score > 0) acertosPorVies[categoriaVies]++;
+                else errosPorVies[categoriaVies]++;
+            }
+
+            const mood = document.getElementById('cliente-mood');
+            if(option.score > 0) {
+                sfxSucesso(); mood.innerText = "✓"; mood.className = "mood-cloud happy";
+                resilienciaAtendente = Math.min(100, resilienciaAtendente + 5);
+            } else {
+                sfxErro(); mood.innerText = "⚡"; mood.className = "mood-cloud sad";
+                pacienciaCliente = Math.max(0, pacienciaCliente - 25);
+                resilienciaAtendente = Math.max(0, resilienciaAtendente - 20);
+                
+                if (pacienciaCliente < 40) document.getElementById('cliente-body-color').style.backgroundColor = "#8e44ad";
+                else if (pacienciaCliente < 70) document.getElementById('cliente-body-color').style.backgroundColor = "#d35400";
+            }
+
+            document.getElementById('bar-paciencia').style.width = pacienciaCliente + "%";
+            document.getElementById('bar-resiliencia').style.width = resilienciaAtendente + "%";
+
+            setTimeout(() => {
+                atendBubble.classList.remove('show');
+                inlineFeedback.style.display = "none";
+                document.getElementById('cliente-mood').className = "mood-cloud"; 
+
+                if (pacienciaCliente <= 0) {
+                    showEndGame("CLIENTE_DESISTIU");
+                } else if (resilienciaAtendente <= 0) {
+                    showEndGame("BURNOUT");
+                } else if (option.next === "END") {
+                    showEndGame("SUCESSO");
+                } else {
+                    montarBotoesInterface(option.next);
+                }
+            }, 4500);
+        }
+
+        function calcularRelatorioVieses() {
+            const labels = bibliotecaCenarios[cenarioAtualChave].categoria_labels;
+            
+            const formatarLinha = (vies) => {
+                if (acertosPorVies[vies] === 0 && errosPorVies[vies] === 0) return "Não avaliado.";
+                return `Acertos: ${acertosPorVies[vies]} | Erros: ${errosPorVies[vies]}`;
+            };
+
+            const cards = document.querySelectorAll('.report-card');
+            cards[0].querySelector('h4').innerText = labels[0];
+            cards[0].querySelector('span').innerText = formatarLinha('cat_a');
+
+            cards[1].querySelector('h4').innerText = labels[1];
+            cards[1].querySelector('span').innerText = formatarLinha('cat_b');
+
+            cards[2].querySelector('h4').innerText = labels[2];
+            cards[2].querySelector('span').innerText = formatarLinha('cat_c');
+
+            cards[3].querySelector('h4').innerText = labels[3];
+            cards[3].querySelector('span').innerText = formatarLinha('cat_d');
+        }
+
+        async function salvarResultadoNoFirebase(motivoTermino) {
+            try {
+                if(window.addDoc && window.collection && window.db) {
+                    await window.addDoc(window.collection(window.db, "resultados_jogos"), {
+                        atendente: nomeDoAtendente,
+                        modulo_jogado: cenarioAtualChave,
+                        nome_modulo: bibliotecaCenarios[cenarioAtualChave].nome_exibicao,
+                        pontuacao_final: score,
+                        motivo_encerramento: motivoTermino,
+                        acertos_detalhes: acertosPorVies,
+                        erros_detalhes: errosPorVies,
+                        data_partida: new Date()
+                    });
+                    console.log("Desempenho salvo com sucesso no Firestore!");
+                }
+            } catch (e) {
+                console.error("Erro ao salvar resultado final: ", e);
+            }
+        }
+
+        function showEndGame(motivo) {
+            if(bgmInterval) clearInterval(bgmInterval);
+            bubble.classList.remove('show'); atendBubble.classList.remove('show'); inlineFeedback.style.display = "none";
+            document.getElementById('screen-game').classList.add('hide');
+            
+            const endScreen = document.getElementById('screen-end');
+            const title = document.getElementById('end-title');
+            const desc = document.getElementById('end-desc');
+            
+            salvarResultadoNoFirebase(motivo); 
+
+            if (motivo === "CLIENTE_DESISTIU") {
+                title.innerText = "Fim de Jogo: Cliente Desistiu!";
+                desc.innerText = "O investidor achou a condução confusa ou agressiva e saiu da agência.";
+                title.style.color = "var(--error-color)";
+            } else if (motivo === "BURNOUT") {
+                title.innerText = "Fim de Jogo: Sobrecarga!";
+                desc.innerText = "O estresse ou a quebra de protocolos esgotou sua resiliência consultiva.";
+                title.style.color = "var(--error-color)";
+            } else {
+                title.innerText = "Módulo Concluído com Sucesso!";
+                desc.innerText = "Excelente trabalho! Você respondeu com precisão e técnica analítica.";
+                title.style.color = "var(--success-color)";
+            }
+
+            calcularRelatorioVieses();
+            endScreen.classList.remove('hide');
+            document.getElementById('final-score-txt').innerText = score;
+            
+            avatar.classList.add('walking'); avatar.style.top = "11%"; avatar.style.left = "83%";
+            setTimeout(() => { avatar.style.opacity = "0"; avatar.classList.remove('walking'); }, 3500);
+        }
+    </script>
+</body>
+</html>
