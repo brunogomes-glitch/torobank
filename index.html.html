@@ -67,31 +67,24 @@
             justify-content: flex-start;
         }
 
-        /* IDENTIDADE VISUAL ATUALIZADA - LOGO E FUNDO DE CONTRASTE */
+        /* IDENTIDADE VISUAL TEXTUAL ORIGINAL - TOROBANK */
         .brand-container {
             margin-bottom: 20px;
             text-align: center;
             animation: fadeInDown 0.8s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .logo-background-card {
-            background-color: #ffffff; /* Fundo branco para contraste com a logo branca */
-            padding: 15px 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-            margin-bottom: 10px;
-            border: 2px solid #ffffff;
         }
         
-        .brand-logo-img {
-            width: 100%;
-            max-width: 400px; /* Tamanho calibrado para o formato horizontal */
-            height: auto;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-            display: block;
+        .brand-main {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            color: #ffffff;
+            line-height: 1;
+        }
+        .brand-main span {
+            color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
 
         .menu-subtitle { 
@@ -108,7 +101,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* ESTILIZAÇÃO DO SITE DA EMPRESA */
+        /* ESTILIZAÇÃO DO SITE NO RODAPÉ */
         .company-website {
             margin-top: auto;
             font-size: 13px;
@@ -117,7 +110,7 @@
             padding-bottom: 10px;
         }
         .company-website a {
-            color: var(--accent-color); /* Amarelo em destaque */
+            color: var(--accent-color);
             text-decoration: none;
             font-weight: bold;
         }
@@ -357,9 +350,7 @@
         
         <div class="menu-screen" id="main-menu">
             <div class="brand-container">
-                <div class="logo-background-card">
-                    <img src="logo.png" alt="Rafael Toro - Academia de Finanças" class="brand-logo-img">
-                </div>
+                <div class="brand-main">Toro<span>Bank</span></div>
                 <div class="menu-subtitle" id="menu-sub-title-label">Módulo de Treinamento e Diagnóstico</div>
             </div>
             
@@ -392,7 +383,7 @@
             <button class="btn-admin-trigger" type="button" onclick="abrirModalSenhaAdmin()">Painel Geral</button>
 
             <div class="company-website">
-                Visite nosso site: <a href="https://rafaeltoro.com.br/" target="_blank">rafaeltoro.com.br</a>
+                Visite nosso site: <a href="https://www.academiarafaeltoro.com.br/" target="_blank">academiarafaeltoro.com.br</a>
             </div>
         </div>
 
@@ -602,7 +593,7 @@
                         steps: jsonObjeto
                     });
 
-                    alert(`Módulo "${nomeMenu}" saved no Firebase!`);
+                    alert(`Módulo "${nomeMenu}" salvo no Firebase!`);
                     
                     document.getElementById('admin-id-chave').value = "";
                     document.getElementById('admin-nome-menu').value = "";
@@ -748,12 +739,16 @@
             setInterval(() => {
                 const rotas = [{top: '22%', left: '63%'}, {top: '16%', left: '74%'}, {top: '36%', left: '62%'}];
                 let d = rotas[Math.floor(Math.random() * rotas.length)];
-                clienteFila.style.top = d.top; clienteFila.style.left = d.left;
+                if(clienteFila) {
+                    clienteFila.style.top = d.top; clienteFila.style.left = d.left;
+                }
             }, 6000);
             setInterval(() => {
                 const rotas = [{top: '38%', left: '74%'}, {top: '18%', left: '80%'}, {top: '20%', left: '45%'}];
                 let d = rotas[Math.floor(Math.random() * rotas.length)];
-                guarda.style.top = d.top; guarda.style.left = d.left;
+                if(guarda) {
+                    guarda.style.top = d.top; guarda.style.left = d.left;
+                }
             }, 7500);
         }
 
