@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToroBank - RPG Analítico Dinâmico Profissional</title>
+    <title>ToroBank - RPG Analítico | Academia de Finanças Rafael Toro</title>
     <style>
         :root {
             --primary-color: #002f6c;
@@ -67,36 +67,75 @@
             justify-content: flex-start;
         }
 
-        .menu-logo { font-size: 52px; font-weight: 800; letter-spacing: 2px; margin-bottom: 5px; }
-        .menu-logo span { color: var(--accent-color); }
-        .menu-subtitle { font-size: 16px; opacity: 0.8; margin-bottom: 20px; font-style: italic; }
+        /* IDENTIDADE VISUAL RAFAEL TORO ACADEMIA DE FINANÇAS */
+        .brand-container {
+            margin-bottom: 25px;
+            text-align: center;
+            animation: fadeInDown 0.8s ease;
+        }
+        .brand-sub {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #ffffff;
+            opacity: 0.6;
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+        .brand-main {
+            font-size: 44px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            line-height: 1;
+            color: #ffffff;
+        }
+        .brand-main span {
+            color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+        .menu-subtitle { 
+            font-size: 15px; 
+            color: #a5b4fc; 
+            margin-top: 8px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .menu-form, .admin-form {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 20px 35px;
-            border-radius: 14px;
-            max-width: 600px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 25px 35px;
+            border-radius: 16px;
+            max-width: 550px;
             width: 100%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             margin-bottom: 15px;
             text-align: left;
             box-sizing: border-box;
         }
 
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px; background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #2c3e50; box-sizing: border-box; outline: none; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: rgba(255,255,255,0.95); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #1e293b; box-sizing: border-box; outline: none; transition: all 0.2s; }
         .form-group textarea { height: 180px; font-family: monospace; font-size: 12px; resize: none; }
-        .form-group input:focus, .form-group textarea:focus { border-color: var(--secondary-color); background: #ffffff; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--secondary-color); background: #ffffff; box-shadow: 0 0 10px rgba(0, 115, 230, 0.2); }
 
-        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 14px 45px; font-size: 16px; font-weight: bold; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 350px; text-align: center;}
-        .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 5px 15px rgba(255,215,0,0.3); }
+        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 15px 45px; font-size: 16px; font-weight: 800; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-top: 10px;}
+        .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 6px 20px rgba(255,215,0,0.4); }
         .btn-start:disabled { background: #cccccc; color: #666666; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .btn-admin-trigger { position: absolute; bottom: 15px; left: 15px; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.6); padding: 5px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; }
-        .btn-admin-trigger:hover { color: white; border-color: white; }
+        .btn-admin-trigger { position: absolute; bottom: 15px; left: 15px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); padding: 5px 12px; font-size: 11px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+        .btn-admin-trigger:hover { color: white; border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
 
         .admin-actions { display: flex; gap: 10px; margin-top: 15px; }
         .btn-admin-save { background: #2e7d32; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 2; }
@@ -240,7 +279,6 @@
         window.doc = doc;
         window.setDoc = setDoc;
 
-        // Otimização assíncrona para evitar congelamentos na inicialização (Correção INP)
         setTimeout(() => {
             requestAnimationFrame(carregarCenariosDoBanco);
         }, 800);
@@ -297,8 +335,11 @@
         </div>
         
         <div class="menu-screen" id="main-menu">
-            <div class="menu-logo">Toro<span>Bank</span></div>
-            <div class="menu-subtitle" id="menu-sub-title-label">Módulo RPG Avançado & Diagnóstico</div>
+            <div class="brand-container">
+                <div class="brand-sub">Academia de Finanças</div>
+                <div class="brand-main">Rafael <span>Toro</span></div>
+                <div class="menu-subtitle" id="menu-sub-title-label">Simulador RPG • ToroBank Corp</div>
+            </div>
             
             <form class="menu-form" id="cadastro-inicial-form" onsubmit="processarCadastroEIniciar(event)">
                 <div id="campos-cadastro-jogador">
@@ -316,12 +357,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="tree-select">Escolha o Cenário/Módulo</label>
+                    <label for="tree-select">Selecione o Módulo de Treinamento</label>
                     <select id="tree-select">
                         <option value="">Carregando cenários disponíveis...</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
+                <div style="text-align: center; width: 100%;">
+                    <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
+                </div>
             </form>
             
             <button class="btn-admin-trigger" type="button" onclick="abrirModalSenhaAdmin()">Painel Geral</button>
@@ -441,7 +484,6 @@
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
 
-        // LEITURA ASSÍNCRONA SEM TRAVAMENTOS (PREVINE INP)
         async function carregarCenariosDoBanco() {
             try {
                 if(window.getDocs && window.collection && window.db) {
@@ -494,7 +536,6 @@
             const senha = document.getElementById('input-senha-mestre-admin').value;
             if(senha === "toroadmin123") {
                 fecharModalSenhaAdmin();
-                // Usa setTimeout para liberar a renderização gráfica do botão imediatamente
                 setTimeout(() => {
                     document.getElementById('admin-panel').style.display = 'flex';
                 }, 50);
@@ -594,7 +635,7 @@
                     document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
 
                     document.getElementById('campos-cadastro-jogador').classList.add('hide');
-                    document.getElementById('menu-sub-title-label').innerText = "Jogador Identificado! Escolha seu Próximo Desafio:";
+                    document.getElementById('menu-sub-title-label').innerText = "Jogador Identificado! Desafio Selecionado.";
 
                     iniciarJogoEDesarmarTela();
                 }
@@ -694,14 +735,12 @@
             }, 7500);
         }
 
-        // 🌟 ELEMENTO CHAVE DA CORREÇÃO: Alinhamento e ordenação forçada das alternativas (A, B, C, D)
         function montarBotoesInterface(stepId) {
             currentStep = stepId;
             const cenariosMundo = bibliotecaCenarios[cenarioAtualChave];
             const step = cenariosMundo.steps[stepId];
             
             if(!step) {
-                alert("Módulo finalizado com sucesso!");
                 showEndGame("SUCESSO");
                 return;
             }
@@ -714,7 +753,6 @@
             document.getElementById('btn-manager-help').disabled = (dicasDisponiveis <= 0);
 
             if(step.options) {
-                // Captura as chaves (A, B, C, D) e força uma ordenação alfabética exata
                 const chavesOrdenadasalfa = Object.keys(step.options).sort();
 
                 chavesOrdenadasalfa.forEach(key => {
@@ -725,7 +763,6 @@
                     btn.setAttribute('data-score', opt.score);
                     btn.innerText = `${key}) ${opt.content}`;
                     
-                    // Tratamento assíncrono do clique para evitar gargalos visuais (Garante INP excelente)
                     btn.onclick = () => {
                         grid.classList.add('invisible-buttons');
                         requestAnimationFrame(() => handleChoice(opt));
