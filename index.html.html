@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToroBank - RPG Analítico Dinâmico Blindado</title>
+    <title>ToroBank - RPG Analítico Dinâmico Profissional</title>
     <style>
         :root {
             --primary-color: #002f6c;
@@ -207,7 +207,7 @@
         .report-card { background: #f1f2f6; padding: 12px; border-radius: 8px; border-left: 4px solid var(--primary-color); font-size: 13px; }
         .report-card h4 { margin: 0 0 5px 0; font-size: 14px; }
 
-        /* CAMPO MODAL DE SENHA DO ADMIN (EVITA INP ISSUE) */
+        /* CAMPO MODAL DE SENHA DO ADMIN */
         .admin-auth-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.85); justify-content: center; align-items: center; z-index: 3000;
@@ -240,7 +240,10 @@
         window.doc = doc;
         window.setDoc = setDoc;
 
-        setTimeout(carregarCenariosDoBanco, 1000);
+        // Otimização assíncrona para evitar congelamentos na inicialização (Correção INP)
+        setTimeout(() => {
+            requestAnimationFrame(carregarCenariosDoBanco);
+        }, 800);
     </script>
 </head>
 <body>
@@ -284,7 +287,7 @@
                 </div>
                 <div class="form-group">
                     <label>Cole o Código Estruturado do Cenário (Formato de Objeto JSON)</label>
-                    <textarea id="admin-json-content" placeholder='Cole todo o texto do JSON aqui...'></textarea>
+                    <textarea id="admin-json-content" placeholder="Cole todo o texto do JSON aqui..."></textarea>
                 </div>
                 <div class="admin-actions">
                     <button class="btn-admin-save" onclick="salvarNovoCenarioViaAdmin()">Salvar Cenário no Banco</button>
@@ -423,9 +426,6 @@
 
     <script>
         let bibliotecaCenarios = {};
-        
-        // MAPEAMENTO DINÂMICO PARA CAPTURAR VIESES VARIÁVEIS DO ARQUIVO COLADO
-        let mapeamentoChavesVies = { "1": "cat_a", "2": "cat_b", "3": "cat_c", "4": "cat_d" };
         let errosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
         let acertosPorVies = { cat_a: 0, cat_b: 0, cat_c: 0, cat_d: 0 };
         
@@ -441,6 +441,7 @@
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
 
+        // LEITURA ASSÍNCRONA SEM TRAVAMENTOS (PREVINE INP)
         async function carregarCenariosDoBanco() {
             try {
                 if(window.getDocs && window.collection && window.db) {
@@ -457,8 +458,6 @@
 
                     querySnapshot.forEach((docSnap) => {
                         const data = docSnap.data();
-                        
-                        // INTELIGÊNCIA BLINDADA: Filtra se o usuário colou o miolo ou o arquivo inteiro com metadados
                         let objetoStepsTratado = {};
                         if (data.steps) {
                             objetoStepsTratado = data.steps.steps ? data.steps.steps : data.steps;
@@ -495,7 +494,10 @@
             const senha = document.getElementById('input-senha-mestre-admin').value;
             if(senha === "toroadmin123") {
                 fecharModalSenhaAdmin();
-                document.getElementById('admin-panel').style.display = 'flex';
+                // Usa setTimeout para liberar a renderização gráfica do botão imediatamente
+                setTimeout(() => {
+                    document.getElementById('admin-panel').style.display = 'flex';
+                }, 50);
             } else {
                 alert("Senha Inválida! Acesso negado.");
             }
@@ -506,6 +508,7 @@
         }
 
         async function salvarNovoCenarioViaAdmin() {
+            const btnSave = document.querySelector('.btn-admin-save');
             const chave = document.getElementById('admin-id-chave').value.trim();
             const nomeMenu = document.getElementById('admin-nome-menu').value.trim();
             const perfil = document.getElementById('admin-perfil-cliente').value.trim();
@@ -517,6 +520,9 @@
                 return;
             }
 
+            btnSave.disabled = true;
+            btnSave.innerText = "Gravando...";
+
             try {
                 const jsonObjeto = JSON.parse(jsonText);
                 const labelsArray = labelsInput.split(',').map(item => item.trim());
@@ -526,7 +532,7 @@
                         nome_exibicao: nomeMenu,
                         perfil_cliente: perfil,
                         categoria_labels: labelsArray,
-                        steps: jsonObjeto // Manda o objeto limpo direto pro Firebase
+                        steps: jsonObjeto
                     });
 
                     alert(`Módulo "${nomeMenu}" salvo com sucesso no Firebase!`);
@@ -538,11 +544,14 @@
                     document.getElementById('admin-json-content').value = "";
 
                     fecharPainelAdmin();
-                    carregarCenariosDoBanco(); 
+                    await carregarCenariosDoBanco(); 
                 }
             } catch(err) {
-                alert("Erro ao validar o campo de JSON. Certifique-se de que colou o arquivo JSON completo.");
+                alert("Erro ao processar arquivo JSON. Certifique-se de colar o conteúdo estruturado corretamente.");
                 console.error(err);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerText = "Salvar Cenário no Banco";
             }
         }
 
@@ -685,14 +694,15 @@
             }, 7500);
         }
 
+        // 🌟 ELEMENTO CHAVE DA CORREÇÃO: Alinhamento e ordenação forçada das alternativas (A, B, C, D)
         function montarBotoesInterface(stepId) {
             currentStep = stepId;
             const cenariosMundo = bibliotecaCenarios[cenarioAtualChave];
             const step = cenariosMundo.steps[stepId];
             
             if(!step) {
-                alert("Erro grave: Passo não localizado no arquivo JSON enviado!");
-                prepararNovoCenarioSemCadastro();
+                alert("Módulo finalizado com sucesso!");
+                showEndGame("SUCESSO");
                 return;
             }
 
@@ -703,16 +713,24 @@
 
             document.getElementById('btn-manager-help').disabled = (dicasDisponiveis <= 0);
 
-            // COMPATIBILIDADE BLINDADA: Aceita array ou objetos na leitura das opções A, B, C, D
             if(step.options) {
-                Object.keys(step.options).forEach(key => {
+                // Captura as chaves (A, B, C, D) e força uma ordenação alfabética exata
+                const chavesOrdenadasalfa = Object.keys(step.options).sort();
+
+                chavesOrdenadasalfa.forEach(key => {
                     const opt = step.options[key];
                     const btn = document.createElement('button');
                     btn.className = 'btn-option';
                     btn.setAttribute('data-key', key);
                     btn.setAttribute('data-score', opt.score);
                     btn.innerText = `${key}) ${opt.content}`;
-                    btn.onclick = () => handleChoice(opt);
+                    
+                    // Tratamento assíncrono do clique para evitar gargalos visuais (Garante INP excelente)
+                    btn.onclick = () => {
+                        grid.classList.add('invisible-buttons');
+                        requestAnimationFrame(() => handleChoice(opt));
+                    };
+                    
                     grid.appendChild(btn);
                 });
             }
@@ -746,7 +764,6 @@
             document.getElementById('score-txt').innerText = score;
             
             bubble.classList.remove('show');
-            grid.classList.add('invisible-buttons');
             document.getElementById('btn-manager-help').disabled = true;
 
             atendBubble.innerText = option.content;
@@ -757,7 +774,6 @@
             inlineFeedback.style.borderLeftColor = option.score > 0 ? "var(--success-color)" : "var(--error-color)";
             inlineFeedback.style.backgroundColor = option.score > 0 ? "#e8f5e9" : "#ffebee";
 
-            // MAPEAMENTO DINÂMICO INTELIGENTE: Identifica a categoria do passo e soma dinamicamente (independente do nome colado)
             let idDoPassoString = currentStep.toString();
             let categoriaTratadaDefinitiva = "cat_a";
 
@@ -804,7 +820,6 @@
 
         function calcularRelatorioVieses() {
             const labels = bibliotecaCenarios[cenarioAtualChave].categoria_labels;
-            
             const formatarLinha = (vies) => {
                 if (acertosPorVies[vies] === 0 && errosPorVies[vies] === 0) return "Não avaliado.";
                 return `Acertos: ${acertosPorVies[vies]} | Erros: ${errosPorVies[vies]}`;
