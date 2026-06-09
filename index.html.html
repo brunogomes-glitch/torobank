@@ -261,7 +261,7 @@
             background: rgba(15, 23, 42, 0.85); justify-content: center; align-items: center; z-index: 3000;
         }
 
-        /* 🟢 BOTAO DO WHATSAPP ATUALIZADO COM O LINK E NOME EXIGIDO */
+        /* 🟢 BOTÃO DO WHATSAPP COM LOGO EM SVG DE ALTO CONTRASTE INTEGRADO */
         .whatsapp-floating-btn {
             position: fixed;
             bottom: 20px;
@@ -276,12 +276,41 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             z-index: 99999;
             transition: transform 0.2s, background-color 0.2s;
         }
         .whatsapp-floating-btn:hover {
             transform: scale(1.05);
+            background-color: #128c7e;
+        }
+        .whatsapp-icon-svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* ESTILO DO BOTÃO DE WHATSAPP DA TELA FINAL */
+        .btn-end-whatsapp {
+            max-width: 280px; 
+            text-align: center; 
+            background: #25d366; 
+            color: white; 
+            border: none; 
+            padding: 12px 25px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            text-decoration: none; 
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+        .btn-end-whatsapp:hover {
             background-color: #128c7e;
         }
 
@@ -311,7 +340,7 @@
         window.getDocs = getDocs;
         window.doc = doc;
         window.setDoc = setDoc;
-        window.deleteDoc = deleteDoc; // Adicionado para suportar deleção limpa
+        window.deleteDoc = deleteDoc;
 
         setTimeout(() => {
             requestAnimationFrame(carregarCenariosDoBanco);
@@ -322,7 +351,10 @@
 <body>
 
     <a href="https://academiarafaeltoro.com.br/whatsapp" target="_blank" class="whatsapp-floating-btn">
-        💬 Fale com o nosso time
+        <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.019 14.062.993 11.45.994c-5.443 0-9.874 4.372-9.878 9.803-.002 1.725.463 3.411 1.348 4.915l-.989 3.613 3.715-.963zm10.852-5.349c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        </svg>
+        Fale com o nosso time
     </a>
 
     <div class="game-container">
@@ -513,7 +545,13 @@
             
             <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 15px;">
                 <button class="btn-next" onclick="prepararNovoCenarioSemCadastro()" style="max-width: 280px; background: var(--success-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">Mudar de Cenário / Jogar de Novo</button>
-                <a href="https://academiarafaeltoro.com.br/whatsapp" target="_blank" style="max-width: 280px; text-align: center; background: #25d366; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; text-decoration: none; box-sizing: border-box;">Falar com o nosso time</a>
+                
+                <a href="https://academiarafaeltoro.com.br/whatsapp" target="_blank" class="btn-end-whatsapp">
+                    <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.019 14.062.993 11.45.994c-5.443 0-9.874 4.372-9.878 9.803-.002 1.725.463 3.411 1.348 4.915l-.989 3.613 3.715-.963zm10.852-5.349c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                    </svg>
+                    Fale com o nosso time
+                </a>
             </div>
         </div>
     </div>
@@ -650,10 +688,8 @@
                 const labelsArray = labelsInput.split(',').map(item => item.trim());
 
                 if(window.setDoc && window.doc && window.db && window.deleteDoc) {
-                    // 🟢 LIMPEZA ABSOLUTA DA ÁRVORE ANTIGA ANTES DE FAZER O UPLOAD DA NOVA (TRAVA DO BANCO)
                     await window.deleteDoc(window.doc(window.db, "cenarios", chave));
 
-                    // Salva a nova versão limpa
                     await window.setDoc(window.doc(window.db, "cenarios", chave), {
                         nome_exibicao: nomeMenu,
                         perfil_cliente: perfil,
@@ -702,7 +738,6 @@
             const emailInput = document.getElementById('player-email-input').value.trim();
             const phoneInput = document.getElementById('player-phone-input').value.trim();
 
-            // 🟢 VALIDIDOR DE WHATSAPP COMPLEMENTAR EM JAVASCRIPT (IMPEDE ENTRADAS EM BRANCO OU CURTAS)
             const regexWhatsApp = /^[0-9]{10,11}$/;
             if(!regexWhatsApp.test(phoneInput)) {
                 alert("Por favor, insira o número de WhatsApp válido contendo apenas números com o DDD (Ex: 51981941625).");
@@ -1019,8 +1054,7 @@
             endScreen.classList.remove('hide');
             document.getElementById('final-score-txt').innerText = score;
             
-            avatar.classList.add('walking'); avatar.style.top = "11%"; avatar.style.left = "83%";
-            setTimeout(() => { avatar.style.opacity = "0"; avatar.classList.remove('walking'); }, 3500);
+            avatar.style.opacity = "0";
         }
     </script>
 </body>
