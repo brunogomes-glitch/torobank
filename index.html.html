@@ -1052,3 +1052,87 @@
 
                 if (pacienciaCliente <= 0) {
                     showEndGame("CLIENTE_DESISTIU");
+                } else if (resilienciaAtendente <= 0) {
+                    showEndGame("BURNOUT");
+                } else if (option.next === "END" || option.next === "end" || !option.next) {
+                    showEndGame("SUCESSO");
+                } else {
+                    montarBotoesInterface(option.next);
+                }
+            }, 4500);
+        }
+
+        function calcularRelatorioVieses() {
+            const labels = bibliotecaCenarios[cenarioAtualChave].categoria_labels;
+            const formatarLinha = (vies) => {
+                if (acertosPorVies[vies] === 0 && errosPorVies[vies] === 0) return "Não avaliado.";
+                return `Acertos: ${acertosPorVies[vies]} | Erros: ${errosPorVies[vies]}`;
+            };
+
+            const cards = document.querySelectorAll('.report-card');
+            cards[0].querySelector('h4').innerText = labels[0] ? labels[0] : "Metodologia A";
+            cards[0].querySelector('span').innerText = formatarLinha('cat_a');
+
+            cards[1].querySelector('h4').innerText = labels[1] ? labels[1] : "Metodologia B";
+            cards[1].querySelector('span').innerText = formatarLinha('cat_b');
+
+            cards[2].querySelector('h4').innerText = labels[2] ? labels[2] : "Metodologia C";
+            cards[2].querySelector('span').innerText = formatarLinha('cat_c');
+
+            cards[3].querySelector('h4').innerText = labels[3] ? labels[3] : "Metodologia D";
+            cards[3].querySelector('span').innerText = formatarLinha('cat_d');
+        }
+
+        async function salvarResultadoNoFirebase(motivoTermino) {
+            try {
+                if(window.addDoc && window.collection && window.db) {
+                    await window.addDoc(window.collection(window.db, "resultados_jogos"), {
+                        atendente: nomeDoAtendente,
+                        modulo_jogado: cenarioAtualChave,
+                        nome_modulo: bibliotecaCenarios[cenarioAtualChave].nome_exibicao,
+                        pontuacao_final: score,
+                        motivo_encerramento: motivoTermino,
+                        acertos_detalhes: acertosPorVies,
+                        erros_detalhes: errosPorVies,
+                        data_partida: new Date()
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function showEndGame(motivo) {
+            if(bgmInterval) clearInterval(bgmInterval);
+            bubble.classList.remove('show'); atendBubble.classList.remove('show'); inlineFeedback.style.display = "none";
+            document.getElementById('screen-game').classList.add('hide');
+            
+            const endScreen = document.getElementById('screen-end');
+            const title = document.getElementById('end-title');
+            const desc = document.getElementById('end-desc');
+            
+            salvarResultadoNoFirebase(motivo); 
+
+            if (motivo === "CLIENTE_DESISTIU") {
+                title.innerText = "Fim de Jogo: Cliente Desistiu!";
+                desc.innerText = "O investidor achou a condução confusa ou agressiva e saiu da agência.";
+                title.style.color = "var(--error-color)";
+            } else if (motivo === "BURNOUT") {
+                title.innerText = "Fim de Jogo: Sobrecarga!";
+                desc.innerText = "O estresse ou a quebra de protocolos esgotou sua resiliência consultiva.";
+                title.style.color = "var(--error-color)";
+            } else {
+                title.innerText = "Módulo Concluído com Sucesso!";
+                desc.innerText = "Excelente trabalho! Você respondeu com precisão e técnica analítica.";
+                title.style.color = "var(--success-color)";
+            }
+
+            calcularRelatorioVieses();
+            endScreen.classList.remove('hide');
+            document.getElementById('final-score-txt').innerText = score;
+            
+            avatar.style.opacity = "0";
+        }
+    </script>
+</body>
+</html>
