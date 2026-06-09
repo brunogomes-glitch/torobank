@@ -139,7 +139,7 @@
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.8px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: rgba(255,255,255,0.95); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #1e293b; box-sizing: border-box; outline: none; transition: all 0.2s; }
-        .form-group textarea { height: 180px; font-family: monospace; font-size: 12px; resize: none; }
+        .form-group textarea { height: 160px; font-family: monospace; font-size: 12px; resize: none; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--secondary-color); background: #ffffff; box-shadow: 0 0 10px rgba(0, 115, 230, 0.2); }
 
         .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 15px 45px; font-size: 16px; font-weight: 800; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-top: 10px;}
@@ -261,6 +261,30 @@
             background: rgba(15, 23, 42, 0.85); justify-content: center; align-items: center; z-index: 3000;
         }
 
+        /* 🟢 BOTÃO FLUTUANTE DO WHATSAPP COMERCIAL (FIXO) */
+        .whatsapp-floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 22px;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 99999;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .whatsapp-floating-btn:hover {
+            transform: scale(1.05);
+            background-color: #128c7e;
+        }
+
         .hide { display: none !important; }
         .invisible-buttons { opacity: 0; pointer-events: none; }
     </style>
@@ -290,12 +314,15 @@
 
         setTimeout(() => {
             requestAnimationFrame(carregarCenariosDoBanco);
-            // INTERCEPTA A URL SECRETA DO ADMINISTRADOR LOGO NO BOOT
             verificarUrlSecretaAdmin();
         }, 800);
     </script>
 </head>
 <body>
+
+    <a href="https://api.whatsapp.com/send?phone=555181941625&text=Ol%C3%A1!%20Gostaria%20de%20entrar%20em%20contato" target="_blank" class="whatsapp-floating-btn">
+        💬 Fale com o Comercial
+    </a>
 
     <div class="game-container">
         
@@ -315,9 +342,16 @@
         
         <div class="admin-screen" id="admin-panel">
             <h2 style="color: var(--accent-color); margin: 15px 0 5px 0;">Painel de Controle ToroBank</h2>
-            <p style="font-size: 13px; opacity:0.7; margin-bottom: 15px;">Insira novos módulos JSON diretamente no Firebase Firestore</p>
+            <p style="font-size: 13px; opacity:0.7; margin-bottom: 15px;">Insira novos cenários ou edite os módulos existentes salvos no banco</p>
             
             <div class="admin-form">
+                <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                    <label style="color: #ff9100;">🛠️ Ajustar uma Árvore Existente? Selecione para puxar os dados:</label>
+                    <select id="admin-select-carregar-existente" onchange="puxarDadosCenarioParaEdicao(this.value)">
+                        <option value="">-- Escolha um cenário para editar --</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>Identificador Único do Módulo (Chave do Sistema)</label>
                     <input type="text" id="admin-id-chave" placeholder="Ex: modulo_credito_2026">
@@ -335,12 +369,12 @@
                     <input type="text" id="admin-labels-relatorio" placeholder="Categoria A, Categoria B, Categoria C, Categoria D">
                 </div>
                 <div class="form-group">
-                    <label>Cole o Código Estruturado do Cenário (Formato de Objeto JSON)</label>
+                    <label>Código Estruturado do Cenário (Objeto JSON)</label>
                     <textarea id="admin-json-content" placeholder="Cole todo o texto do JSON aqui..."></textarea>
                 </div>
                 <div class="admin-actions">
-                    <button class="btn-admin-save" onclick="salvarNovoCenarioViaAdmin()">Salvar Cenário no Banco</button>
-                    <button class="btn-admin-cancel" onclick="fecharPainelAdmin()">Voltar</button>
+                    <button class="btn-admin-save" onclick="salvarNovoCenarioViaAdmin()">Salvar / Atualizar Cenário</button>
+                    <button class="btn-admin-cancel" onclick="fecharPainelAdmin()">Voltar ao Jogo</button>
                 </div>
             </div>
         </div>
@@ -475,7 +509,11 @@
             </div>
 
             <h1 style="color: var(--secondary-color); font-size: 38px; margin: 10px 0;"><span id="final-score-txt">0</span> pts</h1>
-            <button class="btn-next" onclick="prepararNovoCenarioSemCadastro()" style="max-width: 250px; margin: 0 auto; background: var(--success-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">Mudar de Cenário / Jogar de Novo</button>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; margin-top: 15px;">
+                <button class="btn-next" onclick="prepararNovoCenarioSemCadastro()" style="max-width: 280px; background: var(--success-color); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">Mudar de Cenário / Jogar de Novo</button>
+                <a href="https://api.whatsapp.com/send?phone=555181941625&text=Ol%C3%A1!%20Finalizei%20o%20simulador%20e%20gostaria%20de%20falar%20com%20o%20comercial" target="_blank" style="max-width: 280px; text-align: center; background: #25d366; color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; text-decoration: none; box-sizing: border-box;">Falar com Especialista de Alta Renda</a>
+            </div>
         </div>
     </div>
 
@@ -496,7 +534,6 @@
         const grid = document.getElementById('options-grid');
         const inlineFeedback = document.getElementById('feedback-inline-box');
 
-        // LÓGICA DE CAPTURA DO PARAMETRO ?admin=true NA URL
         function verificarUrlSecretaAdmin() {
             const parametrosUrl = new URLSearchParams(window.location.search);
             if (parametrosUrl.get('admin') === 'true') {
@@ -509,7 +546,10 @@
                 if(window.getDocs && window.collection && window.db) {
                     const querySnapshot = await window.getDocs(window.collection(window.db, "cenarios"));
                     const selectMenu = document.getElementById('tree-select');
+                    const adminSelect = document.getElementById('admin-select-carregar-existente');
+                    
                     selectMenu.innerHTML = ""; 
+                    adminSelect.innerHTML = "<option value=''>-- Escolha um cenário para editar --</option>";
 
                     bibliotecaCenarios = {};
 
@@ -532,15 +572,34 @@
                             steps: objetoStepsTratado
                         };
 
+                        // Alimenta o select principal dos alunos
                         const opt = document.createElement('option');
                         opt.value = docSnap.id;
                         opt.innerText = data.nome_exibicao;
                         selectMenu.appendChild(opt);
+
+                        // Alimenta o select do Painel Administrativo de Edição
+                        const adminOpt = document.createElement('option');
+                        adminOpt.value = docSnap.id;
+                        adminOpt.innerText = data.nome_exibicao;
+                        adminSelect.appendChild(adminOpt);
                     });
                 }
             } catch (e) {
                 console.error("Erro ao carregar cenários:", e);
             }
+        }
+
+        // 🟢 PUXA OS DADOS DO SCENARIO SELECIONADO PARA PERMITIR AJUSTES DIRETOS
+        function puxarDadosCenarioParaEdicao(idCenario) {
+            if(!idCenario) return;
+            const target = bibliotecaCenarios[idCenario];
+            
+            document.getElementById('admin-id-chave').value = idCenario;
+            document.getElementById('admin-nome-menu').value = target.nome_exibicao;
+            document.getElementById('admin-perfil-cliente').value = target.perfil_cliente;
+            document.getElementById('admin-labels-relatorio').value = target.categoria_labels.join(', ');
+            document.getElementById('admin-json-content').value = JSON.stringify(target.steps, null, 2);
         }
 
         function abrirModalSenhaAdmin() {
@@ -585,10 +644,16 @@
             btnSave.innerText = "Gravando...";
 
             try {
-                const jsonObjeto = JSON.parse(jsonText);
+                // Se o JSON contiver um container externo, limpa e extrai só o miolo de "steps"
+                let jsonObjeto = JSON.parse(jsonText);
+                if (jsonObjeto.steps && !jsonObjeto.steps.options) {
+                    jsonObjeto = jsonObjeto.steps;
+                }
+
                 const labelsArray = labelsInput.split(',').map(item => item.trim());
 
                 if(window.setDoc && window.doc && window.db) {
+                    // Atualiza ou adiciona (sobrescreve a chave se ela já existir)
                     await window.setDoc(window.doc(window.db, "cenarios", chave), {
                         nome_exibicao: nomeMenu,
                         perfil_cliente: perfil,
@@ -596,23 +661,24 @@
                         steps: jsonObjeto
                     });
 
-                    alert(`Módulo "${nomeMenu}" salvo no Firebase!`);
+                    alert(`Cenário "${nomeMenu}" gravado/ajustado com sucesso no Firebase!`);
                     
                     document.getElementById('admin-id-chave').value = "";
                     document.getElementById('admin-nome-menu').value = "";
                     document.getElementById('admin-perfil-cliente').value = "";
                     document.getElementById('admin-labels-relatorio').value = "";
                     document.getElementById('admin-json-content').value = "";
+                    document.getElementById('admin-select-carregar-existente').value = "";
 
                     fecharPainelAdmin();
                     await carregarCenariosDoBanco(); 
                 }
             } catch(err) {
-                alert("Erro ao processar o arquivo JSON. Certifique-se de que colou o conteúdo completo.");
+                alert("Erro ao decodificar seu objeto JSON. Avalie colchetes e aspas.");
                 console.error(err);
             } finally {
                 btnSave.disabled = false;
-                btnSave.innerText = "Salvar Cenário no Banco";
+                btnSave.innerText = "Salvar / Atualizar Cenário";
             }
         }
 
