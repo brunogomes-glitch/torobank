@@ -32,8 +32,9 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 10px;
-            overflow-x: hidden;
+            height: 100vh;
+            padding: 15px;
+            overflow: hidden; /* 🟢 Remove a barra de rolagem global do navegador no desktop */
         }
 
         .game-container {
@@ -46,7 +47,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            min-height: 600px;
+            max-height: 95vh; /* 🟢 Garante que o container nunca ultrapasse a altura do monitor */
         }
 
         /* --- TELAS DO MENU E ADMIN --- */
@@ -63,7 +64,7 @@
             transition: opacity 0.5s ease;
             text-align: center;
             padding: 20px;
-            overflow-y: auto;
+            overflow-y: auto; /* 🟢 Mantém rolagem apenas interna caso o conteúdo mude */
             overflow-x: hidden;
         }
 
@@ -151,7 +152,6 @@
         .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 6px 20px rgba(255,215,0,0.4); }
         .btn-start:disabled { background: #cccccc; color: #666666; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Estrutura de botões do painel Admin */
         .admin-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; width: 100%; }
         .admin-row-buttons { display: flex; gap: 8px; width: 100%; }
         .btn-admin-save { background: #2e7d32; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; }
@@ -160,7 +160,7 @@
         .btn-admin-delete:hover { background-color: #901a1a; }
 
         /* --- BARRAS DE STATUS RPG --- */
-        .stats-bar { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 8px; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 12px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
+        .stats-bar { display: flex; justify-space: space-around; align-items: center; flex-wrap: wrap; gap: 8px; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 12px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
         .rpg-status { display: flex; align-items: center; gap: 6px; }
         .bar-container { width: 80px; height: 12px; background: #555; border-radius: 6px; overflow: hidden; border: 1px solid #fff; }
         .bar-fill { height: 100%; width: 100%; transition: width 0.4s ease; }
@@ -264,7 +264,7 @@
             padding: 15px;
         }
 
-        /* WHATSAPP INTELIGENTE E RESPONSIVO */
+        /* BOTÃO DO WHATSAPP */
         .whatsapp-floating-btn {
             position: fixed;
             bottom: 20px;
@@ -308,10 +308,10 @@
         .hide { display: none !important; }
         .invisible-buttons { opacity: 0; pointer-events: none; }
 
-        /* --- RESPONSIVIDADE MOBILE --- */
+        /* --- RESPONSIVIDADE MOBILE COMPLETA --- */
         @media (max-width: 768px) {
-            body { padding: 8px; align-items: flex-start; }
-            .game-container { min-height: auto; border-radius: 12px; }
+            body { padding: 8px; align-items: flex-start; overflow: auto; } /* 🟢 Libera rolagem apenas se for mobile real */
+            .game-container { min-height: auto; border-radius: 12px; max-height: none; }
             
             .menu-form, .admin-form { 
                 width: calc(100% - 10px); 
@@ -385,7 +385,7 @@
     <a href="https://academiarafaeltoro.com.br/whatsapp" target="_blank" class="whatsapp-floating-btn">
         <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.019 14.062.993 11.45.994c-5.443 0-9.874 4.372-9.878 9.803-.002 1.725.463 3.411 1.348 4.915l-.989 3.613 3.715-.963zm10.852-5.349c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                    </svg>
+        </svg>
         <span>Fale com o nosso time</span>
     </a>
 
@@ -460,7 +460,7 @@
                         <input type="text" id="player-name-input" required placeholder="Ex: Alex Silva">
                     </div>
                     <div class="form-group">
-                        <label for="player-email-input">E-mail de Trabalho/Estudante</label>
+                        <label interpreter-skip for="player-email-input">E-mail de Trabalho/Estudante</label>
                         <input type="email" id="player-email-input" required placeholder="Ex: alex@empresa.com">
                     </div>
                     <div class="form-group">
@@ -485,17 +485,6 @@
         <div class="stats-bar">
             <div>ToroBank Corp.</div>
             <div>Atendente: <span id="label-atendente-nome">Alex</span></div>
-            
-            <div class="rpg-status">
-                <div class="bar-container">
-                    <div class="bar-fill paciencia-fill" id="bar-paciencia"></div>
-                </div>
-            </div>
-            <div class="rpg-status">
-                <div class="bar-container">
-                    <div class="bar-fill resiliencia-fill" id="bar-resiliencia"></div>
-                </div>
-            </div>
             <div>Pontos: <span id="score-txt">0</span></div>
         </div>
 
@@ -672,11 +661,9 @@
             document.getElementById('admin-labels-relatorio').value = target.categoria_labels.join(', ');
             document.getElementById('admin-json-content').value = JSON.stringify(target.steps, null, 2);
             
-            // Revela o botão de exclusão apenas se houver uma árvore carregada
             btnDel.style.display = "block";
         }
 
-        // 🟢 DELEÇÃO INTERNA DIRETO DO FIRESTORE EM TEMPO REAL
         async function deletarCenarioSelecionadoAdmin() {
             const idChave = document.getElementById('admin-id-chave').value.trim();
             if(!idChave) return;
@@ -693,7 +680,6 @@
                     await window.deleteDoc(window.doc(window.db, "cenarios", idChave));
                     alert(`Sucesso! A árvore "${idChave}" foi apagada de forma definitiva.`);
                     
-                    // Limpa os campos da interface
                     document.getElementById('admin-id-chave').value = "";
                     document.getElementById('admin-nome-menu').value = "";
                     document.getElementById('admin-perfil-cliente').value = "";
@@ -702,7 +688,7 @@
                     document.getElementById('admin-select-carregar-existente').value = "";
                     
                     fecharPainelAdmin();
-                    await carregarCenariosDoBanco(); // Atualiza a lista na hora
+                    await carregarCenariosDoBanco();
                 }
             } catch(e) {
                 alert("Erro crítico ao tentar remover documento.");
@@ -839,7 +825,6 @@
                     nomeDoAtendente = nameInput;
                     jogadorCadastradoStatus = true; 
                     document.getElementById('label-atendente-nome').innerText = nomeDoAtendente;
-                    document.getElementById('sprite-atendente-nome').innerText = nomeDoAtendente;
 
                     document.getElementById('campos-cadastro-jogador').classList.add('hide');
                     document.getElementById('menu-sub-title-label').innerText = "Jogador Identificado! Desafio Selecionado.";
