@@ -127,7 +127,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CARD DE FORMULÁRIO CORRIGIDO PARA FLUIDEZ COMPLETA */
         .menu-form, .admin-form {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -152,9 +151,13 @@
         .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 6px 20px rgba(255,215,0,0.4); }
         .btn-start:disabled { background: #cccccc; color: #666666; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .admin-actions { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
+        /* Estrutura de botões do painel Admin */
+        .admin-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; width: 100%; }
+        .admin-row-buttons { display: flex; gap: 8px; width: 100%; }
         .btn-admin-save { background: #2e7d32; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; }
-        .btn-admin-cancel { background: #c62828; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; }
+        .btn-admin-cancel { background: #555555; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; }
+        .btn-admin-delete { background: var(--error-color); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; display: none; margin-top: 5px; transition: background-color 0.2s; }
+        .btn-admin-delete:hover { background-color: #901a1a; }
 
         /* --- BARRAS DE STATUS RPG --- */
         .stats-bar { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 8px; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 12px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
@@ -261,7 +264,7 @@
             padding: 15px;
         }
 
-        /* BOTÃO DO WHATSAPP TACTILE COM REFRESH DE MEDIA */
+        /* WHATSAPP INTELIGENTE E RESPONSIVO */
         .whatsapp-floating-btn {
             position: fixed;
             bottom: 20px;
@@ -305,14 +308,11 @@
         .hide { display: none !important; }
         .invisible-buttons { opacity: 0; pointer-events: none; }
 
-        /* ==========================================================================
-           🟢 CORREÇÃO E RESPONSIVIDADE MOBILE DEFINITIVA (REMOÇÃO DE ROLAGENS GERAIS)
-           ========================================================================== */
+        /* --- RESPONSIVIDADE MOBILE --- */
         @media (max-width: 768px) {
             body { padding: 8px; align-items: flex-start; }
             .game-container { min-height: auto; border-radius: 12px; }
             
-            /* Ajuste elástico nos cartões de formulários para remover vazamento lateral */
             .menu-form, .admin-form { 
                 width: calc(100% - 10px); 
                 padding: 16px; 
@@ -385,7 +385,7 @@
     <a href="https://academiarafaeltoro.com.br/whatsapp" target="_blank" class="whatsapp-floating-btn">
         <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.019 14.062.993 11.45.994c-5.443 0-9.874 4.372-9.878 9.803-.002 1.725.463 3.411 1.348 4.915l-.989 3.613 3.715-.963zm10.852-5.349c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-        </svg>
+                    </svg>
         <span>Fale com o nosso time</span>
     </a>
 
@@ -438,8 +438,11 @@
                     <textarea id="admin-json-content" placeholder="Cole todo o texto do JSON aqui..."></textarea>
                 </div>
                 <div class="admin-actions">
-                    <button class="btn-admin-save" onclick="salvarNovoCenarioViaAdmin()">Salvar / Atualizar Cenário</button>
-                    <button class="btn-admin-cancel" onclick="fecharPainelAdmin()">Voltar ao Jogo</button>
+                    <div class="admin-row-buttons">
+                        <button class="btn-admin-save" onclick="salvarNovoCenarioViaAdmin()">Salvar / Atualizar</button>
+                        <button class="btn-admin-cancel" onclick="fecharPainelAdmin()">Voltar ao Jogo</button>
+                    </div>
+                    <button class="btn-admin-delete" id="btn-deletar-arvore-banco" onclick="deletarCenarioSelecionadoAdmin()">⚠️ Excluir Árvore Definitivamente</button>
                 </div>
             </div>
         </div>
@@ -656,7 +659,11 @@
         }
 
         function puxarDadosCenarioParaEdicao(idCenario) {
-            if(!idCenario) return;
+            const btnDel = document.getElementById('btn-deletar-arvore-banco');
+            if(!idCenario) {
+                btnDel.style.display = "none";
+                return;
+            }
             const target = bibliotecaCenarios[idCenario];
             
             document.getElementById('admin-id-chave').value = idCenario;
@@ -664,6 +671,47 @@
             document.getElementById('admin-perfil-cliente').value = target.perfil_cliente;
             document.getElementById('admin-labels-relatorio').value = target.categoria_labels.join(', ');
             document.getElementById('admin-json-content').value = JSON.stringify(target.steps, null, 2);
+            
+            // Revela o botão de exclusão apenas se houver uma árvore carregada
+            btnDel.style.display = "block";
+        }
+
+        // 🟢 DELEÇÃO INTERNA DIRETO DO FIRESTORE EM TEMPO REAL
+        async function deletarCenarioSelecionadoAdmin() {
+            const idChave = document.getElementById('admin-id-chave').value.trim();
+            if(!idChave) return;
+
+            const confirmacao = confirm(`ATENÇÃO BRUNO:\nTem certeza absoluta que deseja excluir a árvore "${idChave}" do seu banco de dados? Essa ação não pode ser desfeita.`);
+            if(!confirmacao) return;
+
+            const btnDel = document.getElementById('btn-deletar-arvore-banco');
+            btnDel.disabled = true;
+            btnDel.innerText = "Excluindo do Firebase...";
+
+            try {
+                if(window.deleteDoc && window.doc && window.db) {
+                    await window.deleteDoc(window.doc(window.db, "cenarios", idChave));
+                    alert(`Sucesso! A árvore "${idChave}" foi apagada de forma definitiva.`);
+                    
+                    // Limpa os campos da interface
+                    document.getElementById('admin-id-chave').value = "";
+                    document.getElementById('admin-nome-menu').value = "";
+                    document.getElementById('admin-perfil-cliente').value = "";
+                    document.getElementById('admin-labels-relatorio').value = "";
+                    document.getElementById('admin-json-content').value = "";
+                    document.getElementById('admin-select-carregar-existente').value = "";
+                    
+                    fecharPainelAdmin();
+                    await carregarCenariosDoBanco(); // Atualiza a lista na hora
+                }
+            } catch(e) {
+                alert("Erro crítico ao tentar remover documento.");
+                console.error(e);
+            } finally {
+                btnDel.disabled = false;
+                btnDel.innerText = "⚠️ Excluir Árvore Definitivamente";
+                btnDel.style.display = "none";
+            }
         }
 
         function abrirModalSenhaAdmin() {
@@ -689,6 +737,7 @@
 
         function fecharPainelAdmin() {
             document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('btn-deletar-arvore-banco').style.display = "none";
         }
 
         async function salvarNovoCenarioViaAdmin() {
@@ -1003,87 +1052,3 @@
 
                 if (pacienciaCliente <= 0) {
                     showEndGame("CLIENTE_DESISTIU");
-                } else if (resilienciaAtendente <= 0) {
-                    showEndGame("BURNOUT");
-                } else if (option.next === "END" || option.next === "end" || !option.next) {
-                    showEndGame("SUCESSO");
-                } else {
-                    montarBotoesInterface(option.next);
-                }
-            }, 4500);
-        }
-
-        function calcularRelatorioVieses() {
-            const labels = bibliotecaCenarios[cenarioAtualChave].categoria_labels;
-            const formatarLinha = (vies) => {
-                if (acertosPorVies[vies] === 0 && errosPorVies[vies] === 0) return "Não avaliado.";
-                return `Acertos: ${acertosPorVies[vies]} | Erros: ${errosPorVies[vies]}`;
-            };
-
-            const cards = document.querySelectorAll('.report-card');
-            cards[0].querySelector('h4').innerText = labels[0] ? labels[0] : "Metodologia A";
-            cards[0].querySelector('span').innerText = formatarLinha('cat_a');
-
-            cards[1].querySelector('h4').innerText = labels[1] ? labels[1] : "Metodologia B";
-            cards[1].querySelector('span').innerText = formatarLinha('cat_b');
-
-            cards[2].querySelector('h4').innerText = labels[2] ? labels[2] : "Metodologia C";
-            cards[2].querySelector('span').innerText = formatarLinha('cat_c');
-
-            cards[3].querySelector('h4').innerText = labels[3] ? labels[3] : "Metodologia D";
-            cards[3].querySelector('span').innerText = formatarLinha('cat_d');
-        }
-
-        async function salvarResultadoNoFirebase(motivoTermino) {
-            try {
-                if(window.addDoc && window.collection && window.db) {
-                    await window.addDoc(window.collection(window.db, "resultados_jogos"), {
-                        atendente: nomeDoAtendente,
-                        modulo_jogado: cenarioAtualChave,
-                        nome_modulo: bibliotecaCenarios[cenarioAtualChave].nome_exibicao,
-                        pontuacao_final: score,
-                        motivo_encerramento: motivoTermino,
-                        acertos_detalhes: acertosPorVies,
-                        erros_detalhes: errosPorVies,
-                        data_partida: new Date()
-                    });
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        function showEndGame(motivo) {
-            if(bgmInterval) clearInterval(bgmInterval);
-            bubble.classList.remove('show'); atendBubble.classList.remove('show'); inlineFeedback.style.display = "none";
-            document.getElementById('screen-game').classList.add('hide');
-            
-            const endScreen = document.getElementById('screen-end');
-            const title = document.getElementById('end-title');
-            const desc = document.getElementById('end-desc');
-            
-            salvarResultadoNoFirebase(motivo); 
-
-            if (motivo === "CLIENTE_DESISTIU") {
-                title.innerText = "Fim de Jogo: Cliente Desistiu!";
-                desc.innerText = "O investidor achou a condução confusa ou agressiva e saiu da agência.";
-                title.style.color = "var(--error-color)";
-            } else if (motivo === "BURNOUT") {
-                title.innerText = "Fim de Jogo: Sobrecarga!";
-                desc.innerText = "O estresse ou a quebra de protocolos esgotou sua resiliência consultiva.";
-                title.style.color = "var(--error-color)";
-            } else {
-                title.innerText = "Módulo Concluído com Sucesso!";
-                desc.innerText = "Excelente trabalho! Você respondeu com precisão e técnica analítica.";
-                title.style.color = "var(--success-color)";
-            }
-
-            calcularRelatorioVieses();
-            endScreen.classList.remove('hide');
-            document.getElementById('final-score-txt').innerText = score;
-            
-            avatar.style.opacity = "0";
-        }
-    </script>
-</body>
-</html>
