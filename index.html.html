@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ToroBank - RPG Analítico | Academia de Finanças Rafael Toro</title>
     <style>
         :root {
@@ -21,6 +21,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -60,14 +61,14 @@
             color: white;
             transition: opacity 0.5s ease;
             text-align: center;
-            padding: 20px;
+            padding: 24px;
+            overflow-y: auto;
         }
 
         .admin-screen {
             background: #1e293b;
             z-index: 2000;
             display: none;
-            overflow-y: auto;
             justify-content: flex-start;
         }
 
@@ -79,7 +80,7 @@
         }
         
         .brand-main {
-            font-size: clamp(32px, 8vw, 52px);
+            font-size: clamp(36px, 8vw, 52px);
             font-weight: 800;
             letter-spacing: 2px;
             margin-bottom: 5px;
@@ -98,7 +99,7 @@
             margin-top: 5px;
             font-weight: 600;
             background: rgba(255, 255, 255, 0.12);
-            padding: 5px 20px;
+            padding: 6px 22px;
             border-radius: 20px;
             display: inline-block;
             text-transform: uppercase;
@@ -117,9 +118,7 @@
             text-decoration: none;
             font-weight: bold;
         }
-        .company-website a:hover {
-            text-decoration: underline;
-        }
+        .company-website a:hover { text-decoration: underline; }
 
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
@@ -131,7 +130,7 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding: 20px;
+            padding: 24px;
             border-radius: 16px;
             max-width: 550px;
             width: 100%;
@@ -140,22 +139,22 @@
             text-align: left;
         }
 
-        .form-group { margin-bottom: 14px; }
+        .form-group { margin-bottom: 16px; }
         .form-group label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.8px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; background: rgba(255,255,255,0.95); border: 2px solid transparent; border-radius: 8px; font-size: 14px; color: #1e293b; outline: none; transition: all 0.2s; }
-        .form-group textarea { height: 140px; font-family: monospace; font-size: 12px; resize: none; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; background: rgba(255,255,255,0.95); border: 2px solid transparent; border-radius: 10px; font-size: 15px; color: #1e293b; outline: none; transition: all 0.2s; -webkit-appearance: none; }
+        .form-group textarea { height: 140px; font-family: monospace; resize: none; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--secondary-color); background: #ffffff; box-shadow: 0 0 10px rgba(0, 115, 230, 0.2); }
 
-        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 15px 45px; font-size: 16px; font-weight: 800; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: block; margin: 10px auto 0 auto;}
+        .btn-start { background: var(--accent-color); color: var(--primary-color); border: none; padding: 16px 45px; font-size: 16px; font-weight: 800; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: block; margin: 10px auto 0 auto;}
         .btn-start:hover { transform: translateY(-2px); background: #ffffff; box-shadow: 0 6px 20px rgba(255,215,0,0.4); }
         .btn-start:disabled { background: #cccccc; color: #666666; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .admin-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-admin-save { background: #2e7d32; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 2; }
-        .btn-admin-cancel { background: #c62828; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; }
+        .btn-admin-save { background: #2e7d32; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; }
+        .btn-admin-cancel { background: #c62828; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; }
 
         /* --- BARRAS DE STATUS RPG --- */
-        .stats-bar { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 12px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
+        .stats-bar { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 8px; background: var(--primary-color); color: white; padding: 12px; font-weight: bold; font-size: 12px; z-index: 100; border-bottom: 2px solid var(--accent-color); }
         .rpg-status { display: flex; align-items: center; gap: 6px; }
         .bar-container { width: 80px; height: 12px; background: #555; border-radius: 6px; overflow: hidden; border: 1px solid #fff; }
         .bar-fill { height: 100%; width: 100%; transition: width 0.4s ease; }
@@ -219,8 +218,8 @@
         /* BALÕES DE FALA */
         .npc-bubble {
             position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%) scale(0);
-            width: 240px; background: #ffffff; border: 2px solid var(--primary-color); border-radius: 14px;
-            padding: 12px 15px; font-size: 13px; line-height: 1.4; color: #2c3e50;
+            width: 250px; background: #ffffff; border: 2px solid var(--primary-color); border-radius: 14px;
+            padding: 14px 16px; font-size: 14px; line-height: 1.4; color: #2c3e50;
             box-shadow: 0 8px 20px rgba(0,0,0,0.35); transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none; z-index: 9999; transform-origin: bottom center;
         }
@@ -237,7 +236,7 @@
         @keyframes bounce { from { transform: translate(-50%, 0); } to { transform: translate(-50%, -5px); } }
 
         /* --- PAINEL DE INTERAÇÃO DIRETA --- */
-        .interaction-panel { padding: 15px 20px; background: #f8f9fa; border-top: 2px solid #e9ecef; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+        .interaction-panel { padding: 16px 20px; background: #f8f9fa; border-top: 2px solid #e9ecef; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
         
         .feedback-inline-box { 
             font-size: 14px; line-height: 1.5; padding: 12px 15px; border-radius: 8px; 
@@ -245,14 +244,14 @@
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        .options-container-row { display: flex; flex-direction: column; gap: 8px; }
-        .options-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .options-container-row { display: flex; flex-direction: column; gap: 10px; }
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         
-        /* Otimização dos botões para cliques confortáveis em telas Touch */
-        .btn-option { background: white; border: 2px solid #e2e8f0; padding: 14px 18px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 14px; transition: all 0.2s; line-height: 1.4; }
+        /* Botões robustos e espaçados para evitar toques acidentais no celular */
+        .btn-option { background: white; border: 2px solid #e2e8f0; padding: 16px 20px; border-radius: 10px; text-align: left; cursor: pointer; font-size: 14.5px; transition: all 0.2s; line-height: 1.45; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .btn-option:hover { border-color: var(--secondary-color); background: #f0f7ff; }
 
-        .btn-help-manager { background: #fff5cc; border: 2px dashed #ffcc00; color: #8a6d00; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; text-align: center; transition: all 0.2s; }
+        .btn-help-manager { background: #fff5cc; border: 2px dashed #ffcc00; color: #8a6d00; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 13.5px; text-align: center; transition: all 0.2s; }
 
         /* RELATÓRIO */
         .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: left; margin: 15px 0; }
@@ -266,27 +265,27 @@
             padding: 15px;
         }
 
-        /* BOTÃO DO WHATSAPP RECOGNIZÁVEL E ADAPTÁVEL */
+        /* 🟢 WHATSAPP INTELIGENTE: BOTÃO EXPANDIDO NO PC, DISCRETO NO CELULAR */
         .whatsapp-floating-btn {
             position: fixed;
-            bottom: 15px;
-            right: 15px;
+            bottom: 20px;
+            right: 20px;
             background-color: #25d366;
             color: white;
             border-radius: 50px;
-            padding: 10px 20px;
-            font-size: 13px;
+            padding: 12px 24px;
+            font-size: 14px;
             font-weight: bold;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             z-index: 99999;
-            transition: transform 0.2s;
+            transition: transform 0.2s, background-color 0.2s;
         }
-        .whatsapp-floating-btn:hover { transform: scale(1.05); }
-        .whatsapp-icon-svg { width: 18px; height: 18px; fill: white; }
+        .whatsapp-floating-btn:hover { transform: scale(1.05); background-color: #128c7e; }
+        .whatsapp-icon-svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
 
         .btn-end-whatsapp {
             max-width: 280px; 
@@ -294,8 +293,8 @@
             background: #25d366; 
             color: white; 
             border: none; 
-            padding: 12px 25px; 
-            border-radius: 6px; 
+            padding: 14px 25px; 
+            border-radius: 8px; 
             cursor: pointer; 
             font-weight: bold; 
             width: 100%; 
@@ -311,25 +310,44 @@
         .invisible-buttons { opacity: 0; pointer-events: none; }
 
         /* ==========================================================================
-           🟢 MEDIA QUERIES - MOTOR DE RESPONSIVIDADE E ADAPTAÇÃO MOBILE COMPLETA
+           🟢 ULTRA RESPONSIVIDADE MOBILE (UX DESIGN RECALIBRADO)
            ========================================================================== */
         @media (max-width: 768px) {
-            body { padding: 5px; }
-            .game-container { min-height: auto; border-radius: 12px; }
+            body { padding: 4px; align-items: flex-start; }
+            .game-container { min-height: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
             
-            /* Encolhe e re-centraliza o cenário isométrico no celular para evitar cortes visuais */
-            .stage-area { height: 280px; }
-            .iso-grid { transform: translate(-50%, -50%) scale(0.6) rotateX(60deg) rotateZ(45deg); top: 50%; }
-            .cliente { top: 18%; left: 80%; }
-            .lucas { top: 48%; left: 15%; }
-            .npc-bubble { width: 200px; font-size: 12px; bottom: 75px; }
+            /* Encolhe a maquete para focar na fala e nos botões */
+            .stage-area { height: 240px; }
+            .iso-grid { transform: translate(-50%, -50%) scale(0.48) rotateX(60deg) rotateZ(45deg); top: 52%; }
+            .cliente { top: 16%; left: 76%; }
+            .lucas { top: 48%; left: 12%; }
+            
+            /* Ajusta o balão de fala para não vazar da tela */
+            .npc-bubble { width: 220px; font-size: 13px; bottom: 80px; padding: 10px 12px; }
 
-            .stats-bar { font-size: 11px; padding: 8px; justify-content: space-between; }
-            .rpg-status span { display: none; } /* Oculta labels longos de texto nas barras no celular */
-            .bar-container { width: 60px; }
+            .stats-bar { font-size: 11px; padding: 10px 6px; justify-content: space-between; }
+            .bar-container { width: 55px; height: 10px; }
+
+            /* Alternativas verticais confortáveis para leitura rápida */
+            .interaction-panel { padding: 12px; gap: 8px; }
+            .btn-option { padding: 14px 16px; font-size: 13.5px; border-radius: 8px; }
+            .btn-help-manager { padding: 11px; font-size: 12.5px; }
 
             .report-grid { grid-template-columns: 1fr; gap: 8px; }
-            .menu-form, .admin-form { padding: 15px; border-radius: 12px; }
+            .menu-form, .admin-form { padding: 16px; border-radius: 12px; }
+
+            /* 🟢 Transformação circular compacta do WhatsApp para não tampar a interface touch */
+            .whatsapp-floating-btn {
+                bottom: 12px;
+                right: 12px;
+                width: 48px;
+                height: 48px;
+                padding: 0;
+                justify-content: center;
+                border-radius: 50%;
+            }
+            .whatsapp-floating-btn span { display: none; } /* Remove o texto e deixa só o ícone */
+            .whatsapp-icon-svg { width: 22px; height: 22px; }
         }
     </style>
 
@@ -369,7 +387,7 @@
         <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 2.019 14.062.993 11.45.994c-5.443 0-9.874 4.372-9.878 9.803-.002 1.725.463 3.411 1.348 4.915l-.989 3.613 3.715-.963zm10.852-5.349c-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.668.149-.198.297-.766.967-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.413-.074-.124-.272-.198-.57-.347z"/>
         </svg>
-        Fale com o nosso time
+        <span>Fale com o nosso time</span>
     </a>
 
     <div class="game-container">
@@ -454,7 +472,9 @@
                         <option value="">Carregando cenários disponíveis...</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
+                <div style="text-align: center; width: 100%;">
+                    <button type="submit" class="btn-start" id="btn-submit-cadastro">Iniciar Expediente</button>
+                </div>
             </form>
 
             <div class="company-website">
